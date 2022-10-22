@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -17,8 +16,6 @@ import org.firstinspires.ftc.teamcode.T1_2022.Modules.Drive;
 import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
-import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
-import org.firstinspires.ftc.teamcode.Utils.Point;
 
 public abstract class Base extends LinearOpMode {
   // Sleep Times
@@ -70,7 +67,6 @@ public abstract class Base extends LinearOpMode {
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
 
-
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
     fLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -78,9 +74,8 @@ public abstract class Base extends LinearOpMode {
 
     // Servo
     Servo s = hardwareMap.get(Servo.class, "claw"),
-            lv = hardwareMap.get(Servo.class, "v4bl"),
-            rv = hardwareMap.get(Servo.class, "v4bl");
-
+        lv = hardwareMap.get(Servo.class, "v4bl"),
+        rv = hardwareMap.get(Servo.class, "v4bl");
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -98,16 +93,7 @@ public abstract class Base extends LinearOpMode {
     // Modules
     dt =
         new Drive(
-            fLeftMotor,
-            bLeftMotor,
-            fRightMotor,
-            bRightMotor,
-            gyro,
-            m,
-            xPos,
-            yPos,
-            angle,
-            allHubs);
+            fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
     Grabber grabber = new Grabber(ls, rs, lv, rv, s);
 
@@ -139,11 +125,8 @@ public abstract class Base extends LinearOpMode {
     initHardware(0, m);
   }
 
-
   // Autonomous Movement (Note that you do not have to insert the current position into any of the
   // weighpoints)
-
-
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     dt.turnTo(targetAngle, timeout, powerCap, minDifference);

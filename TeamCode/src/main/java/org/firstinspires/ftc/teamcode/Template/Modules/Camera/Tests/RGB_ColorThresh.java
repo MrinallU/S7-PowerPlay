@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Camera;
+
 @Disabled
 @Autonomous(name = "Temp_RGB_ColorThresh", group = "Tests")
 public class RGB_ColorThresh extends LinearOpMode {

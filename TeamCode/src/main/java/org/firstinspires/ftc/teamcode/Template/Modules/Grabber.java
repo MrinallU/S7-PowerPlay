@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.Template.Modules;
 
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.Utils.Motor;
-
 import java.util.Objects;
+import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
   public final double CLAW_OPEN = 1,
@@ -59,7 +57,7 @@ public class Grabber {
   }
 
   public void updateArmPos(String armStatus) {
-    if(!Objects.equals(armStatusPrev, armStatus)) {
+    if (!Objects.equals(armStatusPrev, armStatus)) {
       if (Objects.equals(armStatus, "high")) {
         raiseTop();
         armStatusPrev = armStatus;
