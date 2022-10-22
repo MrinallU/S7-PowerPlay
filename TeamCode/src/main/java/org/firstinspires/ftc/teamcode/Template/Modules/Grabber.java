@@ -1,23 +1,21 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Modules;
+package org.firstinspires.ftc.teamcode.Template.Modules;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import java.util.Objects;
+
 import org.firstinspires.ftc.teamcode.Utils.Motor;
+
+import java.util.Objects;
 
 public class Grabber {
   public final double CLAW_OPEN = 1,
       CLAW_CLOSE = 0,
-      V4B_FRONT_LEFT = 1,
-      V4B_FRONT_RIGHT = 1,
-      V4B_BACK_LEFT = 0,
-          V4B_BACK_RIGHT = 0,
+      V4B_FRONT = 1,
+      V4B_BACK = 0,
       V4B_FRONT_THRESHOLD = 0.1;
-  public final int HIGH = 0, HIGH_LEFT = 0, HIGH_RIGHT = 0;
-  public final int MIDDLE = 0, MIDDLE_LEFT = 0, MIDDLE_RIGHT = 0;
-  public final int LOW = 0,  LOW_LEFT = 0, LOW_RIGHT = 0;
+  public final int HIGH = 0;
+  public final int MIDDLE = 0;
+  public final int LOW = 0;
   public final int REST = 0;
-
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "rest";
 
@@ -31,36 +29,27 @@ public class Grabber {
     v4bRight = rs;
     claw = g;
 
-    leftSlide.setDirection(DcMotorSimple.Direction.FORWARD);
-    rightSlide.setDirection(DcMotorSimple.Direction.REVERSE);
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
     leftSlide.toPosition();
     rightSlide.toPosition();
-
-
-    v4bRight.setPosition(1);
-    v4bLeft.setPosition(0);
   }
 
   public void raiseTop() {
     setV4B_FRONT();
-    //raiseToPosition(HIGH, 0.5);
-    raiseToPosition(HIGH_LEFT, HIGH_RIGHT,  0.2);
+    raiseToPosition(HIGH, 0.5);
     armRested = false;
   }
 
   public void raiseMiddle() {
     setV4B_FRONT();
-    //raiseToPosition(MIDDLE, 0.5);
-    raiseToPosition(MIDDLE_LEFT, MIDDLE_RIGHT,  0.2);
+    raiseToPosition(MIDDLE, 0.5);
     armRested = false;
   }
 
   public void raiseLow() {
     setV4B_FRONT();
-    //raiseToPosition(LOW, 0.5);
-    raiseToPosition(LOW_LEFT, LOW_RIGHT,  0.2);
+    raiseToPosition(LOW, 0.5);
     armRested = false;
   }
 
@@ -103,18 +92,6 @@ public class Grabber {
     rightSlide.setPower(power);
   }
 
-  public void raiseToPosition(int pos1, int pos2, double power) {
-    leftSlide.setTarget(pos1);
-    leftSlide.retMotorEx().setTargetPositionTolerance(3);
-    leftSlide.toPosition();
-    leftSlide.setPower(power);
-
-    rightSlide.setTarget(pos2);
-    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-    rightSlide.toPosition();
-    rightSlide.setPower(power);
-  }
-
   public void raiseToPosition(int pos) {
     raiseToPosition(pos, 0.2);
   }
@@ -128,14 +105,14 @@ public class Grabber {
   }
 
   public void setV4B_FRONT() {
-    v4bLeft.setPosition(V4B_FRONT_LEFT);
-    v4bRight.setPosition(V4B_FRONT_RIGHT);
+    v4bLeft.setPosition(V4B_FRONT);
+    v4bRight.setPosition(V4B_FRONT);
     v4bISFRONT = true;
   }
 
   public void setV4B_BACK() {
-    v4bLeft.setPosition(V4B_BACK_LEFT);
-    v4bRight.setPosition(V4B_BACK_RIGHT);
+    v4bLeft.setPosition(V4B_BACK);
+    v4bRight.setPosition(V4B_BACK);
     v4bISFRONT = false;
   }
 

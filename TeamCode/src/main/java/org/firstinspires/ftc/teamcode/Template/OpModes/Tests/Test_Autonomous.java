@@ -1,14 +1,15 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
+package org.firstinspires.ftc.teamcode.Template.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.Template.Base;
+import org.firstinspires.ftc.teamcode.Utils.Point;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.firstinspires.ftc.teamcode.T1_2022.Base;
-import org.firstinspires.ftc.teamcode.Utils.Point;
 @Disabled
-@Autonomous(name = "Test_Autonomous", group = "Tests")
+@Autonomous(name = "Temp_Test_Autonomous", group = "Tests")
 public class Test_Autonomous extends Base {
 
   @Override
@@ -20,6 +21,7 @@ public class Test_Autonomous extends Base {
 
     waitForStart();
     matchTime.reset();
+    dt.updateOdometry();
     dt.resetCache();
 
     ArrayList<Point> path1 = new ArrayList<>();
@@ -37,7 +39,7 @@ public class Test_Autonomous extends Base {
 
     sleep(500);
     // SplinePathConstantHeading(path1,  30, 1, 0.5, 3, 3, 2, 10, 100000);
-    //moveToPosition(10, 70, 30, 10000);
+    moveToPosition(10, 70, 30, 10000);
     //        moveToPosition(0,  0,  30, 10000);
     //        moveToPosition(10,  70,  30, 10000);
     //        moveToPosition(0,  0,  30, 10000);
@@ -50,6 +52,7 @@ public class Test_Autonomous extends Base {
     while (opModeIsActive()) {
       // Updates
       dt.resetCache();
+      dt.updateOdometry();
 
       // Reset Angle
       currAngle = dt.getAngle();
@@ -74,6 +77,7 @@ public class Test_Autonomous extends Base {
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
+      telemetry.addData("Odometry Info", dt.getCurrentPosition());
       telemetry.update();
     }
   }

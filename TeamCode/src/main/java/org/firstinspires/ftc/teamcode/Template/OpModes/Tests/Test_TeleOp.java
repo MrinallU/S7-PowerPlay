@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
+package org.firstinspires.ftc.teamcode.Template.OpModes.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
-@TeleOp(name = "Test_TeleOp", group = "OdomBot")
+import org.firstinspires.ftc.teamcode.Template.Base;
+@Disabled
+@TeleOp(name = "Temp_Test_TeleOp", group = "OdomBot")
 public class Test_TeleOp extends Base {
 
   // TeleOp Variables
@@ -16,10 +18,13 @@ public class Test_TeleOp extends Base {
 
     waitForStart();
     matchTime.reset();
+    dt.updateOdometry();
 
     while (opModeIsActive()) {
       // Updates
       dt.resetCache();
+      dt.updateOdometry();
+
       currAngle = dt.getAngle();
 
       // Change Drive Mode
@@ -39,6 +44,7 @@ public class Test_TeleOp extends Base {
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
+      telemetry.addData("Odometry Info", dt.getCurrentPosition());
       telemetry.update();
     }
   }

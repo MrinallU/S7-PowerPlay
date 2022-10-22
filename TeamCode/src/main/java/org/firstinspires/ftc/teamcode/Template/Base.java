@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T1_2022;
+package org.firstinspires.ftc.teamcode.Template;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -7,18 +7,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Drive;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
+import org.firstinspires.ftc.teamcode.Template.Modules.Drive;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public abstract class Base extends LinearOpMode {
   // Sleep Times
@@ -68,8 +68,9 @@ public abstract class Base extends LinearOpMode {
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor");
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
 
-    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-
+    Motor odoL = new Motor(hardwareMap, "enc_left");
+    Motor odoR = new Motor(hardwareMap, "enc_right");
+    Motor odoN = new Motor(hardwareMap, "enc_x");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
@@ -77,10 +78,6 @@ public abstract class Base extends LinearOpMode {
     bLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
-    Servo s = hardwareMap.get(Servo.class, "claw"),
-            lv = hardwareMap.get(Servo.class, "v4bl"),
-            rv = hardwareMap.get(Servo.class, "v4bl");
-
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -102,6 +99,9 @@ public abstract class Base extends LinearOpMode {
             bLeftMotor,
             fRightMotor,
             bRightMotor,
+            odoL,
+            odoR,
+            odoN,
             gyro,
             m,
             xPos,
@@ -109,7 +109,7 @@ public abstract class Base extends LinearOpMode {
             angle,
             allHubs);
 
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    initServos();
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
@@ -139,11 +139,68 @@ public abstract class Base extends LinearOpMode {
     initHardware(0, m);
   }
 
+  public void initServos() {}
 
   // Autonomous Movement (Note that you do not have to insert the current position into any of the
   // weighpoints)
+  public void SplinePathConstantHeading(
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
+    Point curLoc = dt.getCurrentPosition();
+    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
+    dt.traversePath(
+        wps, heading, driveSpeedCap, false, -1, xError, yError, angleError, lookAheadDist, timeout);
+  }
 
+  public void SplinePathConstantHeading(
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
+    Point curLoc = dt.getCurrentPosition();
+    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
+    dt.traversePath(
+        wps,
+        heading,
+        driveSpeedCap,
+        true,
+        powLb,
+        xError,
+        yError,
+        angleError,
+        lookAheadDist,
+        timeout);
+  }
 
+  public void LinearPathConstantHeading(
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
+    Point curLoc = dt.getCurrentPosition();
+    ArrayList<Point> wps = new ArrayList<>();
+    wps.add(curLoc);
+    wps.addAll(pts);
+    wps = PathGenerator.generateLinearSpline(wps);
+    dt.traversePath(
+        wps, heading, driveSpeedCap, powLb, xError, yError, angleError, lookAheadDist, timeout);
+  }
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     dt.turnTo(targetAngle, timeout, powerCap, minDifference);
@@ -155,6 +212,63 @@ public abstract class Base extends LinearOpMode {
 
   public void turnTo(double targetAngle, long timeout) {
     turnTo(targetAngle, timeout, 0.7);
+  }
+
+  public void moveToPosition(
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double posAccuracy,
+      double angleAccuracy,
+      double timeout,
+      double powerLb) {
+    dt.moveToPosition(
+        targetXPos,
+        targetYPos,
+        targetAngle,
+        posAccuracy,
+        posAccuracy,
+        angleAccuracy,
+        timeout,
+        powerLb);
+  }
+
+  public void moveToPosition(
+      double targetXPos, double targetYPos, double targetAngle, double timeout) {
+    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.1);
+  }
+
+  public void moveToPosition(
+      double targetXPos, double targetYPos, double targetAngle, double timeout, double powerLb) {
+    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, powerLb);
+  }
+
+  public void moveToPosition(
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double posAccuracy,
+      double timeout,
+      double powerLb) {
+    moveToPosition(targetXPos, targetYPos, targetAngle, posAccuracy, 2, timeout, powerLb);
+  }
+
+  // Function implementing Points
+  public void moveToPosition(
+      Point p, double xAccuracy, double yAccuracy, double angleAccuracy, double timeout) {
+    moveToPosition(p.xP, p.yP, p.ang, xAccuracy, yAccuracy, angleAccuracy, timeout);
+  }
+
+  public void moveToPosition(Point p, double posAccuracy, double angleAccuracy, double timeout) {
+    moveToPosition(p.xP, p.yP, p.ang, posAccuracy, posAccuracy, angleAccuracy, timeout);
+  }
+
+  public void moveToPosition(Point p, double timeout) {
+    moveToPosition(p.xP, p.yP, p.ang, 2, 2, timeout);
+  }
+
+  public void moveToPosition(Point p, double posAccuracy, double timeout) {
+    moveToPosition(p.xP, p.yP, p.ang, posAccuracy, 2, timeout);
   }
 
   // Driver Controlled Movemement

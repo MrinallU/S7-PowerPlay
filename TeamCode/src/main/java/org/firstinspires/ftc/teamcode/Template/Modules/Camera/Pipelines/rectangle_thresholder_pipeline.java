@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Pipelines;
+package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

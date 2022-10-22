@@ -22,7 +22,6 @@ import org.firstinspires.ftc.teamcode.Utils.Point;
 public class Drive extends Base {
 
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
-  protected Motor odoR, odoL, odoN;
   protected BNO055IMU gyro;
   protected Odometry odometry;
   protected OpMode opMode;
@@ -33,9 +32,6 @@ public class Drive extends Base {
       Motor bLeftMotor,
       Motor fRightMotor,
       Motor bRightMotor,
-      Motor odoL,
-      Motor odoR,
-      Motor odoN,
       BNO055IMU gyro,
       OpMode m,
       int xPos,
@@ -47,194 +43,12 @@ public class Drive extends Base {
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
     this.bRightMotor = bRightMotor;
-    this.odoL = odoL;
-    this.odoR = odoR;
-    this.odoN = odoN;
     this.gyro = gyro;
     this.opMode = m;
     this.allHubs = allHubs;
     odometry = new Odometry(xPos, yPos, angle);
   }
 
-  // Kinda Like:
-  // https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf
-  // Helpful explanation:
-  // https://www.chiefdelphi.com/t/paper-implementation-of-the-adaptive-pure-pursuit-controller/166552
-  public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double driveSpeedCap,
-      boolean limitPower,
-      double powerLowerBound,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
-    ElapsedTime time = new ElapsedTime();
-    int lastLhInd = 0;
-    time.reset();
-    while ((lastLhInd < wp.size() - 1
-            || (Math.abs(odometry.getX() - wp.get(wp.size() - 1).xP) > xError
-                || Math.abs(odometry.getY() - wp.get(wp.size() - 1).yP) > yError
-                || Math.abs(heading - odometry.getAngle()) > angleError))
-        && time.milliseconds() < timeout) {
-      resetCache();
-      updateOdometry();
-      double x = odometry.getX();
-      double y = odometry.getY();
-      double theta = odometry.getAngle();
-
-      // find point which fits the look ahead criteria
-      Point nxtP = null;
-      int i = 0, cnt = 0, possInd = -1;
-      double maxDist = -1;
-      for (Point p : wp) {
-        double ptDist = getRobotDistanceFromPoint(p);
-        if (Math.abs(ptDist) <= lookAheadDist
-            && i > lastLhInd
-            && Math.abs(ptDist) > maxDist
-            && Math.abs(i - lastLhInd) < 5) {
-          nxtP = p;
-          possInd = i;
-          maxDist = Math.abs(ptDist);
-        }
-        i++;
-      }
-
-      if (possInd == -1) {
-        possInd = lastLhInd;
-        nxtP = wp.get(lastLhInd);
-      }
-      if (nxtP == null) {
-        stop();
-        break;
-      }
-
-      // assign powers to follow the look-ahead point
-      double xDiff = nxtP.xP - x;
-      double yDiff = nxtP.yP - y;
-      double angDiff, splineAngle;
-
-      splineAngle = Math.atan2(yDiff, xDiff);
-      if (heading == Double.MAX_VALUE) {
-        angDiff = theta - Angle.normalize(Math.toDegrees(splineAngle));
-      } else {
-        angDiff = theta - heading;
-      }
-
-      if (Math.abs(angDiff) < angleError) angDiff = 0;
-
-      double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
-      double relAngToP =
-          Angle.normalizeRadians(
-              splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
-      double relX = Math.sin(relAngToP) * dist, relY = Math.cos(relAngToP) * dist;
-      double xPow = (relX / (Math.abs(relY) + Math.abs(relX))) * driveSpeedCap,
-          yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
-
-      if (limitPower) {
-        if (Math.abs(yDiff) > 7) {
-          if (yPow < 0) {
-            yPow = Math.min(-powerLowerBound, yPow);
-          } else {
-            yPow = Math.max(powerLowerBound, yPow);
-          }
-        }
-        if (Math.abs(xDiff) > 7) {
-          if (xPow < 0) {
-            xPow = Math.min(-powerLowerBound, xPow);
-          } else {
-            xPow = Math.max(powerLowerBound, xPow);
-          }
-        }
-      }
-      System.out.println(xPow + " " + yPow);
-      driveFieldCentric(yPow, 0.05 * angDiff, xPow);
-      lastLhInd = possInd;
-    }
-    stopDrive();
-  }
-
-  public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double driveSpeedCap,
-      double powLb,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
-    traversePath(
-        wp,
-        heading,
-        driveSpeedCap,
-        true,
-        powLb,
-        xError,
-        yError,
-        angleError,
-        lookAheadDist,
-        timeout);
-  }
-
-  public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
-    traversePath(wp, heading, 1, false, -1, xError, yError, angleError, lookAheadDist, timeout);
-  }
-
-  public void moveToPosition(
-      double targetXPos,
-      double targetYPos,
-      double targetAngle,
-      double xAccuracy,
-      double yAccuracy,
-      double angleAccuracy,
-      double timeout,
-      double powerlB) {
-    ArrayList<Point> pt = new ArrayList<>();
-    pt.add(getCurrentPosition());
-    pt.add(new Point(targetXPos, targetYPos));
-    ArrayList<Point> wps = PathGenerator.generateLinearSpline(pt);
-    traversePath(wps, targetAngle, 1, powerlB, xAccuracy, yAccuracy, angleAccuracy, 10, timeout);
-    stopDrive();
-  }
-
-  public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
-    // GM0
-    double currAngle = getAngle();
-    ElapsedTime time = new ElapsedTime();
-    while (Math.abs(currAngle - targetAngle) > minDifference
-        && time.milliseconds() < timeout
-        && ((LinearOpMode) opMode).opModeIsActive()) {
-      resetCache();
-      updateOdometry();
-      currAngle = getAngle();
-      double angleDiff = Angle.normalize(currAngle - targetAngle);
-      double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
-      setDrivePowers(calcP, calcP, calcP, calcP);
-    }
-
-    stopDrive();
-  }
-
-  // Positional Data
-  public void updateOdometry() {
-    odometry.updatePosition(
-        odoL.encoderReading(), odoR.encoderReading(), odoN.encoderReading(), getAngle());
-  }
-
-  public Point getCurrentPosition() {
-    updateOdometry();
-    return new Point(odometry.getX(), odometry.getY(), odometry.getAngle());
-  }
 
   public double getAngle() {
     Orientation angles =

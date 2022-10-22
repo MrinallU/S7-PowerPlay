@@ -19,17 +19,19 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Tests;
+package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import java.util.ArrayList;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Pipelines.april_tag_detection_pipeline;
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.april_tag_detection_pipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import java.util.ArrayList;
 
 @TeleOp
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {

@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Tests;
+package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import java.util.ArrayList;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
+
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Camera;
 import org.openftc.apriltag.AprilTagDetection;
+
+import java.util.ArrayList;
 
 @TeleOp(name = "ApilTagTest", group = "robot")
 public class AprilTagDetectionExample extends LinearOpMode {

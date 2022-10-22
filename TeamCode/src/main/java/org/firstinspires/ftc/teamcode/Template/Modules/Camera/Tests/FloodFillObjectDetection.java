@@ -1,15 +1,17 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Tests;
+package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Camera;
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.Helpers.VisionObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Pipelines.Helpers.VisionObject;
 
 @Disabled
-@TeleOp(name = "Ecov_yeet", group = "robot")
+@TeleOp(name = "Ecov", group = "robot")
 public class FloodFillObjectDetection extends LinearOpMode {
 
   @Override
