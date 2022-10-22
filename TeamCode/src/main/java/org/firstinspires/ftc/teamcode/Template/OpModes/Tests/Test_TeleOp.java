@@ -19,7 +19,6 @@ public class Test_TeleOp extends Base {
     waitForStart();
     matchTime.reset();
     dt.updateOdometry();
-
     while (opModeIsActive()) {
       // Updates
       dt.resetCache();

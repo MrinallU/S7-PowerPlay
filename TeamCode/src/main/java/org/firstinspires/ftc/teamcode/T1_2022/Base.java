@@ -25,6 +25,7 @@ public abstract class Base extends LinearOpMode {
   public BNO055IMU gyro;
 
   public Drive dt = null;
+  public Grabber grabber;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
@@ -42,6 +43,10 @@ public abstract class Base extends LinearOpMode {
   public boolean yP2 = false, yLP2 = false;
   public boolean rSP2 = false, rSLP2 = false;
   public boolean bP2 = false, bLP2 = false;
+  public boolean dpU = false, dpUL = false;
+  public boolean dpD = false, dpDL = false;
+  public boolean dpL = false, dpLL = false;
+  public boolean dpR = false, dpRL = false;
   public boolean slowDrive = false, fastDrive = false;
   public boolean basicDrive = false;
 
@@ -75,7 +80,7 @@ public abstract class Base extends LinearOpMode {
     // Servo
     Servo s = hardwareMap.get(Servo.class, "claw"),
         lv = hardwareMap.get(Servo.class, "v4bl"),
-        rv = hardwareMap.get(Servo.class, "v4bl");
+        rv = hardwareMap.get(Servo.class, "v4br");
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -95,7 +100,7 @@ public abstract class Base extends LinearOpMode {
         new Drive(
             fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    grabber = new Grabber(ls, rs, lv, rv, s);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
