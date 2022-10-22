@@ -6,8 +6,9 @@ import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN = 1,
-      CLAW_CLOSE = 0,
+  public final double CLAW_OPEN = 0.4,
+      CLAW_CLOSE = 1,
+      CLAW_DROP = 0.7,
       V4B_FRONT_LEFT = 1,
       V4B_FRONT_RIGHT = 1,
       V4B_BACK_LEFT = 0,
@@ -40,6 +41,7 @@ public class Grabber {
 
     v4bRight.setPosition(1);
     v4bLeft.setPosition(0);
+    claw.setPosition(CLAW_CLOSE);
   }
 
   public void raiseTop() {
@@ -123,8 +125,10 @@ public class Grabber {
   }
 
   public void releaseCone() {
-    claw.setPosition(CLAW_CLOSE);
+    claw.setPosition(CLAW_DROP);
   }
+
+  public void setToGrab() {claw.setPosition(CLAW_OPEN);}
 
   public void setV4B_FRONT() {
     v4bLeft.setPosition(V4B_FRONT_LEFT);

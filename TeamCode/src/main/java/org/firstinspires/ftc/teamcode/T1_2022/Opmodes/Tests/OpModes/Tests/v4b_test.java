@@ -10,14 +10,17 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 public class v4b_test extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-    Servo s = hardwareMap.get(Servo.class, "claw"),
+    Servo claw = hardwareMap.get(Servo.class, "claw"),
         lv = hardwareMap.get(Servo.class, "v4bl"),
         rv = hardwareMap.get(Servo.class, "v4bl");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    Grabber grabber = new Grabber(ls, rs, lv, rv, claw);
     double curPos = 1, curPos2 = 0;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
+
+
+
 
     while (opModeIsActive()) {
       if (gamepad1.dpad_up && !lU) {
@@ -47,7 +50,19 @@ public class v4b_test extends LinearOpMode {
       lD = gamepad1.dpad_down;
       lL = gamepad1.dpad_left;
 
+
       telemetry.addData("pos", curPos);
+      telemetry.update();
+
+      if(gamepad1.dpad_left){
+        claw.setPosition(claw.getPosition() + 0.01);
+      }
+
+      if(gamepad1.dpad_right){
+        claw.setPosition(claw.getPosition() - 0.01);
+      }
+
+      telemetry.addData("Claw Pos: ", claw.getPosition());
       telemetry.update();
     }
   }
