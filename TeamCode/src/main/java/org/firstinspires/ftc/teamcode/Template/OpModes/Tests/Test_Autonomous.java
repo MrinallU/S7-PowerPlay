@@ -2,12 +2,11 @@ package org.firstinspires.ftc.teamcode.Template.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.firstinspires.ftc.teamcode.Template.Base;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 @Disabled
 @Autonomous(name = "Temp_Test_Autonomous", group = "Tests")
 public class Test_Autonomous extends Base {

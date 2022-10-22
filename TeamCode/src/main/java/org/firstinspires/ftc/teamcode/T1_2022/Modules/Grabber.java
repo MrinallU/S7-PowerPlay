@@ -11,11 +11,11 @@ public class Grabber {
       V4B_FRONT_LEFT = 1,
       V4B_FRONT_RIGHT = 1,
       V4B_BACK_LEFT = 0,
-          V4B_BACK_RIGHT = 0,
+      V4B_BACK_RIGHT = 0,
       V4B_FRONT_THRESHOLD = 0.1;
   public final int HIGH = 0, HIGH_LEFT = 0, HIGH_RIGHT = 0;
   public final int MIDDLE = 0, MIDDLE_LEFT = 0, MIDDLE_RIGHT = 0;
-  public final int LOW = 0,  LOW_LEFT = 0, LOW_RIGHT = 0;
+  public final int LOW = 0, LOW_LEFT = 0, LOW_RIGHT = 0;
   public final int REST = 0;
 
   boolean armRested = true, v4bISFRONT = false;
@@ -36,28 +36,28 @@ public class Grabber {
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
 
-//    v4bRight.setPosition(1);
-//    v4bLeft.setPosition(0);
+    //    v4bRight.setPosition(1);
+    //    v4bLeft.setPosition(0);
   }
 
   public void raiseTop() {
     setV4B_FRONT();
-    //raiseToPosition(HIGH, 0.5);
-    raiseToPosition(HIGH_LEFT, HIGH_RIGHT,  0.2);
+    // raiseToPosition(HIGH, 0.5);
+    raiseToPosition(HIGH_LEFT, HIGH_RIGHT, 0.2);
     armRested = false;
   }
 
   public void raiseMiddle() {
     setV4B_FRONT();
-    //raiseToPosition(MIDDLE, 0.5);
-    raiseToPosition(MIDDLE_LEFT, MIDDLE_RIGHT,  0.2);
+    // raiseToPosition(MIDDLE, 0.5);
+    raiseToPosition(MIDDLE_LEFT, MIDDLE_RIGHT, 0.2);
     armRested = false;
   }
 
   public void raiseLow() {
     setV4B_FRONT();
-    //raiseToPosition(LOW, 0.5);
-    raiseToPosition(LOW_LEFT, LOW_RIGHT,  0.2);
+    // raiseToPosition(LOW, 0.5);
+    raiseToPosition(LOW_LEFT, LOW_RIGHT, 0.2);
     armRested = false;
   }
 
@@ -67,7 +67,7 @@ public class Grabber {
   }
 
   public void updateArmPos(String armStatus) {
-    if(!Objects.equals(armStatusPrev, armStatus)) {
+    if (!Objects.equals(armStatusPrev, armStatus)) {
       if (Objects.equals(armStatus, "high")) {
         raiseTop();
         armStatusPrev = armStatus;
@@ -106,10 +106,10 @@ public class Grabber {
     leftSlide.toPosition();
     leftSlide.setPower(power);
 
-//    rightSlide.setTarget(pos2);
-//    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-//    rightSlide.toPosition();
-//    rightSlide.setPower(power);
+    //    rightSlide.setTarget(pos2);
+    //    rightSlide.retMotorEx().setTargetPositionTolerance(3);
+    //    rightSlide.toPosition();
+    //    rightSlide.setPower(power);
   }
 
   public void raiseToPosition(int pos) {

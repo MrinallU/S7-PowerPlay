@@ -2,11 +2,7 @@ package org.firstinspires.ftc.teamcode.T1_2022.Modules;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -16,7 +12,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
-import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
 public class Drive extends Base {
@@ -48,7 +43,6 @@ public class Drive extends Base {
     this.allHubs = allHubs;
     odometry = new Odometry(xPos, yPos, angle);
   }
-
 
   public double getAngle() {
     Orientation angles =

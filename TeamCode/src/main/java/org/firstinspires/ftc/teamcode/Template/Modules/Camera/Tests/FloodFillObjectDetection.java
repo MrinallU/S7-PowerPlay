@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode.Template.Modules.Camera.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Camera;
-import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.Helpers.VisionObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Camera;
+import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.Helpers.VisionObject;
 
 @Disabled
 @TeleOp(name = "Ecov", group = "robot")

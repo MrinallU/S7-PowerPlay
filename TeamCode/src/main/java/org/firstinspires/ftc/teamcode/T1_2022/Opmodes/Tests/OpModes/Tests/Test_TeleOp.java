@@ -29,31 +29,29 @@ public class Test_TeleOp extends Base {
         basicDrive = !basicDrive;
       }
 
-//      dpUL = dpU;
-//      dpU = gamepad1.dpad_up;
-//      if (!dpUL && dpU) {
-//        grabber.updateArmPos("high");
-//      }
-//
-//      dpDL = dpD;
-//      dpD = gamepad1.dpad_down;
-//      if (!dpDL && dpD) {
-//        grabber.updateArmPos("rest");
-//      }
-//
-//      dpLL  = dpL;
-//      dpL = gamepad1.dpad_left;
-//      if (!dpUL && dpU) {
-//        grabber.updateArmPos("middle");
-//      }
-//
-//      dpRL = dpR;
-//      dpR = gamepad1.dpad_right;
-//      if (!dpRL && dpR) {
-//        grabber.updateArmPos("middle");
-//      }
-
-
+      //      dpUL = dpU;
+      //      dpU = gamepad1.dpad_up;
+      //      if (!dpUL && dpU) {
+      //        grabber.updateArmPos("high");
+      //      }
+      //
+      //      dpDL = dpD;
+      //      dpD = gamepad1.dpad_down;
+      //      if (!dpDL && dpD) {
+      //        grabber.updateArmPos("rest");
+      //      }
+      //
+      //      dpLL  = dpL;
+      //      dpL = gamepad1.dpad_left;
+      //      if (!dpUL && dpU) {
+      //        grabber.updateArmPos("middle");
+      //      }
+      //
+      //      dpRL = dpR;
+      //      dpR = gamepad1.dpad_right;
+      //      if (!dpRL && dpR) {
+      //        grabber.updateArmPos("middle");
+      //      }
 
       // Drive
       slowDrive = gamepad1.left_bumper;

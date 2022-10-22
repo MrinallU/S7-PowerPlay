@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
+
 @Disabled
 @TeleOp(name = "Temp_SlideTest", group = "Tests")
 public class SlideTest extends LinearOpMode {
@@ -18,23 +18,24 @@ public class SlideTest extends LinearOpMode {
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
     Grabber grabber = new Grabber(ls, rs, lv, rv, s);
-    int curPos=0; boolean lU = false, lD = false, lL = false;
+    int curPos = 0;
+    boolean lU = false, lD = false, lL = false;
 
     waitForStart();
     while (opModeIsActive()) {
-      if (gamepad1.dpad_up&&!lU) {
-        curPos+=10;
+      if (gamepad1.dpad_up && !lU) {
+        curPos += 10;
       }
 
       lU = gamepad1.dpad_up;
 
-      if (gamepad1.dpad_down&&!lD) {
-        curPos-=10;
+      if (gamepad1.dpad_down && !lD) {
+        curPos -= 10;
       }
       lD = gamepad1.dpad_down;
 
-      if (gamepad1.dpad_left&&!lL) {
-        grabber.raiseToPosition(curPos,0.1);
+      if (gamepad1.dpad_left && !lL) {
+        grabber.raiseToPosition(curPos, 0.1);
       }
       lL = gamepad1.dpad_left;
     }
