@@ -12,11 +12,13 @@ public class SlideTest extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     Servo s = hardwareMap.get(Servo.class, "claw"),
             lv = hardwareMap.get(Servo.class, "v4bl"),
-            rv = hardwareMap.get(Servo.class, "v4bl");
+            rv = hardwareMap.get(Servo.class, "v4br");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
     Grabber grabber = new Grabber(ls, rs, lv, rv, s);
     int curPos=0, curPos2=0; boolean lU = false, lD = false, lL = false, lA = false, lB = false;
+    waitForStart();
+
     while (opModeIsActive()) {
       if (gamepad1.dpad_up&&!lU) {
         curPos+=10;
@@ -35,7 +37,7 @@ public class SlideTest extends LinearOpMode {
       }
 
       if (gamepad1.dpad_left&&!lL) {
-        grabber.raiseToPosition(curPos, curPos2, 0.1);
+        grabber.raiseToPosition(curPos, curPos2, 0.9);
       }
 
       lU = gamepad1.dpad_up;

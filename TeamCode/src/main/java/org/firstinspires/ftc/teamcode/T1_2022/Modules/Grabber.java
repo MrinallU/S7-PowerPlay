@@ -6,7 +6,7 @@ import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN = 1,
+  public final double CLAW_OPEN = 0.25,
       CLAW_CLOSE = 0,
       V4B_FRONT_LEFT = 1,
       V4B_FRONT_RIGHT = 1,
@@ -31,16 +31,13 @@ public class Grabber {
     v4bRight = rs;
     claw = g;
 
-    leftSlide.setDirection(DcMotorSimple.Direction.FORWARD);
-    rightSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+    rightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+    leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
-    leftSlide.toPosition();
-    rightSlide.toPosition();
 
-
-    v4bRight.setPosition(1);
-    v4bLeft.setPosition(0);
+//    v4bRight.setPosition(1);
+//    v4bLeft.setPosition(0);
   }
 
   public void raiseTop() {
@@ -109,10 +106,10 @@ public class Grabber {
     leftSlide.toPosition();
     leftSlide.setPower(power);
 
-    rightSlide.setTarget(pos2);
-    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-    rightSlide.toPosition();
-    rightSlide.setPower(power);
+//    rightSlide.setTarget(pos2);
+//    rightSlide.retMotorEx().setTargetPositionTolerance(3);
+//    rightSlide.toPosition();
+//    rightSlide.setPower(power);
   }
 
   public void raiseToPosition(int pos) {

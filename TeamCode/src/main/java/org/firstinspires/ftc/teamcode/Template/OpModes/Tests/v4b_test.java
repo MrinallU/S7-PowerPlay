@@ -19,6 +19,8 @@ public class v4b_test extends LinearOpMode {
         Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
         Grabber grabber = new Grabber(ls, rs, lv, rv, s);
         int curPos=0; boolean lU = false, lD = false, lL = false;
+
+        waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.dpad_up&&!lU) {
                 curPos+=0.1;

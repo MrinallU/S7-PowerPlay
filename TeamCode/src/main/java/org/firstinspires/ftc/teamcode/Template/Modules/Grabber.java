@@ -31,8 +31,8 @@ public class Grabber {
 
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
-    leftSlide.toPosition();
-    rightSlide.toPosition();
+//    leftSlide.toPosition();
+//    rightSlide.toPosition();
   }
 
   public void raiseTop() {
