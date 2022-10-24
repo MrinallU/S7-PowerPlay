@@ -40,7 +40,7 @@ public class Test_TeleOp extends Base {
         armStat = "rest";
       }
 
-      dpLL  = dpL;
+      dpLL = dpL;
       dpL = gamepad1.dpad_left;
       if (!dpUL && dpU) {
         armStat = "middle";
@@ -48,15 +48,15 @@ public class Test_TeleOp extends Base {
 
       aLP2 = aP2;
       aP2 = gamepad2.a;
-      if(!aLP2 && aP2){
+      if (!aLP2 && aP2) {
         grabber.grabCone();
       }
 
-       bLP2 = bP2;
-       bP2 = gamepad2.b;
-       if(!bLP2 && bP2){
-         grabber.releaseCone();
-       }
+      bLP2 = bP2;
+      bP2 = gamepad2.b;
+      if (!bLP2 && bP2) {
+        grabber.releaseCone();
+      }
 
       // Grabber
       grabber.updateArmPos(armStat);

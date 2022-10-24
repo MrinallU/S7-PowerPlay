@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.T1_2022.Modules;
 
-import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
@@ -36,7 +34,6 @@ public class Grabber {
     v4bRight = rs;
     claw = g;
     touchSensor = t;
-
 
     rightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -84,9 +81,9 @@ public class Grabber {
       } else if (Objects.equals(armStatus, "rest")) {
         setV4B_BACK();
         if (v4bRight.getPosition() <= V4B_FRONT_THRESHOLD) {
-          if(!touchSensor.isPressed()) {
+          if (!touchSensor.isPressed()) {
             restArm();
-          }else{
+          } else {
             leftSlide.setPower(0);
             rightSlide.setPower(0);
             leftSlide.resetEncoder(true);
@@ -98,19 +95,19 @@ public class Grabber {
   }
 
   public void raiseToPosition(int pos, double power) {
-//    leftSlide.setTarget(pos);
-//    leftSlide.retMotorEx().setTargetPositionTolerance(3);
-//    leftSlide.toPosition();
-//    leftSlide.setPower(power);
-//
-//    rightSlide.setTarget(pos);
-//    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-//    rightSlide.toPosition();
-//    rightSlide.setPower(power);
-    double diff = rightSlide.encoderReading()-pos;
-    if(Math.abs(diff)>3){
-      rightSlide.setPower(diff*0.05);
-      leftSlide.setPower(diff*0.05);
+    //    leftSlide.setTarget(pos);
+    //    leftSlide.retMotorEx().setTargetPositionTolerance(3);
+    //    leftSlide.toPosition();
+    //    leftSlide.setPower(power);
+    //
+    //    rightSlide.setTarget(pos);
+    //    rightSlide.retMotorEx().setTargetPositionTolerance(3);
+    //    rightSlide.toPosition();
+    //    rightSlide.setPower(power);
+    double diff = rightSlide.encoderReading() - pos;
+    if (Math.abs(diff) > 3) {
+      rightSlide.setPower(diff * 0.05);
+      leftSlide.setPower(diff * 0.05);
     }
   }
 
