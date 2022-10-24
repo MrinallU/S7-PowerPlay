@@ -40,8 +40,8 @@ public class Grabber {
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
 
-    //    v4bRight.setPosition(1);
-    //    v4bLeft.setPosition(0);
+    grabCone();
+    setV4B_BACK();
   }
 
   public void raiseTop() {
