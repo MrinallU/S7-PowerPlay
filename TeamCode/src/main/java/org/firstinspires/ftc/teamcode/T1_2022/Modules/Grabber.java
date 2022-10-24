@@ -46,22 +46,22 @@ public class Grabber {
 
   public void raiseTop() {
     setV4B_FRONT();
-    // raiseToPosition(HIGH, 0.5);
-    raiseToPosition(HIGH_LEFT, HIGH_RIGHT, 0.2);
+    raiseToPosition(HIGH, 0.5);
+    //raiseToPosition(HIGH_LEFT, HIGH_RIGHT, 0.2);
     armRested = false;
   }
 
   public void raiseMiddle() {
     setV4B_FRONT();
-    // raiseToPosition(MIDDLE, 0.5);
-    raiseToPosition(MIDDLE_LEFT, MIDDLE_RIGHT, 0.2);
+    raiseToPosition(MIDDLE, 0.5);
+    //raiseToPosition(MIDDLE_LEFT, MIDDLE_RIGHT, 0.2);
     armRested = false;
   }
 
   public void raiseLow() {
     setV4B_FRONT();
-    // raiseToPosition(LOW, 0.5);
-    raiseToPosition(LOW_LEFT, LOW_RIGHT, 0.2);
+    raiseToPosition(LOW, 0.5);
+    //raiseToPosition(LOW_LEFT, LOW_RIGHT, 0.2);
     armRested = false;
   }
 
@@ -74,8 +74,10 @@ public class Grabber {
     if (!Objects.equals(armStatusPrev, armStatus)) {
       if (Objects.equals(armStatus, "high")) {
         raiseTop();
+        armStatusPrev = armStatus;
       } else if (Objects.equals(armStatus, "low")) {
         raiseLow();
+        armStatusPrev = armStatus;
       } else if (Objects.equals(armStatus, "middle")) {
         raiseMiddle();
       } else if (Objects.equals(armStatus, "rest")) {
@@ -83,11 +85,13 @@ public class Grabber {
         if (v4bRight.getPosition() <= V4B_FRONT_THRESHOLD) {
           if (!touchSensor.isPressed()) {
             restArm();
+            armStatusPrev = "null";
           } else {
             leftSlide.setPower(0);
             rightSlide.setPower(0);
             leftSlide.resetEncoder(true);
             rightSlide.resetEncoder(true);
+            armStatusPrev = armStatus;
           }
         }
       }
@@ -95,20 +99,20 @@ public class Grabber {
   }
 
   public void raiseToPosition(int pos, double power) {
-    //    leftSlide.setTarget(pos);
-    //    leftSlide.retMotorEx().setTargetPositionTolerance(3);
-    //    leftSlide.toPosition();
-    //    leftSlide.setPower(power);
-    //
-    //    rightSlide.setTarget(pos);
-    //    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-    //    rightSlide.toPosition();
-    //    rightSlide.setPower(power);
-    double diff = rightSlide.encoderReading() - pos;
-    if (Math.abs(diff) > 3) {
-      rightSlide.setPower(diff * 0.05);
-      leftSlide.setPower(diff * 0.05);
-    }
+        leftSlide.setTarget(pos);
+        leftSlide.retMotorEx().setTargetPositionTolerance(3);
+        leftSlide.toPosition();
+        leftSlide.setPower(power);
+
+        rightSlide.setTarget(pos);
+        rightSlide.retMotorEx().setTargetPositionTolerance(3);
+        rightSlide.toPosition();
+        rightSlide.setPower(power);
+//    double diff = rightSlide.encoderReading() - pos;
+//    if (Math.abs(diff) > 3) {
+//      rightSlide.setPower(diff * 0.05);
+//      leftSlide.setPower(diff * 0.05);
+//    }
   }
 
   public void raiseToPosition(int pos1, int pos2, double power) {
