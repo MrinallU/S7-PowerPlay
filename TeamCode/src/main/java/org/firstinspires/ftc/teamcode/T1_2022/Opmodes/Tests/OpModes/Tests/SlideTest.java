@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
 import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
@@ -15,9 +17,11 @@ public class SlideTest extends LinearOpMode {
         rv = hardwareMap.get(Servo.class, "v4br");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
+    Grabber grabber = new Grabber(ls, rs, lv, rv, s, t);
     int curPos = 0, curPos2 = 0;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
+
     waitForStart();
 
     while (opModeIsActive()) {

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.List;
 import java.util.Locale;
@@ -31,13 +32,14 @@ public abstract class Base extends LinearOpMode {
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
   public double initAng = 0;
   public String driveType;
+  public String armStat = "rest";
 
   // Positions and Bounds
   public double dpadTurnSpeed = 0.175, dpadDriveSpeed = 0.2;
 
   // Button Variables
   public boolean yP = false, yLP = false;
-  public boolean aP = false, aLP = false;
+  public boolean aP2 = false, aLP2 = false;
   public boolean rP2 = false, rLP2 = false;
   public boolean lP2 = false, lLP2 = false;
   public boolean yP2 = false, yLP2 = false;
@@ -95,35 +97,35 @@ public abstract class Base extends LinearOpMode {
     gyro = hardwareMap.get(BNO055IMU.class, "imu");
     gyro.initialize(parameters);
 
+    // Sensors
+    TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
+
     // Modules
     dt =
         new Drive(
             fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
-    grabber = new Grabber(ls, rs, lv, rv, s);
+    grabber = new Grabber(ls, rs, lv, rv, s, t);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
     dpadTurnSpeed = 0.175;
     dpadDriveSpeed = 0.2;
     initAng = angle;
-    yP = false;
-    yLP = false;
-    aP = false;
-    aLP = false;
-    rP2 = false;
-    rLP2 = false;
-    lP2 = false;
-    lLP2 = false;
-    yP2 = false;
-    yLP2 = false;
-    rSP2 = false;
-    rSLP2 = false;
-    bP2 = false;
-    bLP2 = false;
-    slowDrive = false;
-    fastDrive = false;
+    yP = false; yLP = false;
+    aP2 = false; aLP2 = false;
+    rP2 = false; rLP2 = false;
+    lP2 = false; lLP2 = false;
+    yP2 = false; yLP2 = false;
+    rSP2 = false; rSLP2 = false;
+    bP2 = false; bLP2 = false;
+    dpU = false; dpUL = false;
+    dpD = false; dpDL = false;
+    dpL = false; dpLL = false;
+    dpR = false; dpRL = false;
+    slowDrive = false; fastDrive = false;
     basicDrive = false;
+    armStat = "rest";
   }
 
   public void initHardware(OpMode m) throws InterruptedException {

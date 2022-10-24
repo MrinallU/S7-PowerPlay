@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
+import org.firstinspires.ftc.teamcode.Template.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 @Disabled

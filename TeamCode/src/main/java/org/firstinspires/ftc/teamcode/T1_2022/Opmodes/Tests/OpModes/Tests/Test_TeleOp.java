@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.T1_2022.Base;
 public class Test_TeleOp extends Base {
 
   // TeleOp Variables
-
   @Override
   public void runOpMode() throws InterruptedException {
     initHardware(0, this);
@@ -29,29 +28,38 @@ public class Test_TeleOp extends Base {
         basicDrive = !basicDrive;
       }
 
-      //      dpUL = dpU;
-      //      dpU = gamepad1.dpad_up;
-      //      if (!dpUL && dpU) {
-      //        grabber.updateArmPos("high");
-      //      }
-      //
-      //      dpDL = dpD;
-      //      dpD = gamepad1.dpad_down;
-      //      if (!dpDL && dpD) {
-      //        grabber.updateArmPos("rest");
-      //      }
-      //
-      //      dpLL  = dpL;
-      //      dpL = gamepad1.dpad_left;
-      //      if (!dpUL && dpU) {
-      //        grabber.updateArmPos("middle");
-      //      }
-      //
-      //      dpRL = dpR;
-      //      dpR = gamepad1.dpad_right;
-      //      if (!dpRL && dpR) {
-      //        grabber.updateArmPos("middle");
-      //      }
+      dpUL = dpU;
+      dpU = gamepad1.dpad_up;
+      if (!dpUL && dpU) {
+        armStat = "high";
+      }
+
+      dpDL = dpD;
+      dpD = gamepad1.dpad_down;
+      if (!dpDL && dpD) {
+        armStat = "rest";
+      }
+
+      dpLL  = dpL;
+      dpL = gamepad1.dpad_left;
+      if (!dpUL && dpU) {
+        armStat = "middle";
+      }
+
+      aLP2 = aP2;
+      aP2 = gamepad2.a;
+      if(!aLP2 && aP2){
+        grabber.grabCone();
+      }
+
+       bLP2 = bP2;
+       bP2 = gamepad2.b;
+       if(!bLP2 && bP2){
+         grabber.releaseCone();
+       }
+
+      // Grabber
+      grabber.updateArmPos(armStat);
 
       // Drive
       slowDrive = gamepad1.left_bumper;
