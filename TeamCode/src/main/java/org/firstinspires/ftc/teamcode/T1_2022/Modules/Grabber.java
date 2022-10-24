@@ -146,5 +146,4 @@ public class Grabber {
     v4bRight.setPosition(V4B_BACK_RIGHT);
     v4bISFRONT = false;
   }
-
 }
