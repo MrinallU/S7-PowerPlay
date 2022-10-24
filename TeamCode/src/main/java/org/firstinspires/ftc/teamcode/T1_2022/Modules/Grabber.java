@@ -147,7 +147,4 @@ public class Grabber {
     v4bISFRONT = false;
   }
 
-  public int getSlidePos() {
-    return Math.max(leftSlide.encoderReading(), rightSlide.encoderReading());
-  }
 }

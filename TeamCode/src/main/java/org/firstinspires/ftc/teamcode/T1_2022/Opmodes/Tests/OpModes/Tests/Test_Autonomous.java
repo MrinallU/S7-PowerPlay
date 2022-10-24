@@ -14,7 +14,7 @@ public class Test_Autonomous extends Base {
   @Override
   public void runOpMode() throws InterruptedException {
     initHardware(0, this);
-    sleep(1000);
+    sleep(500);
     telemetry.addData("Status", "Initialized");
     telemetry.update();
 

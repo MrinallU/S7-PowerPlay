@@ -29,6 +29,8 @@ public class Grabber {
 
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
+
+    grabCone();
     //    leftSlide.toPosition();
     //    rightSlide.toPosition();
   }
