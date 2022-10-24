@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Autonomous;
 
-
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
 public class RedPrimary extends Base {
