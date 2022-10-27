@@ -81,7 +81,8 @@ public class Grabber {
         raiseMiddle();
       } else if (Objects.equals(armStatus, "rest")) {
         setV4B_BACK();
-        if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading()) <= V4B_FRONT_THRESHOLD) {
+        if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading())
+            <= V4B_FRONT_THRESHOLD) {
           if (!touchSensor.isPressed()) {
             restArm();
             armStatusPrev = "null";

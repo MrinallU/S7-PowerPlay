@@ -13,8 +13,9 @@ public class ClawTest extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     Servo s = hardwareMap.get(Servo.class, "claw");
 
-    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide"),
-    v4b = new Motor(hardwareMap, "v4b");
+    Motor ls = new Motor(hardwareMap, "leftSlide"),
+        rs = new Motor(hardwareMap, "rightSlide"),
+        v4b = new Motor(hardwareMap, "v4b");
     TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
     Grabber grabber = new Grabber(ls, rs, v4b, s, touch);
     double curPos = 1;

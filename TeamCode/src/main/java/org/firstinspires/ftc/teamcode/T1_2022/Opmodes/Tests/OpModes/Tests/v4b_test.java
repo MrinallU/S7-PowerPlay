@@ -13,8 +13,9 @@ public class v4b_test extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     Servo s = hardwareMap.get(Servo.class, "claw");
 
-    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide"),
-            v4b = new Motor(hardwareMap, "v4b");
+    Motor ls = new Motor(hardwareMap, "leftSlide"),
+        rs = new Motor(hardwareMap, "rightSlide"),
+        v4b = new Motor(hardwareMap, "v4b");
     TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
     Grabber grabber = new Grabber(ls, rs, v4b, s, touch);
     double curPos = 0, curPos2 = 0;
@@ -26,13 +27,13 @@ public class v4b_test extends LinearOpMode {
         curPos += 0.1;
       }
 
-//      if (gamepad1.a && !lA) {
-//        curPos2 += 0.1;
-//      }
+      //      if (gamepad1.a && !lA) {
+      //        curPos2 += 0.1;
+      //      }
 
-//      if (gamepad1.b && !lB) {
-//        curPos2 -= 0.1;
-//      }
+      //      if (gamepad1.b && !lB) {
+      //        curPos2 -= 0.1;
+      //      }
 
       if (gamepad1.dpad_down && !lD) {
         curPos -= 0.1;
@@ -40,7 +41,7 @@ public class v4b_test extends LinearOpMode {
 
       if (gamepad1.dpad_left && !lL) {
         grabber.v4b.setTarget(curPos);
-        grabber. v4b.retMotorEx().setTargetPositionTolerance(3);
+        grabber.v4b.retMotorEx().setTargetPositionTolerance(3);
         grabber.v4b.toPosition();
         grabber.v4b.setPower(0.3);
       }
@@ -52,7 +53,7 @@ public class v4b_test extends LinearOpMode {
       lL = gamepad1.dpad_left;
 
       telemetry.addData("pos", curPos);
-//      telemetry.addData("posRight", curPos);
+      //      telemetry.addData("posRight", curPos);
 
       telemetry.update();
     }

@@ -72,8 +72,9 @@ public abstract class Base extends LinearOpMode {
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor");
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
 
-    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide"),
-            v = new Motor(hardwareMap, "v4b");
+    Motor ls = new Motor(hardwareMap, "leftSlide"),
+        rs = new Motor(hardwareMap, "rightSlide"),
+        v = new Motor(hardwareMap, "v4b");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
