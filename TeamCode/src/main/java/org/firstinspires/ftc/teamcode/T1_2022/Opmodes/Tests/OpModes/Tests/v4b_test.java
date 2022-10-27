@@ -11,13 +11,12 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 public class v4b_test extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-    Servo s = hardwareMap.get(Servo.class, "claw"),
-        lv = hardwareMap.get(Servo.class, "v4bl"),
-        rv = hardwareMap.get(Servo.class, "v4br");
+    Servo s = hardwareMap.get(Servo.class, "claw");
 
-    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-    TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s, t);
+    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide"),
+            v4b = new Motor(hardwareMap, "v4b");
+    TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
+    Grabber grabber = new Grabber(ls, rs, v4b, s, touch);
     double curPos = 0, curPos2 = 0;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
     waitForStart();
@@ -27,21 +26,23 @@ public class v4b_test extends LinearOpMode {
         curPos += 0.1;
       }
 
-      if (gamepad1.a && !lA) {
-        curPos2 += 0.1;
-      }
+//      if (gamepad1.a && !lA) {
+//        curPos2 += 0.1;
+//      }
 
-      if (gamepad1.b && !lB) {
-        curPos2 -= 0.1;
-      }
+//      if (gamepad1.b && !lB) {
+//        curPos2 -= 0.1;
+//      }
 
       if (gamepad1.dpad_down && !lD) {
         curPos -= 0.1;
       }
 
       if (gamepad1.dpad_left && !lL) {
-        grabber.v4bLeft.setPosition(curPos);
-        grabber.v4bRight.setPosition(curPos2);
+        grabber.v4b.setTarget(curPos);
+        grabber. v4b.retMotorEx().setTargetPositionTolerance(3);
+        grabber.v4b.toPosition();
+        grabber.v4b.setPower(0.3);
       }
 
       lU = gamepad1.dpad_up;
@@ -50,8 +51,8 @@ public class v4b_test extends LinearOpMode {
       lD = gamepad1.dpad_down;
       lL = gamepad1.dpad_left;
 
-      telemetry.addData("posLeft", curPos);
-      telemetry.addData("posRight", curPos);
+      telemetry.addData("pos", curPos);
+//      telemetry.addData("posRight", curPos);
 
       telemetry.update();
     }

@@ -10,11 +10,9 @@ public class Grabber {
   public final double CLAW_OPEN = 0.5,
       CLAW_OPEN_MIDDLE = 0.25,
       CLAW_CLOSE = 0,
-      V4B_FRONT_LEFT = 1,
-      V4B_FRONT_RIGHT = 1,
-      V4B_BACK_LEFT = 0,
-      V4B_BACK_RIGHT = 0,
-      V4B_FRONT_THRESHOLD = 0.1;
+      V4B_FRONT = 1,
+      V4B_BACK = 0,
+      V4B_FRONT_THRESHOLD = 5;
   public final int HIGH = 0, HIGH_LEFT = 0, HIGH_RIGHT = 0;
   public final int MIDDLE = 0, MIDDLE_LEFT = 0, MIDDLE_RIGHT = 0;
   public final int LOW = 0, LOW_LEFT = 0, LOW_RIGHT = 0;
@@ -23,22 +21,23 @@ public class Grabber {
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "null";
 
-  public Motor leftSlide, rightSlide;
-  public Servo claw, v4bLeft, v4bRight;
+  public Motor leftSlide, rightSlide, v4b;
+  public Servo claw;
   public TouchSensor touchSensor;
 
-  public Grabber(Motor l, Motor r, Servo ls, Servo rs, Servo g, TouchSensor t) {
+  public Grabber(Motor l, Motor r, Motor vb, Servo g, TouchSensor t) {
     leftSlide = l;
     rightSlide = r;
-    v4bLeft = ls;
-    v4bRight = rs;
+    v4b = vb;
     claw = g;
     touchSensor = t;
 
     rightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+    v4b.setDirection(DcMotorSimple.Direction.FORWARD);
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
+    v4b.resetEncoder(true);
 
     grabCone();
     setV4B_BACK();
@@ -82,7 +81,7 @@ public class Grabber {
         raiseMiddle();
       } else if (Objects.equals(armStatus, "rest")) {
         setV4B_BACK();
-        if (v4bRight.getPosition() <= V4B_FRONT_THRESHOLD) {
+        if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading()) <= V4B_FRONT_THRESHOLD) {
           if (!touchSensor.isPressed()) {
             restArm();
             armStatusPrev = "null";
@@ -140,14 +139,18 @@ public class Grabber {
   }
 
   public void setV4B_FRONT() {
-    v4bLeft.setPosition(V4B_FRONT_LEFT);
-    v4bRight.setPosition(V4B_FRONT_RIGHT);
+    v4b.setTarget(V4B_FRONT);
+    v4b.retMotorEx().setTargetPositionTolerance(3);
+    v4b.toPosition();
+    v4b.setPower(0.3);
     v4bISFRONT = true;
   }
 
   public void setV4B_BACK() {
-    v4bLeft.setPosition(V4B_BACK_LEFT);
-    v4bRight.setPosition(V4B_BACK_RIGHT);
-    v4bISFRONT = false;
+    v4b.setTarget(V4B_BACK);
+    v4b.retMotorEx().setTargetPositionTolerance(3);
+    v4b.toPosition();
+    v4b.setPower(0.3);
+    v4bISFRONT = true;
   }
 }
