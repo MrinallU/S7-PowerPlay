@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.T1_2022.Base;
-
 import java.util.Objects;
+import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
 @TeleOp(name = "Test_TeleOp", group = "OdomBot")
 public class Test_TeleOp extends Base {
@@ -51,13 +50,13 @@ public class Test_TeleOp extends Base {
       rLP = rP;
       rP = gamepad1.right_bumper;
       if (!rLP2 && rP2) {
-        if(Objects.equals(grabber.clawStatus, "closed")){
-          if(grabber.touchSensor.isPressed()){
+        if (Objects.equals(grabber.clawStatus, "closed")) {
+          if (grabber.touchSensor.isPressed()) {
             grabber.resetClaw();
-          }else{
+          } else {
             grabber.releaseCone();
           }
-        }else{
+        } else {
           grabber.grabCone();
         }
       }

@@ -14,10 +14,8 @@ public class Grabber {
       V4B_BACK = 3,
       V4B_FRONT_THRESHOLD = 5;
   public final int HIGH = 1000, MIDDLE = 700, LOW = 400, REST = 0;
-
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "null", clawStatus = "closed";
-
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
   public TouchSensor touchSensor;
