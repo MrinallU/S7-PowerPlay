@@ -41,14 +41,15 @@ public abstract class Base extends LinearOpMode {
   public boolean yP = false, yLP = false;
   public boolean aP2 = false, aLP2 = false;
   public boolean rP2 = false, rLP2 = false;
+  public boolean rP = false, rLP = false;
   public boolean lP2 = false, lLP2 = false;
   public boolean yP2 = false, yLP2 = false;
   public boolean rSP2 = false, rSLP2 = false;
   public boolean bP2 = false, bLP2 = false;
-  public boolean dpU = false, dpUL = false;
-  public boolean dpD = false, dpDL = false;
-  public boolean dpL = false, dpLL = false;
-  public boolean dpR = false, dpRL = false;
+  public boolean dpU2 = false, dpUL2 = false;
+  public boolean dpD2 = false, dpDL2 = false;
+  public boolean dpL2 = false, dpLL2 = false;
+  public boolean dpR2 = false, dpRL2 = false;
   public boolean slowDrive = false, fastDrive = false;
   public boolean basicDrive = false;
 
@@ -78,8 +79,8 @@ public abstract class Base extends LinearOpMode {
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
-    fLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    bLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    fRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    bRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
     Servo s = hardwareMap.get(Servo.class, "claw");
@@ -124,16 +125,18 @@ public abstract class Base extends LinearOpMode {
     yLP2 = false;
     rSP2 = false;
     rSLP2 = false;
+    rP = false;
+    rLP = false;
     bP2 = false;
     bLP2 = false;
-    dpU = false;
-    dpUL = false;
-    dpD = false;
-    dpDL = false;
-    dpL = false;
-    dpLL = false;
-    dpR = false;
-    dpRL = false;
+    dpU2 = false;
+    dpUL2 = false;
+    dpD2 = false;
+    dpDL2 = false;
+    dpL2 = false;
+    dpLL2 = false;
+    dpR2 = false;
+    dpRL2 = false;
     slowDrive = false;
     fastDrive = false;
     basicDrive = false;

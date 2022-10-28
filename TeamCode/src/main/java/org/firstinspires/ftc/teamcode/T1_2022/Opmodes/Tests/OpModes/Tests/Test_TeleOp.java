@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
+import java.util.Objects;
+
 @TeleOp(name = "Test_TeleOp", group = "OdomBot")
 public class Test_TeleOp extends Base {
 
@@ -28,34 +30,36 @@ public class Test_TeleOp extends Base {
         basicDrive = !basicDrive;
       }
 
-      dpUL = dpU;
-      dpU = gamepad1.dpad_up;
-      if (!dpUL && dpU) {
+      dpUL2 = dpU2;
+      dpU2 = gamepad2.dpad_up;
+      if (!dpUL2 && dpU2) {
         armStat = "high";
       }
 
-      dpDL = dpD;
-      dpD = gamepad1.dpad_down;
-      if (!dpDL && dpD) {
+      dpDL2 = dpD2;
+      dpD2 = gamepad2.dpad_down;
+      if (!dpDL2 && dpD2) {
         armStat = "rest";
       }
 
-      dpLL = dpL;
-      dpL = gamepad1.dpad_left;
-      if (!dpUL && dpU) {
+      dpLL2 = dpL2;
+      dpL2 = gamepad2.dpad_left;
+      if (!dpLL2 && dpL2) {
         armStat = "middle";
       }
 
-      aLP2 = aP2;
-      aP2 = gamepad2.a;
-      if (!aLP2 && aP2) {
-        grabber.grabCone();
-      }
-
-      bLP2 = bP2;
-      bP2 = gamepad2.b;
-      if (!bLP2 && bP2) {
-        grabber.releaseCone();
+      rLP = rP;
+      rP = gamepad1.right_bumper;
+      if (!rLP2 && rP2) {
+        if(Objects.equals(grabber.clawStatus, "closed")){
+          if(grabber.touchSensor.isPressed()){
+            grabber.resetClaw();
+          }else{
+            grabber.releaseCone();
+          }
+        }else{
+          grabber.grabCone();
+        }
       }
 
       // Grabber
@@ -71,6 +75,7 @@ public class Test_TeleOp extends Base {
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
+      telemetry.addData("touch sensor", grabber.touchSensor.isPressed());
       telemetry.update();
     }
   }

@@ -52,6 +52,7 @@ public class SlideTest extends LinearOpMode {
 
       telemetry.addData("left slide pos ", curPos);
       telemetry.addData("right slide pos ", curPos2);
+      telemetry.addData("touch sensor", grabber.touchSensor.isPressed());
       telemetry.update();
     }
   }
