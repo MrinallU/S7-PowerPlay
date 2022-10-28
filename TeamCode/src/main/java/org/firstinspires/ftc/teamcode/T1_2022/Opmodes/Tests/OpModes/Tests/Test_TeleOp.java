@@ -51,7 +51,7 @@ public class Test_TeleOp extends Base {
       rP = gamepad1.right_bumper;
       if (!rLP2 && rP2) {
         if (Objects.equals(grabber.clawStatus, "closed")) {
-          if (grabber.touchSensor.isPressed()) {
+          if (Objects.equals(grabber.armStatusPrev, "rest")) {
             grabber.resetClaw();
           } else {
             grabber.releaseCone();
