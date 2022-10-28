@@ -17,7 +17,9 @@ public class SlideTest extends LinearOpMode {
         rv = hardwareMap.get(Servo.class, "v4bl");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    Motor fbr = new Motor(hardwareMap, "fourBar");
+
+    Grabber grabber = new Grabber(ls, rs, fbr, s);
     int curPos = 0;
     boolean lU = false, lD = false, lL = false;
 
@@ -35,7 +37,7 @@ public class SlideTest extends LinearOpMode {
       lD = gamepad1.dpad_down;
 
       if (gamepad1.dpad_left && !lL) {
-        grabber.raiseToPosition(curPos, 0.1);
+        grabber.raiseToPositionRight(curPos, 0.1);
       }
       lL = gamepad1.dpad_left;
     }

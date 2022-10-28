@@ -70,17 +70,19 @@ public abstract class Base extends LinearOpMode {
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor");
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
 
+    Motor fourBar = new Motor(hardwareMap, "fourBar");
+
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
+    fourBar.resetEncoder(true);
     fLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     bLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
-    Servo s = hardwareMap.get(Servo.class, "claw"),
-        lv = hardwareMap.get(Servo.class, "v4bl"),
-        rv = hardwareMap.get(Servo.class, "v4br");
+    Servo s = hardwareMap.get(Servo.class, "claw");
+
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -100,7 +102,7 @@ public abstract class Base extends LinearOpMode {
         new Drive(
             fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
-    grabber = new Grabber(ls, rs, lv, rv, s);
+    grabber = new Grabber(ls, rs, fourBar, s);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;

@@ -17,7 +17,8 @@ public class v4b_test extends LinearOpMode {
         rv = hardwareMap.get(Servo.class, "v4bl");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
-    Grabber grabber = new Grabber(ls, rs, lv, rv, s);
+    Motor fbr = new Motor(hardwareMap, "fourBar");
+    Grabber grabber = new Grabber(ls, rs, fbr, s);
     int curPos = 0;
     boolean lU = false, lD = false, lL = false;
 
