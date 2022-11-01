@@ -32,7 +32,7 @@ public abstract class Base extends LinearOpMode {
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
   public double initAng = 0;
   public String driveType;
-  public String armStat = "rest";
+  public String armStat;
 
   // Positions and Bounds
   public double dpadTurnSpeed = 0.175, dpadDriveSpeed = 0.2;
