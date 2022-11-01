@@ -50,11 +50,11 @@ public class Test_TeleOp extends Base {
 
       fourBarLast = fourBarCurr;
       fourBarCurr = gamepad2.left_bumper;
-      if(fourBarCurr && !fourBarLast){
+      if (fourBarCurr && !fourBarLast) {
         fourBarUp = !fourBarUp;
-        if(fourBarUp){
+        if (fourBarUp) {
           grabber.setV4B_FRONT();
-        }else{
+        } else {
           grabber.setV4B_BACK();
         }
       }
@@ -63,7 +63,7 @@ public class Test_TeleOp extends Base {
       rP = gamepad1.right_bumper;
       if (!rLP && rP) {
         if (Objects.equals(grabber.clawStatus, "closed")) {
-          //telemetry.addData("works", true);
+          // telemetry.addData("works", true);
           if (Objects.equals(grabber.armStatusPrev, "rest")) {
             grabber.resetClaw();
             telemetry.addData("works", true);
@@ -76,12 +76,11 @@ public class Test_TeleOp extends Base {
         }
       }
 
-//      rLP = rP;
-//      rP = gamepad1.right_bumper;
-//      if (!rLP && rP) {
-//        grabber.resetClaw();
-//      }
-
+      //      rLP = rP;
+      //      rP = gamepad1.right_bumper;
+      //      if (!rLP && rP) {
+      //        grabber.resetClaw();
+      //      }
 
       // Grabber
       grabber.updateArmPos(armStat);
@@ -89,9 +88,9 @@ public class Test_TeleOp extends Base {
       // Drive
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
-      drive = floor(gamepad1.right_stick_x*0.8);
-      strafe = floor(-gamepad1.right_stick_y*0.8);
-      turn = turnFloor(gamepad1.left_stick_x*0.8);
+      drive = floor(gamepad1.right_stick_x * 0.8);
+      strafe = floor(-gamepad1.right_stick_y * 0.8);
+      turn = turnFloor(gamepad1.left_stick_x * 0.8);
       computeDrivePowers(gamepad1);
 
       // Display Values

@@ -38,59 +38,59 @@ public class Grabber {
   }
 
   public void raiseTop() {
-//    grabCone();
+    //    grabCone();
     setV4B_FRONT();
     raiseToPosition(HIGH, 0.5);
     armRested = false;
   }
 
   public void raiseMiddle() {
-//    grabCone();
+    //    grabCone();
     setV4B_FRONT();
     raiseToPosition(MIDDLE, 0.5);
     armRested = false;
   }
 
   public void raiseLow() {
-//    grabCone();
+    //    grabCone();
     setV4B_FRONT();
     raiseToPosition(LOW, 0.5);
     armRested = false;
   }
 
   public void restArm() {
-    //grabCone();
+    // grabCone();
     raiseToPosition(REST, 0.5);
     armRested = true;
   }
 
   public void updateArmPos(String armStatus) {
-      if (Objects.equals(armStatus, "high")) {
-        raiseTop();
-        armStatusPrev = armStatus;
-      } else if (Objects.equals(armStatus, "low")) {
-        raiseLow();
-        armStatusPrev = armStatus;
-      } else if (Objects.equals(armStatus, "middle")) {
-        raiseMiddle();
-      } else if (Objects.equals(armStatus, "rest")) {
-        setV4B_BACK();
-        if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading())
-            <= V4B_FRONT_THRESHOLD) {
-          if (Math.abs(rightSlide.encoderReading()) > 5 ) {
-            restArm();
-            armStatusPrev = "null";
-          } else {
-            leftSlide.setPower(0);
-            rightSlide.setPower(0);
-            leftSlide.resetEncoder(true);
-            rightSlide.resetEncoder(true);
-            v4b.resetEncoder(true);
-            armStatusPrev = armStatus;
-//            grabCone();
-          }
+    if (Objects.equals(armStatus, "high")) {
+      raiseTop();
+      armStatusPrev = armStatus;
+    } else if (Objects.equals(armStatus, "low")) {
+      raiseLow();
+      armStatusPrev = armStatus;
+    } else if (Objects.equals(armStatus, "middle")) {
+      raiseMiddle();
+    } else if (Objects.equals(armStatus, "rest")) {
+      setV4B_BACK();
+      if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading())
+          <= V4B_FRONT_THRESHOLD) {
+        if (Math.abs(rightSlide.encoderReading()) > 5) {
+          restArm();
+          armStatusPrev = "null";
+        } else {
+          leftSlide.setPower(0);
+          rightSlide.setPower(0);
+          leftSlide.resetEncoder(true);
+          rightSlide.resetEncoder(true);
+          v4b.resetEncoder(true);
+          armStatusPrev = armStatus;
+          //            grabCone();
         }
       }
+    }
   }
 
   public void raiseToPosition(int pos, double power) {
