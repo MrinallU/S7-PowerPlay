@@ -48,25 +48,25 @@ public class Test_TeleOp extends Base {
         armStat = "middle";
       }
 
-      if(gamepad2.dpad_up){
+      if (gamepad2.dpad_up) {
         grabber.v4b.setPower(0.15);
-      }else if(gamepad2.dpad_down){
+      } else if (gamepad2.dpad_down) {
         grabber.v4b.setPower(-0.4);
 
-      }else{
+      } else {
         grabber.v4b.setPower(0);
       }
 
-//      fourBarLast = fourBarCurr;
-//      fourBarCurr = gamepad2.left_bumper;
-//      if (fourBarCurr && !fourBarLast) {
-//        fourBarUp = !fourBarUp;
-//        if (fourBarUp) {
-//          grabber.setV4B_FRONT();
-//        } else {
-//          grabber.setV4B_BACK();
-//        }
-//      }
+      //      fourBarLast = fourBarCurr;
+      //      fourBarCurr = gamepad2.left_bumper;
+      //      if (fourBarCurr && !fourBarLast) {
+      //        fourBarUp = !fourBarUp;
+      //        if (fourBarUp) {
+      //          grabber.setV4B_FRONT();
+      //        } else {
+      //          grabber.setV4B_BACK();
+      //        }
+      //      }
 
       rLP = rP;
       rP = gamepad1.right_bumper;

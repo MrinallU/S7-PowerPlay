@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -97,7 +96,6 @@ public class Drive extends Base {
     setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
   }
 
-
   public void driveRobotCentric(double drive, double turn, double strafe) {
     // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#robot-centric-final-sample-code
 
@@ -149,8 +147,8 @@ public class Drive extends Base {
     double currAngle = getAngle();
     ElapsedTime time = new ElapsedTime();
     while (Math.abs(currAngle - targetAngle) > minDifference
-            && time.milliseconds() < timeout
-            && ((LinearOpMode) opMode).opModeIsActive()) {
+        && time.milliseconds() < timeout
+        && ((LinearOpMode) opMode).opModeIsActive()) {
       resetCache();
       currAngle = getAngle();
       double angleDiff = Angle.normalize(currAngle - targetAngle);

@@ -39,21 +39,21 @@ public class Grabber {
 
   public void raiseTop() {
     //    grabCone();
-    //setV4B_FRONT();
+    // setV4B_FRONT();
     raiseToPosition(HIGH, 0.5);
     armRested = false;
   }
 
   public void raiseMiddle() {
     //    grabCone();
-    //setV4B_FRONT();
+    // setV4B_FRONT();
     raiseToPosition(MIDDLE, 0.5);
     armRested = false;
   }
 
   public void raiseLow() {
     //    grabCone();
-    //setV4B_FRONT();
+    // setV4B_FRONT();
     raiseToPosition(LOW, 0.5);
     armRested = false;
   }
@@ -74,7 +74,7 @@ public class Grabber {
     } else if (Objects.equals(armStatus, "middle")) {
       raiseMiddle();
     } else if (Objects.equals(armStatus, "rest")) {
-      //setV4B_BACK();
+      // setV4B_BACK();
       if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading())
           <= V4B_FRONT_THRESHOLD) {
         if (Math.abs(rightSlide.encoderReading()) > 5) {
