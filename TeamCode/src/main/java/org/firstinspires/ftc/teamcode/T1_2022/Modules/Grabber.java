@@ -13,7 +13,7 @@ public class Grabber {
       V4B_FRONT = -30,
       V4B_BACK = 3,
       V4B_FRONT_THRESHOLD = 5;
-  public final int HIGH = 1300, MIDDLE = 700, LOW = 400, REST = 0;
+  public final int HIGH = 1550, MIDDLE = 1700, LOW = 400, REST = 0;
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
@@ -39,21 +39,21 @@ public class Grabber {
 
   public void raiseTop() {
     //    grabCone();
-    setV4B_FRONT();
+    //setV4B_FRONT();
     raiseToPosition(HIGH, 0.5);
     armRested = false;
   }
 
   public void raiseMiddle() {
     //    grabCone();
-    setV4B_FRONT();
+    //setV4B_FRONT();
     raiseToPosition(MIDDLE, 0.5);
     armRested = false;
   }
 
   public void raiseLow() {
     //    grabCone();
-    setV4B_FRONT();
+    //setV4B_FRONT();
     raiseToPosition(LOW, 0.5);
     armRested = false;
   }
@@ -74,7 +74,7 @@ public class Grabber {
     } else if (Objects.equals(armStatus, "middle")) {
       raiseMiddle();
     } else if (Objects.equals(armStatus, "rest")) {
-      setV4B_BACK();
+      //setV4B_BACK();
       if (Math.abs(v4b.retMotorEx().getTargetPosition() - v4b.encoderReading())
           <= V4B_FRONT_THRESHOLD) {
         if (Math.abs(rightSlide.encoderReading()) > 5) {

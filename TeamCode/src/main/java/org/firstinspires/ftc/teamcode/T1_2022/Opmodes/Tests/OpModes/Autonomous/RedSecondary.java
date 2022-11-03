@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
-@Autonomous(name = "Red_Primary", group = "OdomBot")
-public class RedPrimary extends Base {
+@Autonomous(name = "Red_Secondary", group = "OdomBot")
+public class RedSecondary extends Base {
   @Override
   public void runOpMode() throws InterruptedException {
     ElapsedTime timer = new ElapsedTime();
@@ -20,7 +20,7 @@ public class RedPrimary extends Base {
     matchTime.reset();
     dt.resetCache();
 
-    int location = 1;
+    int location = 2;
     //location = getLocation();
 
     timer.reset();
@@ -33,8 +33,8 @@ public class RedPrimary extends Base {
     sleep(300);
 
     timer.reset();
-    while (timer.milliseconds() <= 1100) {
-      dt.driveFieldCentric(0.2, 0, 0, 1);
+    while (timer.milliseconds() <= 1000) {
+      dt.driveFieldCentric(-0.2, 0, 0, 1);
     }
     dt.stopDrive();
     //sleep(900);
@@ -44,7 +44,7 @@ public class RedPrimary extends Base {
     sleep(2000);
 
     timer.reset();
-    while (timer.milliseconds() <= 900) {
+    while (timer.milliseconds() <= 700) {
       dt.driveFieldCentric(0, 0, 0.1, 1);
     }
     dt.stopDrive();
@@ -54,7 +54,7 @@ public class RedPrimary extends Base {
     grabber.grabCone();
 
     timer.reset();
-    while (timer.milliseconds() <= 900) {
+    while (timer.milliseconds() <= 1000) {
       dt.driveFieldCentric(0, 0, -0.1, 1);
     }
     dt.stopDrive();
@@ -64,17 +64,17 @@ public class RedPrimary extends Base {
 
     // park
     timer.reset();
-    if(location==1){
+    if(location==3){
       while (timer.milliseconds() <= 3000) {
-        dt.driveFieldCentric(-0.2, 0, 0, 1);
+        dt.driveFieldCentric(0.2, 0, 0, 1);
       }
     }else if(location==2){
       while (timer.milliseconds() <= 1000) {
-        dt.driveFieldCentric(-0.2, 0, 0, 1);
+        dt.driveFieldCentric(0.2, 0, 0, 1);
       }
     }else{
       while (timer.milliseconds() <= 1000) {
-        dt.driveFieldCentric(0.2, 0, 0, 1);
+        dt.driveFieldCentric(-0.2, 0, 0, 1);
       }
     }
     dt.stopDrive();

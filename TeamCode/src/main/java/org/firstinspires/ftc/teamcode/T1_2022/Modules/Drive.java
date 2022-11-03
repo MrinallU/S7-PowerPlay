@@ -2,7 +2,11 @@ package org.firstinspires.ftc.teamcode.T1_2022.Modules;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -71,6 +75,29 @@ public class Drive extends Base {
     setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
   }
 
+  public void driveFieldCentric(double drive, double angle, double strafe, double diff) {
+    // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
+    double fRightPow, bRightPow, fLeftPow, bLeftPow;
+    double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
+
+    currAngle = getAngle();
+    double angleDiff = Angle.normalize(currAngle - angle);
+    double calcP = Range.clip(angleDiff * 0.01, -1, 1);
+    turn = calcP;
+
+    double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
+    double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
+
+    double denominator = Math.max(Math.abs(strafe) + Math.abs(drive) + Math.abs(turn), 1);
+    fLeftPow = (rotY + rotX + turn) / denominator;
+    bLeftPow = (rotY - rotX + turn) / denominator;
+    fRightPow = (rotY - rotX - turn) / denominator;
+    bRightPow = (rotY + rotX - turn) / denominator;
+
+    setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
+  }
+
+
   public void driveRobotCentric(double drive, double turn, double strafe) {
     // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#robot-centric-final-sample-code
 
@@ -115,6 +142,23 @@ public class Drive extends Base {
     }
 
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
+  }
+
+  public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
+    // GM0
+    double currAngle = getAngle();
+    ElapsedTime time = new ElapsedTime();
+    while (Math.abs(currAngle - targetAngle) > minDifference
+            && time.milliseconds() < timeout
+            && ((LinearOpMode) opMode).opModeIsActive()) {
+      resetCache();
+      currAngle = getAngle();
+      double angleDiff = Angle.normalize(currAngle - targetAngle);
+      double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
+      driveFieldCentric(0, calcP, 0);
+    }
+
+    stopDrive();
   }
 
   // Misc. Functions / Overloaded Method Storage
