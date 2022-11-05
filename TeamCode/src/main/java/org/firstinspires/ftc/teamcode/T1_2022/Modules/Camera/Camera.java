@@ -39,7 +39,7 @@ public class Camera {
         new OpenCvCamera.AsyncCameraOpenListener() {
           @Override
           public void onOpened() {
-            webcam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
+            webcam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
           }
 
           @Override
@@ -50,7 +50,7 @@ public class Camera {
     p3 = new april_tag_detection_pipeline();
   }
 
-  public String getSignalColor() {
+  public int getSignalColor() {
     return p1.getOut();
   }
 

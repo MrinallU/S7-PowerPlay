@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Tests;
+package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.TeleOP;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
 
-@TeleOp(name = "Test_TeleOp", group = "OdomBot")
-public class Test_TeleOp extends Base {
+@TeleOp(name = "TeleOp", group = "OdomBot")
+public class DriverControlled extends Base {
   boolean fourBarLast = false, fourBarCurr = false, fourBarUp = false;
 
   // TeleOp Variables
@@ -42,6 +42,12 @@ public class Test_TeleOp extends Base {
         armStat = "rest";
       }
 
+      bLP2 = bP2;
+      bP2 = gamepad2.b;
+      if(bP2 && !bLP2){
+        armStat = "low";
+      }
+
       dpLL2 = dpL2;
       dpL2 = gamepad2.x;
       if (!dpLL2 && dpL2) {
@@ -49,24 +55,12 @@ public class Test_TeleOp extends Base {
       }
 
       if (gamepad2.dpad_up) {
-        grabber.v4b.setPower(0.15);
+        grabber.v4b.setPower(1);
       } else if (gamepad2.dpad_down) {
-        grabber.v4b.setPower(-0.4);
-
+        grabber.v4b.setPower(-1);
       } else {
         grabber.v4b.setPower(0);
       }
-
-      //      fourBarLast = fourBarCurr;
-      //      fourBarCurr = gamepad2.left_bumper;
-      //      if (fourBarCurr && !fourBarLast) {
-      //        fourBarUp = !fourBarUp;
-      //        if (fourBarUp) {
-      //          grabber.setV4B_FRONT();
-      //        } else {
-      //          grabber.setV4B_BACK();
-      //        }
-      //      }
 
       rLP = rP;
       rP = gamepad1.right_bumper;
@@ -85,11 +79,19 @@ public class Test_TeleOp extends Base {
         }
       }
 
-      //      rLP = rP;
-      //      rP = gamepad1.right_bumper;
-      //      if (!rLP && rP) {
-      //        grabber.resetClaw();
-      //      }
+      lbl2 = lb2;
+      lb2 = gamepad2.left_bumper;
+      if(lb2 && !lbl2){
+        armStat = "manual";
+        grabber.manualPos-=100;
+      }
+
+      spLL2 = sPL2;
+      sPL2 = gamepad2.right_bumper;
+      if(sPL2 && !spLL2){
+        armStat = "manual";
+        grabber.manualPos+=100;
+      }
 
       // Grabber
       grabber.updateArmPos(armStat);
@@ -104,11 +106,11 @@ public class Test_TeleOp extends Base {
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
-      telemetry.addData("touch sensor", grabber.touchSensor.isPressed());
-      telemetry.addData("claw", grabber.clawStatus);
-      telemetry.addData("claw", gamepad1.right_bumper);
-      telemetry.addData("rs Pos: ", grabber.rightSlide.retMotorEx().getCurrentPosition());
-      telemetry.addData("rs: ", armStat);
+      telemetry.addData("slideMode: ", armStat);
+      if(Objects.equals(armStat, "manual")){
+        telemetry.addData("manualPos: ", grabber.manualPos);
+
+      }
       telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.update();
     }

@@ -25,13 +25,13 @@ public class v4b_test extends LinearOpMode {
 
     while (opModeIsActive()) {
       if (gamepad2.dpad_up) {
-        grabber.v4b.setPower(0.2);
+        grabber.v4b.setPower(1);
 
       } else if (gamepad2.dpad_down) {
-        grabber.v4b.setPower(-0.2);
+        grabber.v4b.setPower(-1);
 
       } else {
-        grabber.v4b.setPower(-0.025);
+        grabber.v4b.setPower(-0);
       }
     }
     //

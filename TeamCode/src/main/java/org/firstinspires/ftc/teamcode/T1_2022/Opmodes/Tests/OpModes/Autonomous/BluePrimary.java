@@ -23,7 +23,12 @@ public class BluePrimary extends Base {
     // location = getLocation();
 
     timer.reset();
-    while (timer.milliseconds() <= 1290) {
+    while (timer.milliseconds() <= 525){
+      dt.driveFieldCentric(-0.15, 0, 0, 1);
+    }
+
+    timer.reset();
+    while (timer.milliseconds() <= 1200) {
       dt.driveFieldCentric(0, 0, 0.3, 1);
     }
     dt.stopDrive();
@@ -38,7 +43,7 @@ public class BluePrimary extends Base {
     dt.stopDrive();
     //        sleep(900);
     // Raise slide and drop
-    grabber.raiseMiddle();
+    grabber.raiseMiddleAuto();
     sleep(2000);
 
     timer.reset();

@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Pipelines.Helpers.V
 @Disabled
 @TeleOp(name = "Ecov_yeet", group = "robot")
 public class FloodFillObjectDetection extends LinearOpMode {
-
   @Override
   public void runOpMode() throws InterruptedException {
     Camera camera = new Camera(hardwareMap);

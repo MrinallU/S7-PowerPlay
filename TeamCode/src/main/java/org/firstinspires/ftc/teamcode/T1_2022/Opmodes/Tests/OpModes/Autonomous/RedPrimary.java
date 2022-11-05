@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
+import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
 
 @Autonomous(name = "Red_Primary", group = "OdomBot")
 public class RedPrimary extends Base {
@@ -20,10 +21,15 @@ public class RedPrimary extends Base {
     dt.resetCache();
 
     int location = 1;
-    // location = getLocation();
+    location = camera.getSignalColor();
 
     timer.reset();
-    while (timer.milliseconds() <= 1290) {
+    while (timer.milliseconds() <= 525){
+      dt.driveFieldCentric(0.15, 0, 0, 1);
+    }
+
+    timer.reset();
+    while (timer.milliseconds() <= 1200) {
       dt.driveFieldCentric(0, 0, 0.3, 1);
     }
     dt.stopDrive();
@@ -39,11 +45,11 @@ public class RedPrimary extends Base {
     // sleep(900);
 
     // Raise slide and drop
-    grabber.raiseMiddle();
+    grabber.raiseMiddleAuto();
     sleep(2000);
 
     timer.reset();
-    while (timer.milliseconds() <= 900) {
+    while (timer.milliseconds() <= 850) {
       dt.driveFieldCentric(0, 0, 0.1, 1);
     }
     dt.stopDrive();

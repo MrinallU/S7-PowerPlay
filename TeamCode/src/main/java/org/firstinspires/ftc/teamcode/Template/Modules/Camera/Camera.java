@@ -50,7 +50,7 @@ public class Camera {
     p3 = new april_tag_detection_pipeline();
   }
 
-  public String getSignalColor() {
+  public int getSignalColor() {
     return p1.getOut();
   }
 

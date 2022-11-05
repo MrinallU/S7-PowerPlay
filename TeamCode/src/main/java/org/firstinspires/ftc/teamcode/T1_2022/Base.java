@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.List;
 import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
 import org.firstinspires.ftc.teamcode.T1_2022.Modules.Drive;
 import org.firstinspires.ftc.teamcode.T1_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
@@ -27,6 +28,7 @@ public abstract class Base extends LinearOpMode {
 
   public Drive dt = null;
   public Grabber grabber;
+  public Camera camera;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
@@ -50,11 +52,14 @@ public abstract class Base extends LinearOpMode {
   public boolean dpD2 = false, dpDL2 = false;
   public boolean dpL2 = false, dpLL2 = false;
   public boolean dpR2 = false, dpRL2 = false;
+  public boolean sPL2 = false, spLL2 = false;
+  public boolean lb2 = false, lbl2 = false;
   public boolean slowDrive = false, fastDrive = false;
   public boolean basicDrive = false;
 
   public void initHardware(int angle, OpMode m) throws InterruptedException {
     initHardware(0, 0, angle, m);
+
     initAng = angle;
   }
 
@@ -94,6 +99,8 @@ public abstract class Base extends LinearOpMode {
     parameters.loggingEnabled = true;
     parameters.loggingTag = "IMU";
     parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+    camera = new Camera(hardwareMap);
 
     gyro = hardwareMap.get(BNO055IMU.class, "imu");
     gyro.initialize(parameters);
@@ -140,6 +147,8 @@ public abstract class Base extends LinearOpMode {
     slowDrive = false;
     fastDrive = false;
     basicDrive = false;
+    sPL2 = false;
+    spLL2 = false;
     armStat = "rest";
   }
 

@@ -16,7 +16,7 @@ public class RGB_ColorThresh extends LinearOpMode {
 
     waitForStart();
 
-    String color = camera.getSignalColor();
+    int color = camera.getSignalColor();
 
     while (opModeIsActive()) {
       // Display Values
