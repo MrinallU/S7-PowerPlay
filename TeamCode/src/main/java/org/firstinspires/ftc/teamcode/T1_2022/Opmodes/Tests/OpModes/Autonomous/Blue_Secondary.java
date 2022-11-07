@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
+import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
 
 @Autonomous(name = "Blue_Secondary", group = "OdomBot")
 public class Blue_Secondary extends Base {
@@ -10,7 +11,6 @@ public class Blue_Secondary extends Base {
   public void runOpMode() throws InterruptedException {
     ElapsedTime timer = new ElapsedTime();
     initHardware(0, this);
-    grabber.grabCone();
     sleep(500);
     telemetry.addData("Status", "Initialized");
     telemetry.update();
@@ -18,9 +18,10 @@ public class Blue_Secondary extends Base {
     waitForStart();
     matchTime.reset();
     dt.resetCache();
+    grabber.grabCone();
+    sleep(500);
 
     int location = 3;
-    // location = getLocation();
 
     timer.reset();
     while (timer.milliseconds() <= 525){
@@ -48,7 +49,7 @@ public class Blue_Secondary extends Base {
     sleep(2000);
 
     timer.reset();
-    while (timer.milliseconds() <= 1100) {
+    while (timer.milliseconds() <= 850) {
       dt.driveFieldCentric(0, 0, 0.1, 1);
     }
     dt.stopDrive();
@@ -58,7 +59,7 @@ public class Blue_Secondary extends Base {
     grabber.grabCone();
 
     timer.reset();
-    while (timer.milliseconds() <= 1200) {
+    while (timer.milliseconds() <= 900) {
       dt.driveFieldCentric(0, 0, -0.1, 1);
     }
     dt.stopDrive();

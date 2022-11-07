@@ -22,6 +22,7 @@ public class DriverControlled extends Base {
       // Updates
       dt.resetCache();
       currAngle = dt.getAngle();
+      dt.updatePoseEstimate();
 
       // Change Drive Mode
       yLP = yP;
@@ -112,6 +113,8 @@ public class DriverControlled extends Base {
 
       }
       telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
+      telemetry.addData( "Current Pos: ", dt.getPose().getX() + " " + dt.getPose().getY()
+      + " " + dt.getAngle());
       telemetry.update();
     }
   }

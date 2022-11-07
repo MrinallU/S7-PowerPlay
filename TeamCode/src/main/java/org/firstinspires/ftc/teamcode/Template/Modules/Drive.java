@@ -221,7 +221,6 @@ public class Drive extends Base {
       double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
       setDrivePowers(calcP, calcP, calcP, calcP);
     }
-
     stopDrive();
   }
 

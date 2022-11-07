@@ -10,7 +10,6 @@ public class RedSecondary extends Base {
   public void runOpMode() throws InterruptedException {
     ElapsedTime timer = new ElapsedTime();
     initHardware(0, this);
-    grabber.grabCone();
     sleep(500);
     telemetry.addData("Status", "Initialized");
     telemetry.update();
@@ -18,6 +17,8 @@ public class RedSecondary extends Base {
     waitForStart();
     matchTime.reset();
     dt.resetCache();
+    grabber.grabCone();
+    sleep(500);
 
     int location = 2;
     // location = getLocation();

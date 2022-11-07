@@ -11,17 +11,17 @@ public class rectangle_thresholder_pipeline extends OpenCvPipeline {
 
   private int out;
   private boolean saveImg;
-  public Scalar lowerOrange = new Scalar(0, 72.3, 0);
-  public Scalar upperOrange = new Scalar(72.3, 184.2, 255);
+  public Scalar lowerOrange = new Scalar(0, 89.3, 0);
+  public Scalar upperOrange = new Scalar(28.3, 175.7, 255);
 
-  public Scalar lowerBlue = new Scalar(0, 0, 0);
-  public Scalar upperBlue = new Scalar(255, 255, 255);
+  public Scalar lowerBlue = new Scalar(110.5, 48.2, 0);
+  public Scalar upperBlue = new Scalar(255, 144.5, 255);
 
-  public Scalar lowerGreen = new Scalar(0, 0, 0);
-  public Scalar upperGreen = new Scalar(255, 255, 255);
+  public Scalar lowerGreen = new Scalar(32.6, 52.4, 123.3);
+  public Scalar upperGreen = new Scalar(80, 255, 255);
 
   private Mat hsvMat = new Mat(), binaryMat = new Mat();
-  private Point topLeft1 = new Point(128, 128), bottomRight1 = new Point(152, 133); // Analyzed area is constant
+  private Point topLeft1 = new Point(93, 80), bottomRight1 = new Point(115, 110); // Analyzed area is constant
 
   /*public rectangle_thresholder_pipeline(Telemetry telemetry) {
     this.telemetry = telemetry;
@@ -57,22 +57,24 @@ public class rectangle_thresholder_pipeline extends OpenCvPipeline {
   @Override
   public Mat processFrame(Mat input) {
     double winR, winB, winG;
-    winR = thresholdColor(input, lowerOrange, upperOrange);
     winB = thresholdColor(input, lowerBlue, upperBlue);
     winG = thresholdColor(input, lowerGreen, upperGreen);
+    winR = thresholdColor(input, lowerOrange, upperOrange);
 
     double best = Math.max(Math.max(winB, winG), winR);
 
-    if (best == winR) out = 1;
+    Imgproc.rectangle(input, new Point(topLeft1.x, topLeft1.y), new Point(bottomRight1.x, bottomRight1.y), new Scalar(255, 0, 0));
+
+    if (best == winR) out = 3;
     else if (best == winB) out = 2;
-    else out = 3;
+    else out = 1;
 
     if (saveImg) {
       saveMatToDisk(input, "rect_manual_img");
       saveImg = false;
     }
 
-    return binaryMat;
+    return input;
   }
 
   public int getOut() {

@@ -11,7 +11,6 @@ public class RedPrimary extends Base {
   public void runOpMode() throws InterruptedException {
     ElapsedTime timer = new ElapsedTime();
     initHardware(0, this);
-    grabber.grabCone();
     sleep(500);
     telemetry.addData("Status", "Initialized");
     telemetry.update();
@@ -19,9 +18,10 @@ public class RedPrimary extends Base {
     waitForStart();
     matchTime.reset();
     dt.resetCache();
+    grabber.grabCone();
+    sleep(500);
 
-    int location = 1;
-    location = camera.getSignalColor();
+    int location = 2;
 
     timer.reset();
     while (timer.milliseconds() <= 525){
