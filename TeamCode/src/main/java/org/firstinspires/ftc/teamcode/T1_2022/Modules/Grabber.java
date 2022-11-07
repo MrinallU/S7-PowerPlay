@@ -14,8 +14,13 @@ public class Grabber {
       V4B_BACK = 3,
       V4B_FRONT_THRESHOLD = 5;
   public int manualPos = 0;
-  //1670
-  public final int HIGH = 1900,MIDDLE = 1100, MIDDLE_AUTO = 1700, LOW = 1100, REST = 0, STACK = 600;
+  // 1670
+  public final int HIGH = 1900,
+      MIDDLE = 1100,
+      MIDDLE_AUTO = 1700,
+      LOW = 1100,
+      REST = 0,
+      STACK = 600;
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
@@ -51,15 +56,15 @@ public class Grabber {
   }
 
   public void raiseMiddle() {
-    //grabCone();
-    //setV4B_FRONT();
+    // grabCone();
+    // setV4B_FRONT();
     raiseToPosition(MIDDLE, 1);
     armRested = false;
   }
 
   public void raiseMiddleAuto() {
-    //grabCone();
-    //setV4B_FRONT();
+    // grabCone();
+    // setV4B_FRONT();
     raiseToPosition(MIDDLE_AUTO, 1);
     armRested = false;
   }
@@ -79,29 +84,29 @@ public class Grabber {
 
   public void updateArmPos(String armStatus) {
     if (Objects.equals(armStatus, "high")) {
-      //setV4B_FRONT();
+      // setV4B_FRONT();
       raiseTop();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
-     // setV4B_FRONT();
+      // setV4B_FRONT();
       raiseLow();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "middle")) {
-      //setV4B_FRONT();
+      // setV4B_FRONT();
       raiseMiddle();
     } else if (Objects.equals(armStatus, "rest")) {
-      //setV4B_BACK();
-        if (Math.abs(rightSlide.encoderReading()) > 2) {
-          restArm();
-        } else {
-          leftSlide.setPower(0);
-          rightSlide.setPower(0);
-          leftSlide.resetEncoder(true);
-          rightSlide.resetEncoder(true);
-          v4b.resetEncoder(true);
-        }
+      // setV4B_BACK();
+      if (Math.abs(rightSlide.encoderReading()) > 2) {
+        restArm();
+      } else {
+        leftSlide.setPower(0);
+        rightSlide.setPower(0);
+        leftSlide.resetEncoder(true);
+        rightSlide.resetEncoder(true);
+        v4b.resetEncoder(true);
+      }
       armStatusPrev = armStatus;
-    } else if(Objects.equals(armStatus, "manual")){
+    } else if (Objects.equals(armStatus, "manual")) {
       raiseToPosition(manualPos, 0.5);
       armStatusPrev = armStatus;
     }
@@ -147,21 +152,21 @@ public class Grabber {
   }
 
   public void setV4B_FRONT() {
-    if(v4b.encoderReading()<200) {
+    if (v4b.encoderReading() < 200) {
       v4b.setPower(1);
-    }else{
+    } else {
       v4b.setPower(0);
     }
-//    rightSlide.setTarget(V4B_FRONT);
-//    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-//    rightSlide.toPosition();
-//    rightSlide.setPower(0.05);
+    //    rightSlide.setTarget(V4B_FRONT);
+    //    rightSlide.retMotorEx().setTargetPositionTolerance(3);
+    //    rightSlide.toPosition();
+    //    rightSlide.setPower(0.05);
   }
 
   public void setV4B_BACK() {
-    if(v4b.encoderReading()>150) {
+    if (v4b.encoderReading() > 150) {
       v4b.setPower(-1);
-    }else{
+    } else {
       v4b.setPower(0);
     }
   }

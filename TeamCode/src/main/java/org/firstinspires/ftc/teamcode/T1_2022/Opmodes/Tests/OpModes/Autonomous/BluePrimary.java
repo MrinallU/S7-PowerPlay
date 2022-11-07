@@ -24,7 +24,7 @@ public class BluePrimary extends Base {
     // location = getLocation();
 
     timer.reset();
-    while (timer.milliseconds() <= 525){
+    while (timer.milliseconds() <= 525) {
       dt.driveFieldCentric(-0.15, 0, 0, 1);
     }
 

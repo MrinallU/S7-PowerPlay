@@ -69,8 +69,10 @@ public class Camera {
   public ArrayList<AprilTagDetection> getLatestDetections() {
     return p3.getLatestDetections();
   }
-  public int getDetection() {return p3.getLatestDetections().get(0).id;}
 
+  public int getDetection() {
+    return p3.getLatestDetections().get(0).id;
+  }
 
   public void stop() {
     webcam.stopStreaming();

@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -116,8 +115,17 @@ public abstract class Base extends LinearOpMode {
     // Modules
     dt =
         new Drive(
-            fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, initAng,
-                allHubs);
+            fLeftMotor,
+            bLeftMotor,
+            fRightMotor,
+            bRightMotor,
+            gyro,
+            m,
+            xPos,
+            yPos,
+            angle,
+            initAng,
+            allHubs);
 
     grabber = new Grabber(ls, rs, v, s, t);
 
@@ -162,66 +170,65 @@ public abstract class Base extends LinearOpMode {
     initHardware(0, m);
   }
 
-
   // Autonomous Movement (Note that you do not have to insert the current position into any of the
   // weighpoints)
   public void SplinePathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double driveSpeedCap,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
     dt.traversePath(
-            wps, heading, driveSpeedCap, false, -1, xError, yError, angleError, lookAheadDist, timeout);
+        wps, heading, driveSpeedCap, false, -1, xError, yError, angleError, lookAheadDist, timeout);
   }
 
   public void SplinePathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double driveSpeedCap,
-          double powLb,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
     dt.traversePath(
-            wps,
-            heading,
-            driveSpeedCap,
-            true,
-            powLb,
-            xError,
-            yError,
-            angleError,
-            lookAheadDist,
-            timeout);
+        wps,
+        heading,
+        driveSpeedCap,
+        true,
+        powLb,
+        xError,
+        yError,
+        angleError,
+        lookAheadDist,
+        timeout);
   }
 
   public void LinearPathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double driveSpeedCap,
-          double powLb,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = new ArrayList<>();
     wps.add(curLoc);
     wps.addAll(pts);
     wps = PathGenerator.generateLinearSpline(wps);
     dt.traversePath(
-            wps, heading, driveSpeedCap, powLb, xError, yError, angleError, lookAheadDist, timeout);
+        wps, heading, driveSpeedCap, powLb, xError, yError, angleError, lookAheadDist, timeout);
   }
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
@@ -237,47 +244,47 @@ public abstract class Base extends LinearOpMode {
   }
 
   public void moveToPosition(
-          double targetXPos,
-          double targetYPos,
-          double targetAngle,
-          double posAccuracy,
-          double angleAccuracy,
-          double timeout,
-          double powerLb) {
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double posAccuracy,
+      double angleAccuracy,
+      double timeout,
+      double powerLb) {
     dt.moveToPosition(
-            targetXPos,
-            targetYPos,
-            targetAngle,
-            posAccuracy,
-            posAccuracy,
-            angleAccuracy,
-            timeout,
-            powerLb);
+        targetXPos,
+        targetYPos,
+        targetAngle,
+        posAccuracy,
+        posAccuracy,
+        angleAccuracy,
+        timeout,
+        powerLb);
   }
 
   public void moveToPosition(
-          double targetXPos, double targetYPos, double targetAngle, double timeout) {
+      double targetXPos, double targetYPos, double targetAngle, double timeout) {
     moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.1);
   }
 
   public void moveToPosition(
-          double targetXPos, double targetYPos, double targetAngle, double timeout, double powerLb) {
+      double targetXPos, double targetYPos, double targetAngle, double timeout, double powerLb) {
     moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, powerLb);
   }
 
   public void moveToPosition(
-          double targetXPos,
-          double targetYPos,
-          double targetAngle,
-          double posAccuracy,
-          double timeout,
-          double powerLb) {
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double posAccuracy,
+      double timeout,
+      double powerLb) {
     moveToPosition(targetXPos, targetYPos, targetAngle, posAccuracy, 2, timeout, powerLb);
   }
 
   // Function implementing Points
   public void moveToPosition(
-          Point p, double xAccuracy, double yAccuracy, double angleAccuracy, double timeout) {
+      Point p, double xAccuracy, double yAccuracy, double angleAccuracy, double timeout) {
     moveToPosition(p.xP, p.yP, p.ang, xAccuracy, yAccuracy, angleAccuracy, timeout);
   }
 

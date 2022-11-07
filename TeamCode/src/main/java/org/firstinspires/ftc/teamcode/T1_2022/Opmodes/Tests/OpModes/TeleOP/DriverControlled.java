@@ -45,7 +45,7 @@ public class DriverControlled extends Base {
 
       bLP2 = bP2;
       bP2 = gamepad2.b;
-      if(bP2 && !bLP2){
+      if (bP2 && !bLP2) {
         armStat = "low";
       }
 
@@ -82,16 +82,16 @@ public class DriverControlled extends Base {
 
       lbl2 = lb2;
       lb2 = gamepad2.left_bumper;
-      if(lb2 && !lbl2){
+      if (lb2 && !lbl2) {
         armStat = "manual";
-        grabber.manualPos-=100;
+        grabber.manualPos -= 100;
       }
 
       spLL2 = sPL2;
       sPL2 = gamepad2.right_bumper;
-      if(sPL2 && !spLL2){
+      if (sPL2 && !spLL2) {
         armStat = "manual";
-        grabber.manualPos+=100;
+        grabber.manualPos += 100;
       }
 
       // Grabber
@@ -108,13 +108,12 @@ public class DriverControlled extends Base {
       // Display Values
       telemetry.addData("Drive Type", driveType);
       telemetry.addData("slideMode: ", armStat);
-      if(Objects.equals(armStat, "manual")){
+      if (Objects.equals(armStat, "manual")) {
         telemetry.addData("manualPos: ", grabber.manualPos);
-
       }
       telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
-      telemetry.addData( "Current Pos: ", dt.getPose().getX() + " " + dt.getPose().getY()
-      + " " + dt.getAngle());
+      telemetry.addData(
+          "Current Pos: ", dt.getPose().getX() + " " + dt.getPose().getY() + " " + dt.getAngle());
       telemetry.update();
     }
   }

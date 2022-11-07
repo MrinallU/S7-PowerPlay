@@ -21,7 +21,8 @@ public class rectangle_thresholder_pipeline extends OpenCvPipeline {
   public Scalar upperGreen = new Scalar(80, 255, 255);
 
   private Mat hsvMat = new Mat(), binaryMat = new Mat();
-  private Point topLeft1 = new Point(93, 80), bottomRight1 = new Point(115, 110); // Analyzed area is constant
+  private Point topLeft1 = new Point(93, 80),
+      bottomRight1 = new Point(115, 110); // Analyzed area is constant
 
   /*public rectangle_thresholder_pipeline(Telemetry telemetry) {
     this.telemetry = telemetry;
@@ -63,7 +64,11 @@ public class rectangle_thresholder_pipeline extends OpenCvPipeline {
 
     double best = Math.max(Math.max(winB, winG), winR);
 
-    Imgproc.rectangle(input, new Point(topLeft1.x, topLeft1.y), new Point(bottomRight1.x, bottomRight1.y), new Scalar(255, 0, 0));
+    Imgproc.rectangle(
+        input,
+        new Point(topLeft1.x, topLeft1.y),
+        new Point(bottomRight1.x, bottomRight1.y),
+        new Scalar(255, 0, 0));
 
     if (best == winR) out = 3;
     else if (best == winB) out = 2;

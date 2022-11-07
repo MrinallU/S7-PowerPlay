@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.T1_2022.Modules;
 
 import androidx.annotation.NonNull;
-
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -10,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +17,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
-import org.firstinspires.ftc.teamcode.T1_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
@@ -47,7 +44,6 @@ public class Drive extends MecanumDrive {
       List<LynxModule> allHubs) {
     super(1, 1, 1, 13, 13, 1);
 
-
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
@@ -63,25 +59,25 @@ public class Drive extends MecanumDrive {
   // Helpful explanation:
   // https://www.chiefdelphi.com/t/paper-implementation-of-the-adaptive-pure-pursuit-controller/166552
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double driveSpeedCap,
-          boolean limitPower,
-          double powerLowerBound,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double driveSpeedCap,
+      boolean limitPower,
+      double powerLowerBound,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     ElapsedTime time = new ElapsedTime();
     int lastLhInd = 0;
     Pose2d cur = getPoseEstimate();
     time.reset();
     while ((lastLhInd < wp.size() - 1
             || (Math.abs(cur.getX() - wp.get(wp.size() - 1).xP) > xError
-            || Math.abs(cur.getY() - wp.get(wp.size() - 1).yP) > yError
-            || Math.abs(heading - getAngle()) > angleError))
-            && time.milliseconds() < timeout) {
+                || Math.abs(cur.getY() - wp.get(wp.size() - 1).yP) > yError
+                || Math.abs(heading - getAngle()) > angleError))
+        && time.milliseconds() < timeout) {
       resetCache();
       updatePoseEstimate();
       double x = cur.getX();
@@ -95,9 +91,9 @@ public class Drive extends MecanumDrive {
       for (Point p : wp) {
         double ptDist = getRobotDistanceFromPoint(p);
         if (Math.abs(ptDist) <= lookAheadDist
-                && i > lastLhInd
-                && Math.abs(ptDist) > maxDist
-                && Math.abs(i - lastLhInd) < 5) {
+            && i > lastLhInd
+            && Math.abs(ptDist) > maxDist
+            && Math.abs(i - lastLhInd) < 5) {
           nxtP = p;
           possInd = i;
           maxDist = Math.abs(ptDist);
@@ -130,11 +126,11 @@ public class Drive extends MecanumDrive {
 
       double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
       double relAngToP =
-              Angle.normalizeRadians(
-                      splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
+          Angle.normalizeRadians(
+              splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
       double relX = Math.sin(relAngToP) * dist, relY = Math.cos(relAngToP) * dist;
       double xPow = (relX / (Math.abs(relY) + Math.abs(relX))) * driveSpeedCap,
-              yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
+          yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
 
       if (limitPower) {
         if (Math.abs(yDiff) > 7) {
@@ -161,48 +157,48 @@ public class Drive extends MecanumDrive {
   }
 
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double driveSpeedCap,
-          double powLb,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     traversePath(
-            wp,
-            heading,
-            driveSpeedCap,
-            true,
-            powLb,
-            xError,
-            yError,
-            angleError,
-            lookAheadDist,
-            timeout);
+        wp,
+        heading,
+        driveSpeedCap,
+        true,
+        powLb,
+        xError,
+        yError,
+        angleError,
+        lookAheadDist,
+        timeout);
   }
 
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     traversePath(wp, heading, 1, false, -1, xError, yError, angleError, lookAheadDist, timeout);
   }
 
   public void moveToPosition(
-          double targetXPos,
-          double targetYPos,
-          double targetAngle,
-          double xAccuracy,
-          double yAccuracy,
-          double angleAccuracy,
-          double timeout,
-          double powerlB) {
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double xAccuracy,
+      double yAccuracy,
+      double angleAccuracy,
+      double timeout,
+      double powerlB) {
     ArrayList<Point> pt = new ArrayList<>();
     pt.add(getCurrentPosition());
     pt.add(new Point(targetXPos, targetYPos));
@@ -333,14 +329,15 @@ public class Drive extends MecanumDrive {
     updatePoseEstimate();
   }
 
-  public Pose2d getPose(){return getPoseEstimate();}
+  public Pose2d getPose() {
+    return getPoseEstimate();
+  }
 
   // Misc. Functions / Overloaded Method Storage
   public double getRobotDistanceFromPoint(Point p2) {
     Pose2d cur = getPose();
     return Math.sqrt(
-        (p2.yP - cur.getY()) * (p2.yP - cur.getY())
-            + (p2.xP - cur.getX()) * (p2.xP - cur.getX()));
+        (p2.yP - cur.getY()) * (p2.yP - cur.getY()) + (p2.xP - cur.getX()) * (p2.xP - cur.getX()));
   }
 
   // BULK-READING FUNCTIONS
@@ -368,10 +365,11 @@ public class Drive extends MecanumDrive {
   @NonNull
   @Override
   public List<Double> getWheelPositions() {
-     return Arrays.asList( (double)fLeftMotor.encoderReading(),
-             (double) bLeftMotor.encoderReading(),
-             (double) bRightMotor.encoderReading(),
-             (double)fRightMotor.encoderReading());
+    return Arrays.asList(
+        (double) fLeftMotor.encoderReading(),
+        (double) bLeftMotor.encoderReading(),
+        (double) bRightMotor.encoderReading(),
+        (double) fRightMotor.encoderReading());
   }
 
   @Override

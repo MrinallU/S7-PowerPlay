@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.T1_2022.Opmodes.Tests.OpModes.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.T1_2022.Base;
-import org.firstinspires.ftc.teamcode.T1_2022.Modules.Camera.Camera;
 
 @Autonomous(name = "Red_Primary", group = "OdomBot")
 public class RedPrimary extends Base {
@@ -24,7 +23,7 @@ public class RedPrimary extends Base {
     int location = 2;
 
     timer.reset();
-    while (timer.milliseconds() <= 525){
+    while (timer.milliseconds() <= 525) {
       dt.driveFieldCentric(0.15, 0, 0, 1);
     }
 
