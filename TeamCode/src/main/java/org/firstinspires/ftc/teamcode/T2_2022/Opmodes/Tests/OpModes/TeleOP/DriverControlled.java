@@ -110,7 +110,8 @@ public class DriverControlled extends Base {
       }
       telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.addData(
-          "Current Pos: ", dt.getCurrentPosition().xP + " " + dt.getCurrentPosition().xP + " " + dt.getAngle());
+          "Current Pos: ",
+          dt.getCurrentPosition().xP + " " + dt.getCurrentPosition().xP + " " + dt.getAngle());
       telemetry.update();
     }
   }
