@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.Template.Modules.Camera;
+package org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.ArrayList;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.Helpers.VisionObject;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.april_tag_detection_pipeline;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.auto_floodfill_detection;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.rectangle_thresholder_pipeline;
-import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.Helpers.VisionObject;
-import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.april_tag_detection_pipeline;
-import org.firstinspires.ftc.teamcode.Template.Modules.Camera.Pipelines.auto_floodfill_detection;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -39,7 +39,7 @@ public class Camera {
         new OpenCvCamera.AsyncCameraOpenListener() {
           @Override
           public void onOpened() {
-            webcam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
+            webcam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
           }
 
           @Override
@@ -68,6 +68,10 @@ public class Camera {
 
   public ArrayList<AprilTagDetection> getLatestDetections() {
     return p3.getLatestDetections();
+  }
+
+  public int getDetection() {
+    return p3.getLatestDetections().get(0).id;
   }
 
   public void stop() {

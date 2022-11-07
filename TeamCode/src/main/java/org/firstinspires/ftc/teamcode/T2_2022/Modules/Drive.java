@@ -1,13 +1,18 @@
-package org.firstinspires.ftc.teamcode.Template.Modules;
+package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -19,41 +24,67 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
-public class Drive extends Base {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Drive extends Base {
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
-  protected Motor odoR, odoL, odoN;
   protected BNO055IMU gyro;
-  protected Odometry odometry;
   protected OpMode opMode;
   protected List<LynxModule> allHubs;
+  protected ElapsedTime driveTime = new ElapsedTime();
+  protected Point curPose;
+  public double initAng, TICKS_TO_METERS = 1000;
+
+  // Locations of the wheels relative to the robot center (METERS).
+  Translation2d m_frontLeftLocation =
+          new Translation2d(0.381, 0.381);
+  Translation2d m_frontRightLocation =
+          new Translation2d(0.381, -0.381);
+  Translation2d m_backLeftLocation =
+          new Translation2d(-0.381, 0.381);
+  Translation2d m_backRightLocation =
+          new Translation2d(-0.381, -0.381);
+
+  // Creating my kinematics object using the wheel locations.
+  MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics
+          (
+                  m_frontLeftLocation, m_frontRightLocation,
+                  m_backLeftLocation, m_backRightLocation
+          );
+
+  MecanumDriveOdometry odometry;
+
 
   public Drive(
       Motor fLeftMotor,
       Motor bLeftMotor,
       Motor fRightMotor,
       Motor bRightMotor,
-      Motor odoL,
-      Motor odoR,
-      Motor odoN,
       BNO055IMU gyro,
       OpMode m,
       int xPos,
       int yPos,
       int angle,
+      double initAng,
       List<LynxModule> allHubs) {
 
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
     this.bRightMotor = bRightMotor;
-    this.odoL = odoL;
-    this.odoR = odoR;
-    this.odoN = odoN;
     this.gyro = gyro;
     this.opMode = m;
     this.allHubs = allHubs;
-    odometry = new Odometry(xPos, yPos, angle);
+    this.initAng = initAng;
+
+    driveTime.reset();
+    curPose = new Point(xPos, yPos, getAngle());
+    odometry = new MecanumDriveOdometry
+            (
+                    m_kinematics, new Rotation2d(Math.toRadians(getAngle())),
+                    new Pose2d(xPos, yPos, new Rotation2d())
+                    );
   }
 
   // Kinda Like:
@@ -75,15 +106,15 @@ public class Drive extends Base {
     int lastLhInd = 0;
     time.reset();
     while ((lastLhInd < wp.size() - 1
-            || (Math.abs(odometry.getX() - wp.get(wp.size() - 1).xP) > xError
-                || Math.abs(odometry.getY() - wp.get(wp.size() - 1).yP) > yError
-                || Math.abs(heading - odometry.getAngle()) > angleError))
+            || (Math.abs(curPose.xP - wp.get(wp.size() - 1).xP) > xError
+                || Math.abs(curPose.yP - wp.get(wp.size() - 1).yP) > yError
+                || Math.abs(heading - getAngle()) > angleError))
         && time.milliseconds() < timeout) {
       resetCache();
-      updateOdometry();
-      double x = odometry.getX();
-      double y = odometry.getY();
-      double theta = odometry.getAngle();
+      updatePosition();
+      double x = curPose.xP;
+      double y = curPose.yP;
+      double theta = getAngle();
 
       // find point which fits the look ahead criteria
       Point nxtP = null;
@@ -107,7 +138,7 @@ public class Drive extends Base {
         nxtP = wp.get(lastLhInd);
       }
       if (nxtP == null) {
-        stop();
+        stopDrive();
         break;
       }
 
@@ -149,8 +180,9 @@ public class Drive extends Base {
           }
         }
       }
-      System.out.println(xPow + " " + yPow);
+
       driveFieldCentric(yPow, 0.05 * angDiff, xPow);
+      updatePosition();
       lastLhInd = possInd;
     }
     stopDrive();
@@ -207,6 +239,14 @@ public class Drive extends Base {
     stopDrive();
   }
 
+  public double getAngle() {
+    Orientation angles =
+        gyro.getAngularOrientation(
+            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+    return Angle.normalize(angles.firstAngle + initAng);
+  }
+
+
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = getAngle();
@@ -215,32 +255,44 @@ public class Drive extends Base {
         && time.milliseconds() < timeout
         && ((LinearOpMode) opMode).opModeIsActive()) {
       resetCache();
-      updateOdometry();
+      updatePosition();
       currAngle = getAngle();
       double angleDiff = Angle.normalize(currAngle - targetAngle);
       double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
-      setDrivePowers(calcP, calcP, calcP, calcP);
+      driveFieldCentric(0, calcP, 0);
     }
+
     stopDrive();
   }
 
-  // Positional Data
-  public void updateOdometry() {
-    odometry.updatePosition(
-        odoL.encoderReading(), odoR.encoderReading(), odoN.encoderReading(), getAngle());
+  //  FTC-lib drive encoder based odometry (not for teleop use)
+  public void updatePosition() {
+    MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
+            (
+                    fLeftMotor.retMotorEx().getVelocity()*TICKS_TO_METERS
+                    , fRightMotor.retMotorEx().getVelocity()*TICKS_TO_METERS,
+                    bLeftMotor.retMotorEx().getVelocity()*TICKS_TO_METERS,
+                    bRightMotor.retMotorEx().getVelocity()*TICKS_TO_METERS
+            );
+
+    // Get my gyro angle.
+    Rotation2d gyroAngle = Rotation2d.fromDegrees(getAngle());
+    odometry.updateWithTime(driveTime.seconds(), gyroAngle, wheelSpeeds);
   }
 
   public Point getCurrentPosition() {
-    updateOdometry();
-    return new Point(odometry.getX(), odometry.getY(), odometry.getAngle());
+    Pose2d meters = odometry.getPoseMeters();
+    return new Point(meters.getX()*39.3701,
+            meters.getY()*39.3701,
+            getAngle());
   }
 
-  public double getAngle() {
-    Orientation angles =
-        gyro.getAngularOrientation(
-            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
-    return Angle.normalize(angles.firstAngle + initAng);
+  public double getRobotDistanceFromPoint(Point p2) {
+    Point cur = getCurrentPosition();
+    return Math.sqrt(
+            (p2.yP - cur.yP) * (p2.yP - cur.yP) + (p2.xP - cur.xP) * (p2.xP - cur.xP));
   }
+
 
   // Driving
   public void driveFieldCentric(double drive, double turn, double strafe) {
@@ -249,6 +301,28 @@ public class Drive extends Base {
     double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
 
     System.out.println(drive + " " + turn + " " + strafe);
+
+    double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
+    double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
+
+    double denominator = Math.max(Math.abs(strafe) + Math.abs(drive) + Math.abs(turn), 1);
+    fLeftPow = (rotY + rotX + turn) / denominator;
+    bLeftPow = (rotY - rotX + turn) / denominator;
+    fRightPow = (rotY - rotX - turn) / denominator;
+    bRightPow = (rotY + rotX - turn) / denominator;
+
+    setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
+  }
+
+  public void driveFieldCentric(double drive, double angle, double strafe, double diff) {
+    // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
+    double fRightPow, bRightPow, fLeftPow, bLeftPow;
+    double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
+
+    double currAngle = getAngle();
+    double angleDiff = Angle.normalize(currAngle - angle);
+    double calcP = Range.clip(angleDiff * 0.01, -1, 1);
+    double turn = calcP;
 
     double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
     double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
@@ -293,11 +367,11 @@ public class Drive extends Base {
   }
 
   public double[] scalePowers(
-      double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+          double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
     double maxPow =
-        Math.max(
-            Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
-            Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
+            Math.max(
+                    Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
+                    Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
     if (maxPow > 1) {
       fLeftPow /= maxPow;
       bLeftPow /= maxPow;
@@ -308,15 +382,8 @@ public class Drive extends Base {
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
   }
 
-  // Misc. Functions / Overloaded Method Storage
 
-  public double getRobotDistanceFromPoint(Point p2) {
-    return Math.sqrt(
-        (p2.yP - odometry.getY()) * (p2.yP - odometry.getY())
-            + (p2.xP - odometry.getX()) * (p2.xP - odometry.getX()));
-  }
-
-  // BULK-READING FUNCTIONS
+  // Hub Methods
   public void resetCache() {
     // Clears cache of all hubs
     for (LynxModule hub : allHubs) {
