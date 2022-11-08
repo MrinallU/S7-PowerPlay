@@ -22,10 +22,10 @@ public class BluePrimary extends Base {
 
     int location;
     timer.reset();
-    while (camera.getLatestDetections().size()==0&&timer.milliseconds()<=2000){}
-    if(camera.getLatestDetections().size()>0){
+    while (camera.getLatestDetections().size() == 0 && timer.milliseconds() <= 2000) {}
+    if (camera.getLatestDetections().size() > 0) {
       location = camera.getDetection();
-    }else{
+    } else {
       location = 2;
     }
 

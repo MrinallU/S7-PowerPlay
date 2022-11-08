@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -24,9 +25,6 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Drive extends Base {
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
   protected BNO055IMU gyro;
@@ -37,24 +35,18 @@ public class Drive extends Base {
   public double initAng, TICKS_TO_METERS = 1000;
 
   // Locations of the wheels relative to the robot center (METERS).
-  Translation2d m_frontLeftLocation =
-          new Translation2d(0.381, 0.381);
-  Translation2d m_frontRightLocation =
-          new Translation2d(0.381, -0.381);
-  Translation2d m_backLeftLocation =
-          new Translation2d(-0.381, 0.381);
-  Translation2d m_backRightLocation =
-          new Translation2d(-0.381, -0.381);
+  Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
+  Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
+  Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
+  Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
   // Creating my kinematics object using the wheel locations.
-  MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics
-          (
-                  m_frontLeftLocation, m_frontRightLocation,
-                  m_backLeftLocation, m_backRightLocation
-          );
+  MecanumDriveKinematics m_kinematics =
+      new MecanumDriveKinematics(
+          m_frontLeftLocation, m_frontRightLocation,
+          m_backLeftLocation, m_backRightLocation);
 
   MecanumDriveOdometry odometry;
-
 
   public Drive(
       Motor fLeftMotor,
@@ -80,11 +72,11 @@ public class Drive extends Base {
 
     driveTime.reset();
     curPose = new Point(xPos, yPos, getAngle());
-    odometry = new MecanumDriveOdometry
-            (
-                    m_kinematics, new Rotation2d(Math.toRadians(getAngle())),
-                    new Pose2d(xPos, yPos, new Rotation2d())
-                    );
+    odometry =
+        new MecanumDriveOdometry(
+            m_kinematics,
+            new Rotation2d(Math.toRadians(getAngle())),
+            new Pose2d(xPos, yPos, new Rotation2d()));
   }
 
   // Kinda Like:
@@ -246,7 +238,6 @@ public class Drive extends Base {
     return Angle.normalize(angles.firstAngle + initAng);
   }
 
-
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = getAngle();
@@ -267,13 +258,12 @@ public class Drive extends Base {
 
   //  FTC-lib drive encoder based odometry (not for teleop use)
   public void updatePosition() {
-    MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
-            (
-                    fLeftMotor.retMotorEx().getVelocity()*TICKS_TO_METERS
-                    , fRightMotor.retMotorEx().getVelocity()*TICKS_TO_METERS,
-                    bLeftMotor.retMotorEx().getVelocity()*TICKS_TO_METERS,
-                    bRightMotor.retMotorEx().getVelocity()*TICKS_TO_METERS
-            );
+    MecanumDriveWheelSpeeds wheelSpeeds =
+        new MecanumDriveWheelSpeeds(
+            fLeftMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
+            fRightMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
+            bLeftMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
+            bRightMotor.retMotorEx().getVelocity() * TICKS_TO_METERS);
 
     // Get my gyro angle.
     Rotation2d gyroAngle = Rotation2d.fromDegrees(getAngle());
@@ -282,17 +272,13 @@ public class Drive extends Base {
 
   public Point getCurrentPosition() {
     Pose2d meters = odometry.getPoseMeters();
-    return new Point(meters.getX()*39.3701,
-            meters.getY()*39.3701,
-            getAngle());
+    return new Point(meters.getX() * 39.3701, meters.getY() * 39.3701, getAngle());
   }
 
   public double getRobotDistanceFromPoint(Point p2) {
     Point cur = getCurrentPosition();
-    return Math.sqrt(
-            (p2.yP - cur.yP) * (p2.yP - cur.yP) + (p2.xP - cur.xP) * (p2.xP - cur.xP));
+    return Math.sqrt((p2.yP - cur.yP) * (p2.yP - cur.yP) + (p2.xP - cur.xP) * (p2.xP - cur.xP));
   }
-
 
   // Driving
   public void driveFieldCentric(double drive, double turn, double strafe) {
@@ -367,11 +353,11 @@ public class Drive extends Base {
   }
 
   public double[] scalePowers(
-          double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+      double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
     double maxPow =
-            Math.max(
-                    Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
-                    Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
+        Math.max(
+            Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
+            Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
     if (maxPow > 1) {
       fLeftPow /= maxPow;
       bLeftPow /= maxPow;
@@ -381,7 +367,6 @@ public class Drive extends Base {
 
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
   }
-
 
   // Hub Methods
   public void resetCache() {

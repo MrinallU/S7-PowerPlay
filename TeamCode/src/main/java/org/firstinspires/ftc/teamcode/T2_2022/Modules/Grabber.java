@@ -15,12 +15,7 @@ public class Grabber {
       V4B_FRONT_THRESHOLD = 5;
   public int manualPos = 0;
   // 1670
-  public final int HIGH = 2400,
-      MIDDLE = 1650,
-      MIDDLE_AUTO = 1700,
-      LOW = 700,
-      REST = 0,
-      STACK = 600;
+  public final int HIGH = 2400, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
   boolean armRested = true, v4bISFRONT = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
