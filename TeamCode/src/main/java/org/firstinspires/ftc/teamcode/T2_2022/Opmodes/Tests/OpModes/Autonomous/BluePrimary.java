@@ -20,8 +20,14 @@ public class BluePrimary extends Base {
     grabber.grabCone();
     sleep(500);
 
-    int location = camera.getDetection();
-    // location = getLocation();
+    int location;
+    timer.reset();
+    while (camera.getLatestDetections().size()==0&&timer.milliseconds()<=2000){}
+    if(camera.getLatestDetections().size()>0){
+      location = camera.getDetection();
+    }else{
+      location = 2;
+    }
 
     timer.reset();
     while (timer.milliseconds() <= 525) {

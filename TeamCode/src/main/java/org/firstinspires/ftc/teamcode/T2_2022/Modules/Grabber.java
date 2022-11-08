@@ -15,10 +15,10 @@ public class Grabber {
       V4B_FRONT_THRESHOLD = 5;
   public int manualPos = 0;
   // 1670
-  public final int HIGH = 1900,
-      MIDDLE = 1100,
+  public final int HIGH = 2400,
+      MIDDLE = 1650,
       MIDDLE_AUTO = 1700,
-      LOW = 1100,
+      LOW = 700,
       REST = 0,
       STACK = 600;
   boolean armRested = true, v4bISFRONT = false;
@@ -157,10 +157,6 @@ public class Grabber {
     } else {
       v4b.setPower(0);
     }
-    //    rightSlide.setTarget(V4B_FRONT);
-    //    rightSlide.retMotorEx().setTargetPositionTolerance(3);
-    //    rightSlide.toPosition();
-    //    rightSlide.setPower(0.05);
   }
 
   public void setV4B_BACK() {
