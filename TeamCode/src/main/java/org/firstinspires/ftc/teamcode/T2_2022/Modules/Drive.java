@@ -32,7 +32,7 @@ public class Drive extends Base {
   protected List<LynxModule> allHubs;
   protected ElapsedTime driveTime = new ElapsedTime();
   protected Point curPose;
-  public double initAng, TICKS_TO_METERS = 1000;
+  public double initAng, TICKS_TO_METERS = 1000, prevTime=0;
 
   // Locations of the wheels relative to the robot center (METERS).
   Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
@@ -268,6 +268,26 @@ public class Drive extends Base {
     // Get my gyro angle.
     Rotation2d gyroAngle = Rotation2d.fromDegrees(getAngle());
     odometry.updateWithTime(driveTime.seconds(), gyroAngle, wheelSpeeds);
+    curPose = getCurrentPosition();
+  }
+
+  // https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
+  public void updatePositionEncoderOdoBackup(){
+    // apply mecnaum kinematic model
+    double xV = (fLeftMotor.retMotorEx().getVelocity() + fRightMotor.retMotorEx().getVelocity()
+            + bLeftMotor.retMotorEx().getVelocity() + bRightMotor.retMotorEx().getVelocity()) * 0.5;
+    double yV =  (-fLeftMotor.retMotorEx().getVelocity() + fRightMotor.retMotorEx().getVelocity()
+            + bLeftMotor.retMotorEx().getVelocity() - bRightMotor.retMotorEx().getVelocity()) * 0.5;
+
+    // rotate the vector
+    double nx = (xV*Math.cos(Math.toRadians(getAngle())))-(yV*Math.sin(Math.toRadians(getAngle())));
+    double nY = (xV*Math.sin(Math.toRadians(getAngle())))+(yV*Math.cos(Math.toRadians(getAngle())));
+    xV = nx; yV = nY;
+
+    // integrate velocity over time
+    curPose.yP+=(yV*(driveTime.seconds()-prevTime))/162.15; // <-- Tick to inch conversion factor
+    curPose.xP+=(xV*(driveTime.seconds()-prevTime))/162.15;
+    prevTime = driveTime.seconds();
   }
 
   public Point getCurrentPosition() {
