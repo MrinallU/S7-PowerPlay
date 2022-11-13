@@ -115,16 +115,7 @@ public abstract class Base extends LinearOpMode {
     // Modules
     dt =
         new Drive(
-            fLeftMotor,
-            bLeftMotor,
-            fRightMotor,
-            bRightMotor,
-            gyro,
-            m,
-            xPos,
-            yPos,
-            angle,
-            allHubs);
+            fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
     grabber = new Grabber(ls, rs, v, s, t);
 

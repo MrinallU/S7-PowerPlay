@@ -7,9 +7,7 @@ import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN_ELEVATED = 0.5,
-      CLAW_OPEN_REST = 0.506,
-      CLAW_CLOSE = 0.1;
+  public final double CLAW_OPEN_ELEVATED = 0.5, CLAW_OPEN_REST = 0.506, CLAW_CLOSE = 0.1;
   public int manualPos = 0;
   public final int HIGH = 2400, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
   boolean armRested = true, v4bISFRONT = false, manualControlV4b = false;
@@ -75,35 +73,35 @@ public class Grabber {
 
   public void updateArmPos(String armStatus) {
     if (Objects.equals(armStatus, "high")) {
-       setV4B_FRONT();
+      setV4B_FRONT();
       raiseTop();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
-       setV4B_FRONT();
+      setV4B_FRONT();
       raiseLow();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "middle")) {
       setV4B_FRONT();
       raiseMiddle();
     } else if (Objects.equals(armStatus, "rest")) {
-       setV4B_BACK();
-       if(!v4bISFRONT) {
-         if (Math.abs(rightSlide.encoderReading()) > 2) {
-           restArm();
-         } else {
-           leftSlide.setPower(0);
-           rightSlide.setPower(0);
-           leftSlide.resetEncoder(true);
-           rightSlide.resetEncoder(true);
-           v4b.resetEncoder(true);
-         }
-         armStatusPrev = armStatus;
-       }
+      setV4B_BACK();
+      if (!v4bISFRONT) {
+        if (Math.abs(rightSlide.encoderReading()) > 2) {
+          restArm();
+        } else {
+          leftSlide.setPower(0);
+          rightSlide.setPower(0);
+          leftSlide.resetEncoder(true);
+          rightSlide.resetEncoder(true);
+          v4b.resetEncoder(true);
+        }
+        armStatusPrev = armStatus;
+      }
     }
-//    else if (Objects.equals(armStatus, "manual")) {
-//      raiseToPosition(manualPos, 0.5);
-//      armStatusPrev = armStatus;
-//    }
+    //    else if (Objects.equals(armStatus, "manual")) {
+    //      raiseToPosition(manualPos, 0.5);
+    //      armStatusPrev = armStatus;
+    //    }
   }
 
   public void raiseToPosition(int pos, double power) {

@@ -29,16 +29,16 @@ public class Drive extends Base {
   public double yEncPos = 0, xEncPosv = 0;
 
   public Drive(
-          Motor fLeftMotor,
-          Motor bLeftMotor,
-          Motor fRightMotor,
-          Motor bRightMotor,
-          BNO055IMU gyro,
-          OpMode m,
-          int xPos,
-          int yPos,
-          int angle,
-          List<LynxModule> allHubs) {
+      Motor fLeftMotor,
+      Motor bLeftMotor,
+      Motor fRightMotor,
+      Motor bRightMotor,
+      BNO055IMU gyro,
+      OpMode m,
+      int xPos,
+      int yPos,
+      int angle,
+      List<LynxModule> allHubs) {
 
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
@@ -52,23 +52,23 @@ public class Drive extends Base {
   public void updatePosition() {
     // apply mecnaum kinematic model
     double xV =
-            (fLeftMotor.retMotorEx().getVelocity()
-                    + fRightMotor.retMotorEx().getVelocity()
-                    + bLeftMotor.retMotorEx().getVelocity()
-                    + bRightMotor.retMotorEx().getVelocity())
-                    * 0.5;
+        (fLeftMotor.retMotorEx().getVelocity()
+                + fRightMotor.retMotorEx().getVelocity()
+                + bLeftMotor.retMotorEx().getVelocity()
+                + bRightMotor.retMotorEx().getVelocity())
+            * 0.5;
     double yV =
-            (-fLeftMotor.retMotorEx().getVelocity()
-                    + fRightMotor.retMotorEx().getVelocity()
-                    + bLeftMotor.retMotorEx().getVelocity()
-                    - bRightMotor.retMotorEx().getVelocity())
-                    * 0.5;
+        (-fLeftMotor.retMotorEx().getVelocity()
+                + fRightMotor.retMotorEx().getVelocity()
+                + bLeftMotor.retMotorEx().getVelocity()
+                - bRightMotor.retMotorEx().getVelocity())
+            * 0.5;
 
     // rotate the vector
     double nx =
-            (xV * Math.cos(Math.toRadians(getAngle()))) - (yV * Math.sin(Math.toRadians(getAngle())));
+        (xV * Math.cos(Math.toRadians(getAngle()))) - (yV * Math.sin(Math.toRadians(getAngle())));
     double nY =
-            (xV * Math.sin(Math.toRadians(getAngle()))) + (yV * Math.cos(Math.toRadians(getAngle())));
+        (xV * Math.sin(Math.toRadians(getAngle()))) + (yV * Math.cos(Math.toRadians(getAngle())));
     xV = nx;
     yV = nY;
 
@@ -91,24 +91,24 @@ public class Drive extends Base {
   // Helpful explanation:
   // https://www.chiefdelphi.com/t/paper-implementation-of-the-adaptive-pure-pursuit-controller/166552
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double driveSpeedCap,
-          boolean limitPower,
-          double powerLowerBound,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double driveSpeedCap,
+      boolean limitPower,
+      double powerLowerBound,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     ElapsedTime time = new ElapsedTime();
     int lastLhInd = 0;
     time.reset();
     while ((lastLhInd < wp.size() - 1
             || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > xError
-            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > yError
-            || Math.abs(heading - getAngle()) > angleError))
-            && time.milliseconds() < timeout) {
+                || Math.abs(getY() - wp.get(wp.size() - 1).yP) > yError
+                || Math.abs(heading - getAngle()) > angleError))
+        && time.milliseconds() < timeout) {
       resetCache();
       updatePosition();
       double x = getX();
@@ -122,9 +122,9 @@ public class Drive extends Base {
       for (Point p : wp) {
         double ptDist = getRobotDistanceFromPoint(p);
         if (Math.abs(ptDist) <= lookAheadDist
-                && i > lastLhInd
-                && Math.abs(ptDist) > maxDist
-                && Math.abs(i - lastLhInd) < 5) {
+            && i > lastLhInd
+            && Math.abs(ptDist) > maxDist
+            && Math.abs(i - lastLhInd) < 5) {
           nxtP = p;
           possInd = i;
           maxDist = Math.abs(ptDist);
@@ -157,11 +157,11 @@ public class Drive extends Base {
 
       double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
       double relAngToP =
-              Angle.normalizeRadians(
-                      splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
+          Angle.normalizeRadians(
+              splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
       double relX = Math.sin(relAngToP) * dist, relY = Math.cos(relAngToP) * dist;
       double xPow = (relX / (Math.abs(relY) + Math.abs(relX))) * driveSpeedCap,
-              yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
+          yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
 
       if (limitPower) {
         if (Math.abs(yDiff) > 7) {
@@ -187,48 +187,48 @@ public class Drive extends Base {
   }
 
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double driveSpeedCap,
-          double powLb,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double driveSpeedCap,
+      double powLb,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     traversePath(
-            wp,
-            heading,
-            driveSpeedCap,
-            true,
-            powLb,
-            xError,
-            yError,
-            angleError,
-            lookAheadDist,
-            timeout);
+        wp,
+        heading,
+        driveSpeedCap,
+        true,
+        powLb,
+        xError,
+        yError,
+        angleError,
+        lookAheadDist,
+        timeout);
   }
 
   public void traversePath(
-          ArrayList<Point> wp,
-          double heading,
-          double xError,
-          double yError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> wp,
+      double heading,
+      double xError,
+      double yError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     traversePath(wp, heading, 1, false, -1, xError, yError, angleError, lookAheadDist, timeout);
   }
 
   public void moveToPosition(
-          double targetXPos,
-          double targetYPos,
-          double targetAngle,
-          double xAccuracy,
-          double yAccuracy,
-          double angleAccuracy,
-          double timeout,
-          double powerlB) {
+      double targetXPos,
+      double targetYPos,
+      double targetAngle,
+      double xAccuracy,
+      double yAccuracy,
+      double angleAccuracy,
+      double timeout,
+      double powerlB) {
     ArrayList<Point> pt = new ArrayList<>();
     pt.add(getCurrentPosition());
     pt.add(new Point(targetXPos, targetYPos));
@@ -242,8 +242,8 @@ public class Drive extends Base {
     double currAngle = getAngle();
     ElapsedTime time = new ElapsedTime();
     while (Math.abs(currAngle - targetAngle) > minDifference
-            && time.milliseconds() < timeout
-            && ((LinearOpMode) opMode).opModeIsActive()) {
+        && time.milliseconds() < timeout
+        && ((LinearOpMode) opMode).opModeIsActive()) {
       resetCache();
       updatePosition();
       currAngle = getAngle();
@@ -262,8 +262,8 @@ public class Drive extends Base {
 
   public double getAngle() {
     Orientation angles =
-            gyro.getAngularOrientation(
-                    AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+        gyro.getAngularOrientation(
+            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
     return Angle.normalize(angles.firstAngle + initAng);
   }
 
@@ -318,11 +318,11 @@ public class Drive extends Base {
   }
 
   public double[] scalePowers(
-          double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+      double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
     double maxPow =
-            Math.max(
-                    Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
-                    Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
+        Math.max(
+            Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
+            Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
     if (maxPow > 1) {
       fLeftPow /= maxPow;
       bLeftPow /= maxPow;

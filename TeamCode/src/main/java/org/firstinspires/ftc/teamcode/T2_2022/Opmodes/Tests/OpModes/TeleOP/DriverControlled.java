@@ -52,13 +52,13 @@ public class DriverControlled extends Base {
         armStat = "middle";
       }
 
-//      if (gamepad2.dpad_up) {
-//        grabber.v4b.setPower(1);
-//      } else if (gamepad2.dpad_down) {
-//        grabber.v4b.setPower(-1);
-//      } else {
-//        grabber.v4b.setPower(0);
-//      }
+      //      if (gamepad2.dpad_up) {
+      //        grabber.v4b.setPower(1);
+      //      } else if (gamepad2.dpad_down) {
+      //        grabber.v4b.setPower(-1);
+      //      } else {
+      //        grabber.v4b.setPower(0);
+      //      }
 
       rLP = rP;
       rP = gamepad1.right_bumper;
