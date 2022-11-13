@@ -50,7 +50,7 @@ public class Drive extends Base {
   }
 
   public void updatePosition() {
-    // apply mecnaum kinematic model
+    // apply mecanum kinematic model
     double xV =
         (fLeftMotor.retMotorEx().getVelocity()
                 + fRightMotor.retMotorEx().getVelocity()

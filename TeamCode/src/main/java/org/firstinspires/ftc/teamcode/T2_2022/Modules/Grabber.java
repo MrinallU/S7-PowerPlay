@@ -89,6 +89,7 @@ public class Grabber {
         if (Math.abs(rightSlide.encoderReading()) > 2) {
           restArm();
         } else {
+          resetClaw();
           leftSlide.setPower(0);
           rightSlide.setPower(0);
           leftSlide.resetEncoder(true);
@@ -158,6 +159,7 @@ public class Grabber {
     } else {
       v4bISFRONT = false;
       v4b.setPower(0);
+      v4b.resetEncoder(true);
     }
   }
 }
