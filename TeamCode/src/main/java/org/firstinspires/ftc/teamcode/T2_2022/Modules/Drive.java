@@ -287,6 +287,28 @@ public class Drive extends Base {
     setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
   }
 
+  public void driveFieldCentric(double drive, double angle, double strafe, double diff) {
+    // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
+    double fRightPow, bRightPow, fLeftPow, bLeftPow;
+    double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
+
+    double currAngle = getAngle();
+    double angleDiff = Angle.normalize(currAngle - angle);
+    double calcP = Range.clip(angleDiff * 0.01, -1, 1);
+    double turn = calcP;
+
+    double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
+    double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
+
+    double denominator = Math.max(Math.abs(strafe) + Math.abs(drive) + Math.abs(turn), 1);
+    fLeftPow = (rotY + rotX + turn) / denominator;
+    bLeftPow = (rotY - rotX + turn) / denominator;
+    fRightPow = (rotY - rotX - turn) / denominator;
+    bRightPow = (rotY + rotX - turn) / denominator;
+
+    setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
+  }
+
   public void driveRobotCentric(double drive, double turn, double strafe) {
     // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#robot-centric-final-sample-code
 
