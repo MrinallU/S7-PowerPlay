@@ -124,7 +124,6 @@ public abstract class Base extends LinearOpMode {
             xPos,
             yPos,
             angle,
-            initAng,
             allHubs);
 
     grabber = new Grabber(ls, rs, v, s, t);

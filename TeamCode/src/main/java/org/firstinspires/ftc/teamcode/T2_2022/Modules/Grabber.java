@@ -9,14 +9,10 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 public class Grabber {
   public final double CLAW_OPEN_ELEVATED = 0.5,
       CLAW_OPEN_REST = 0.506,
-      CLAW_CLOSE = 0.1,
-      V4B_FRONT = -30,
-      V4B_BACK = 3,
-      V4B_FRONT_THRESHOLD = 5;
+      CLAW_CLOSE = 0.1;
   public int manualPos = 0;
-  // 1670
   public final int HIGH = 2400, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
-  boolean armRested = true, v4bISFRONT = false;
+  boolean armRested = true, v4bISFRONT = false, manualControlV4b = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
@@ -79,32 +75,35 @@ public class Grabber {
 
   public void updateArmPos(String armStatus) {
     if (Objects.equals(armStatus, "high")) {
-      // setV4B_FRONT();
+       setV4B_FRONT();
       raiseTop();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
-      // setV4B_FRONT();
+       setV4B_FRONT();
       raiseLow();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "middle")) {
-      // setV4B_FRONT();
+      setV4B_FRONT();
       raiseMiddle();
     } else if (Objects.equals(armStatus, "rest")) {
-      // setV4B_BACK();
-      if (Math.abs(rightSlide.encoderReading()) > 2) {
-        restArm();
-      } else {
-        leftSlide.setPower(0);
-        rightSlide.setPower(0);
-        leftSlide.resetEncoder(true);
-        rightSlide.resetEncoder(true);
-        v4b.resetEncoder(true);
-      }
-      armStatusPrev = armStatus;
-    } else if (Objects.equals(armStatus, "manual")) {
-      raiseToPosition(manualPos, 0.5);
-      armStatusPrev = armStatus;
+       setV4B_BACK();
+       if(!v4bISFRONT) {
+         if (Math.abs(rightSlide.encoderReading()) > 2) {
+           restArm();
+         } else {
+           leftSlide.setPower(0);
+           rightSlide.setPower(0);
+           leftSlide.resetEncoder(true);
+           rightSlide.resetEncoder(true);
+           v4b.resetEncoder(true);
+         }
+         armStatusPrev = armStatus;
+       }
     }
+//    else if (Objects.equals(armStatus, "manual")) {
+//      raiseToPosition(manualPos, 0.5);
+//      armStatusPrev = armStatus;
+//    }
   }
 
   public void raiseToPosition(int pos, double power) {
@@ -151,6 +150,7 @@ public class Grabber {
       v4b.setPower(1);
     } else {
       v4b.setPower(0);
+      v4bISFRONT = true;
     }
   }
 
@@ -158,6 +158,7 @@ public class Grabber {
     if (v4b.encoderReading() > 150) {
       v4b.setPower(-1);
     } else {
+      v4bISFRONT = false;
       v4b.setPower(0);
     }
   }

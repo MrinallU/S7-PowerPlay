@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,7 +12,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -26,40 +19,26 @@ import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
 public class Drive extends Base {
+
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
   protected BNO055IMU gyro;
   protected OpMode opMode;
   protected List<LynxModule> allHubs;
-  protected ElapsedTime driveTime = new ElapsedTime();
-  protected Point curPose;
-  public double initAng, TICKS_TO_METERS = 1000, prevTime = 0;
-
-  // Locations of the wheels relative to the robot center (METERS).
-  Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-  Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-  Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-  Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
-
-  // Creating my kinematics object using the wheel locations.
-  MecanumDriveKinematics m_kinematics =
-      new MecanumDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation,
-          m_backLeftLocation, m_backRightLocation);
-
-  MecanumDriveOdometry odometry;
+  ElapsedTime time = new ElapsedTime();
+  double prevTime = 0;
+  public double yEncPos = 0, xEncPosv = 0;
 
   public Drive(
-      Motor fLeftMotor,
-      Motor bLeftMotor,
-      Motor fRightMotor,
-      Motor bRightMotor,
-      BNO055IMU gyro,
-      OpMode m,
-      int xPos,
-      int yPos,
-      int angle,
-      double initAng,
-      List<LynxModule> allHubs) {
+          Motor fLeftMotor,
+          Motor bLeftMotor,
+          Motor fRightMotor,
+          Motor bRightMotor,
+          BNO055IMU gyro,
+          OpMode m,
+          int xPos,
+          int yPos,
+          int angle,
+          List<LynxModule> allHubs) {
 
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
@@ -68,15 +47,43 @@ public class Drive extends Base {
     this.gyro = gyro;
     this.opMode = m;
     this.allHubs = allHubs;
-    this.initAng = initAng;
+  }
 
-    driveTime.reset();
-    curPose = new Point(xPos, yPos, getAngle());
-    odometry =
-        new MecanumDriveOdometry(
-            m_kinematics,
-            new Rotation2d(Math.toRadians(getAngle())),
-            new Pose2d(xPos, yPos, new Rotation2d()));
+  public void updatePosition() {
+    // apply mecnaum kinematic model
+    double xV =
+            (fLeftMotor.retMotorEx().getVelocity()
+                    + fRightMotor.retMotorEx().getVelocity()
+                    + bLeftMotor.retMotorEx().getVelocity()
+                    + bRightMotor.retMotorEx().getVelocity())
+                    * 0.5;
+    double yV =
+            (-fLeftMotor.retMotorEx().getVelocity()
+                    + fRightMotor.retMotorEx().getVelocity()
+                    + bLeftMotor.retMotorEx().getVelocity()
+                    - bRightMotor.retMotorEx().getVelocity())
+                    * 0.5;
+
+    // rotate the vector
+    double nx =
+            (xV * Math.cos(Math.toRadians(getAngle()))) - (yV * Math.sin(Math.toRadians(getAngle())));
+    double nY =
+            (xV * Math.sin(Math.toRadians(getAngle()))) + (yV * Math.cos(Math.toRadians(getAngle())));
+    xV = nx;
+    yV = nY;
+
+    // integrate velocity over time
+    yEncPos += (yV * (time.seconds() - prevTime)) / 162.15; // <-- Tick to inch conversion factor
+    xEncPosv += (xV * (time.seconds() - prevTime)) / 162.15;
+    prevTime = time.seconds();
+  }
+
+  public double getX() {
+    return xEncPosv;
+  }
+
+  public double getY() {
+    return yEncPos;
   }
 
   // Kinda Like:
@@ -84,28 +91,28 @@ public class Drive extends Base {
   // Helpful explanation:
   // https://www.chiefdelphi.com/t/paper-implementation-of-the-adaptive-pure-pursuit-controller/166552
   public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double driveSpeedCap,
-      boolean limitPower,
-      double powerLowerBound,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
+          ArrayList<Point> wp,
+          double heading,
+          double driveSpeedCap,
+          boolean limitPower,
+          double powerLowerBound,
+          double xError,
+          double yError,
+          double angleError,
+          int lookAheadDist,
+          double timeout) {
     ElapsedTime time = new ElapsedTime();
     int lastLhInd = 0;
     time.reset();
     while ((lastLhInd < wp.size() - 1
-            || (Math.abs(curPose.xP - wp.get(wp.size() - 1).xP) > xError
-                || Math.abs(curPose.yP - wp.get(wp.size() - 1).yP) > yError
-                || Math.abs(heading - getAngle()) > angleError))
-        && time.milliseconds() < timeout) {
+            || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > xError
+            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > yError
+            || Math.abs(heading - getAngle()) > angleError))
+            && time.milliseconds() < timeout) {
       resetCache();
       updatePosition();
-      double x = curPose.xP;
-      double y = curPose.yP;
+      double x = getX();
+      double y = getY();
       double theta = getAngle();
 
       // find point which fits the look ahead criteria
@@ -115,9 +122,9 @@ public class Drive extends Base {
       for (Point p : wp) {
         double ptDist = getRobotDistanceFromPoint(p);
         if (Math.abs(ptDist) <= lookAheadDist
-            && i > lastLhInd
-            && Math.abs(ptDist) > maxDist
-            && Math.abs(i - lastLhInd) < 5) {
+                && i > lastLhInd
+                && Math.abs(ptDist) > maxDist
+                && Math.abs(i - lastLhInd) < 5) {
           nxtP = p;
           possInd = i;
           maxDist = Math.abs(ptDist);
@@ -130,7 +137,7 @@ public class Drive extends Base {
         nxtP = wp.get(lastLhInd);
       }
       if (nxtP == null) {
-        stopDrive();
+        stop();
         break;
       }
 
@@ -150,11 +157,11 @@ public class Drive extends Base {
 
       double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
       double relAngToP =
-          Angle.normalizeRadians(
-              splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
+              Angle.normalizeRadians(
+                      splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
       double relX = Math.sin(relAngToP) * dist, relY = Math.cos(relAngToP) * dist;
       double xPow = (relX / (Math.abs(relY) + Math.abs(relX))) * driveSpeedCap,
-          yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
+              yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
 
       if (limitPower) {
         if (Math.abs(yDiff) > 7) {
@@ -172,57 +179,56 @@ public class Drive extends Base {
           }
         }
       }
-
+      System.out.println(xPow + " " + yPow);
       driveFieldCentric(yPow, 0.05 * angDiff, xPow);
-      updatePosition();
       lastLhInd = possInd;
     }
     stopDrive();
   }
 
   public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double driveSpeedCap,
-      double powLb,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
+          ArrayList<Point> wp,
+          double heading,
+          double driveSpeedCap,
+          double powLb,
+          double xError,
+          double yError,
+          double angleError,
+          int lookAheadDist,
+          double timeout) {
     traversePath(
-        wp,
-        heading,
-        driveSpeedCap,
-        true,
-        powLb,
-        xError,
-        yError,
-        angleError,
-        lookAheadDist,
-        timeout);
+            wp,
+            heading,
+            driveSpeedCap,
+            true,
+            powLb,
+            xError,
+            yError,
+            angleError,
+            lookAheadDist,
+            timeout);
   }
 
   public void traversePath(
-      ArrayList<Point> wp,
-      double heading,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
+          ArrayList<Point> wp,
+          double heading,
+          double xError,
+          double yError,
+          double angleError,
+          int lookAheadDist,
+          double timeout) {
     traversePath(wp, heading, 1, false, -1, xError, yError, angleError, lookAheadDist, timeout);
   }
 
   public void moveToPosition(
-      double targetXPos,
-      double targetYPos,
-      double targetAngle,
-      double xAccuracy,
-      double yAccuracy,
-      double angleAccuracy,
-      double timeout,
-      double powerlB) {
+          double targetXPos,
+          double targetYPos,
+          double targetAngle,
+          double xAccuracy,
+          double yAccuracy,
+          double angleAccuracy,
+          double timeout,
+          double powerlB) {
     ArrayList<Point> pt = new ArrayList<>();
     pt.add(getCurrentPosition());
     pt.add(new Point(targetXPos, targetYPos));
@@ -231,85 +237,34 @@ public class Drive extends Base {
     stopDrive();
   }
 
-  public double getAngle() {
-    Orientation angles =
-        gyro.getAngularOrientation(
-            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
-    return Angle.normalize(angles.firstAngle + initAng);
-  }
-
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = getAngle();
     ElapsedTime time = new ElapsedTime();
     while (Math.abs(currAngle - targetAngle) > minDifference
-        && time.milliseconds() < timeout
-        && ((LinearOpMode) opMode).opModeIsActive()) {
+            && time.milliseconds() < timeout
+            && ((LinearOpMode) opMode).opModeIsActive()) {
       resetCache();
       updatePosition();
       currAngle = getAngle();
       double angleDiff = Angle.normalize(currAngle - targetAngle);
       double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
-      driveFieldCentric(0, calcP, 0);
+      setDrivePowers(calcP, calcP, calcP, calcP);
     }
 
     stopDrive();
   }
 
-  //  FTC-lib drive encoder based odometry (not for teleop use)
-  public void updatePosition() {
-    MecanumDriveWheelSpeeds wheelSpeeds =
-        new MecanumDriveWheelSpeeds(
-            fLeftMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
-            fRightMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
-            bLeftMotor.retMotorEx().getVelocity() * TICKS_TO_METERS,
-            bRightMotor.retMotorEx().getVelocity() * TICKS_TO_METERS);
-
-    // Get my gyro angle.
-    Rotation2d gyroAngle = Rotation2d.fromDegrees(getAngle());
-    odometry.updateWithTime(driveTime.seconds(), gyroAngle, wheelSpeeds);
-    curPose = getCurrentPosition();
-  }
-
-  // https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
-  public void updatePositionEncoderOdoBackup() {
-    // apply mecnaum kinematic model
-    double xV =
-        (fLeftMotor.retMotorEx().getVelocity()
-                + fRightMotor.retMotorEx().getVelocity()
-                + bLeftMotor.retMotorEx().getVelocity()
-                + bRightMotor.retMotorEx().getVelocity())
-            * 0.5;
-    double yV =
-        (-fLeftMotor.retMotorEx().getVelocity()
-                + fRightMotor.retMotorEx().getVelocity()
-                + bLeftMotor.retMotorEx().getVelocity()
-                - bRightMotor.retMotorEx().getVelocity())
-            * 0.5;
-
-    // rotate the vector
-    double nx =
-        (xV * Math.cos(Math.toRadians(getAngle()))) - (yV * Math.sin(Math.toRadians(getAngle())));
-    double nY =
-        (xV * Math.sin(Math.toRadians(getAngle()))) + (yV * Math.cos(Math.toRadians(getAngle())));
-    xV = nx;
-    yV = nY;
-
-    // integrate velocity over time
-    curPose.yP +=
-        (yV * (driveTime.seconds() - prevTime)) / 162.15; // <-- Tick to inch conversion factor
-    curPose.xP += (xV * (driveTime.seconds() - prevTime)) / 162.15;
-    prevTime = driveTime.seconds();
-  }
-
   public Point getCurrentPosition() {
-    Pose2d meters = odometry.getPoseMeters();
-    return new Point(meters.getX() * 39.3701, meters.getY() * 39.3701, getAngle());
+    updatePosition();
+    return new Point(getX(), getY(), getAngle());
   }
 
-  public double getRobotDistanceFromPoint(Point p2) {
-    Point cur = getCurrentPosition();
-    return Math.sqrt((p2.yP - cur.yP) * (p2.yP - cur.yP) + (p2.xP - cur.xP) * (p2.xP - cur.xP));
+  public double getAngle() {
+    Orientation angles =
+            gyro.getAngularOrientation(
+                    AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+    return Angle.normalize(angles.firstAngle + initAng);
   }
 
   // Driving
@@ -319,28 +274,6 @@ public class Drive extends Base {
     double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
 
     System.out.println(drive + " " + turn + " " + strafe);
-
-    double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
-    double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
-
-    double denominator = Math.max(Math.abs(strafe) + Math.abs(drive) + Math.abs(turn), 1);
-    fLeftPow = (rotY + rotX + turn) / denominator;
-    bLeftPow = (rotY - rotX + turn) / denominator;
-    fRightPow = (rotY - rotX - turn) / denominator;
-    bRightPow = (rotY + rotX - turn) / denominator;
-
-    setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
-  }
-
-  public void driveFieldCentric(double drive, double angle, double strafe, double diff) {
-    // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
-    double fRightPow, bRightPow, fLeftPow, bLeftPow;
-    double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
-
-    double currAngle = getAngle();
-    double angleDiff = Angle.normalize(currAngle - angle);
-    double calcP = Range.clip(angleDiff * 0.01, -1, 1);
-    double turn = calcP;
 
     double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
     double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
@@ -385,11 +318,11 @@ public class Drive extends Base {
   }
 
   public double[] scalePowers(
-      double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+          double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
     double maxPow =
-        Math.max(
-            Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
-            Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
+            Math.max(
+                    Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
+                    Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
     if (maxPow > 1) {
       fLeftPow /= maxPow;
       bLeftPow /= maxPow;
@@ -400,21 +333,18 @@ public class Drive extends Base {
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
   }
 
-  // Hub Methods
+  // Misc. Functions / Overloaded Method Storage
+
+  public double getRobotDistanceFromPoint(Point p2) {
+    return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
+  }
+
+  // BULK-READING FUNCTIONS
   public void resetCache() {
     // Clears cache of all hubs
     for (LynxModule hub : allHubs) {
       hub.clearBulkCache();
     }
-  }
-
-  private double getVoltage() {
-    double voltage = Double.MIN_VALUE;
-    for (LynxModule hub : allHubs) {
-      voltage = Math.max(voltage, hub.getInputVoltage(VoltageUnit.VOLTS));
-    }
-
-    return voltage;
   }
 
   @Override
