@@ -48,9 +48,9 @@ public class Drive extends Base {
     this.opMode = m;
     this.allHubs = allHubs;
   }
-
+  // Localization
   public void updatePosition() {
-    // apply mecanum kinematic model
+    // apply mecanum kinematic model (https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf)
     double xV =
         (fLeftMotor.retMotorEx().getVelocity()
                 + fRightMotor.retMotorEx().getVelocity()
@@ -85,6 +85,24 @@ public class Drive extends Base {
   public double getY() {
     return yEncPos;
   }
+
+  public Point getCurrentPosition() {
+    updatePosition();
+    return new Point(getX(), getY(), getAngle());
+  }
+
+  public double getAngle() {
+    Orientation angles =
+            gyro.getAngularOrientation(
+                    AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+    return Angle.normalize(angles.firstAngle + initAng);
+  }
+
+  public double getRobotDistanceFromPoint(Point p2) {
+    return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
+  }
+
+  // Path Traversal
 
   // Kinda Like:
   // https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf
@@ -251,20 +269,7 @@ public class Drive extends Base {
       double calcP = Range.clip(angleDiff * 0.01, -powerCap, powerCap);
       setDrivePowers(calcP, calcP, calcP, calcP);
     }
-
     stopDrive();
-  }
-
-  public Point getCurrentPosition() {
-    updatePosition();
-    return new Point(getX(), getY(), getAngle());
-  }
-
-  public double getAngle() {
-    Orientation angles =
-        gyro.getAngularOrientation(
-            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
-    return Angle.normalize(angles.firstAngle + initAng);
   }
 
   // Driving
@@ -341,6 +346,7 @@ public class Drive extends Base {
 
   public double[] scalePowers(
       double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+    // Normalizes powers such that they are all all less than or equal to 1
     double maxPow =
         Math.max(
             Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
@@ -355,13 +361,7 @@ public class Drive extends Base {
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
   }
 
-  // Misc. Functions / Overloaded Method Storage
-
-  public double getRobotDistanceFromPoint(Point p2) {
-    return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
-  }
-
-  // BULK-READING FUNCTIONS
+  // Misc. Functions
   public void resetCache() {
     // Clears cache of all hubs
     for (LynxModule hub : allHubs) {
