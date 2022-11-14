@@ -50,7 +50,8 @@ public class Drive extends Base {
   }
   // Localization
   public void updatePosition() {
-    // apply mecanum kinematic model (https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf)
+    // apply mecanum kinematic model
+    // (https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf)
     double xV =
         (fLeftMotor.retMotorEx().getVelocity()
                 + fRightMotor.retMotorEx().getVelocity()
@@ -93,8 +94,8 @@ public class Drive extends Base {
 
   public double getAngle() {
     Orientation angles =
-            gyro.getAngularOrientation(
-                    AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+        gyro.getAngularOrientation(
+            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
     return Angle.normalize(angles.firstAngle + initAng);
   }
 
