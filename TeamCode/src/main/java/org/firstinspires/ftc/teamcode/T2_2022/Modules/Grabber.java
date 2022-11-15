@@ -10,7 +10,7 @@ public class Grabber {
   public final double CLAW_OPEN_ELEVATED = 0.5, CLAW_OPEN_REST = 0.506, CLAW_CLOSE = 0.1;
   public int manualPos = 0;
   public final int HIGH = 2400, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
-  boolean armRested = true, v4bFRONT = false;
+  boolean armRested = true, v4bExtended;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
@@ -30,6 +30,7 @@ public class Grabber {
     rightSlide.resetEncoder(true);
     v4b.resetEncoder(true);
     clawStatus = "open";
+    v4bExtended = false;
     resetClaw();
   }
 
@@ -66,20 +67,20 @@ public class Grabber {
 
   public void updateArmPos(String armStatus) {
     if (Objects.equals(armStatus, "high")) {
-      setV4B_FRONT();
+      extendV4b();
       raiseTop();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
-      setV4B_FRONT();
+      extendV4b();
       raiseLow();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "middle")) {
-      setV4B_FRONT();
+      extendV4b();
       raiseMiddle();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "rest")) {
-      setV4B_BACK();
-      if (!v4bFRONT) {
+      retractV4b();
+      if (!v4bExtended) {
         if (Math.abs(rightSlide.encoderReading()) > 2) {
           restArm();
         } else {
@@ -137,20 +138,20 @@ public class Grabber {
     clawStatus = "open";
   }
 
-  public void setV4B_FRONT() {
+  public void extendV4b() {
     if (v4b.encoderReading() < 200) {
       v4b.setPower(1);
     } else {
       v4b.setPower(0);
-      v4bFRONT = true;
+      v4bExtended = true;
     }
   }
 
-  public void setV4B_BACK() {
+  public void retractV4b() {
     if (v4b.encoderReading() > 150) {
       v4b.setPower(-1);
     } else {
-      v4bFRONT = false;
+      v4bExtended = false;
       v4b.setPower(0);
       v4b.resetEncoder(true);
     }
