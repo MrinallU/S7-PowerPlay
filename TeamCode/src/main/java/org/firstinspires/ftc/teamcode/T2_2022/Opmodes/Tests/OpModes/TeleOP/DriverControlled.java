@@ -52,6 +52,7 @@ public class DriverControlled extends Base {
         armStat = "middle";
       }
 
+      // replace manual control in favour for automated control
       //      if (gamepad2.dpad_up) {
       //        grabber.v4b.setPower(1);
       //      } else if (gamepad2.dpad_down) {
@@ -64,8 +65,7 @@ public class DriverControlled extends Base {
       rP = gamepad1.right_bumper;
       if (!rLP && rP) {
         if (Objects.equals(grabber.clawStatus, "closed")) {
-          // telemetry.addData("works", true);
-          if (Objects.equals(grabber.armStatusPrev, "rest")) {
+          if (Objects.equals(armStat, "rest")) {
             grabber.resetClaw();
             telemetry.addData("works", true);
           } else {
@@ -79,16 +79,8 @@ public class DriverControlled extends Base {
 
       lbl2 = lb2;
       lb2 = gamepad2.left_bumper;
-      if (lb2 && !lbl2) {
-        armStat = "manual";
-        grabber.manualPos -= 100;
-      }
-
-      spLL2 = sPL2;
-      sPL2 = gamepad2.right_bumper;
-      if (sPL2 && !spLL2) {
-        armStat = "manual";
-        grabber.manualPos += 100;
+      if (lb2 && !lbl2) { // only press when v4b is at rest and slides are all the way down!
+        grabber.resetGrabber();
       }
 
       // Grabber

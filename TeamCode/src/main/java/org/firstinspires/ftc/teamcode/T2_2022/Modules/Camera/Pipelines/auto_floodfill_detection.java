@@ -53,12 +53,10 @@ public class auto_floodfill_detection extends OpenCvPipeline {
 
   @Override
   public Mat processFrame(Mat input) {
-    // objs = new ArrayList<>();
     Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
     Core.inRange(hsvMat, lower, upper, binaryMat);
     grid = binaryMat;
 
-    // objs = new ArrayList<>();
     rowNum = (int) input.size().height;
     colNum = (int) input.size().width;
     visited = new boolean[rowNum][colNum];

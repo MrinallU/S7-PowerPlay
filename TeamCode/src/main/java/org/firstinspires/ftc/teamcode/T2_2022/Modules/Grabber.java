@@ -10,7 +10,7 @@ public class Grabber {
   public final double CLAW_OPEN_ELEVATED = 0.5, CLAW_OPEN_REST = 0.506, CLAW_CLOSE = 0.1;
   public int manualPos = 0;
   public final int HIGH = 2400, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
-  boolean armRested = true, v4bISFRONT = false, manualControlV4b = false;
+  boolean armRested = true, v4bFRONT = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
@@ -34,9 +34,22 @@ public class Grabber {
   }
 
   public void raiseTop() {
-    //    grabCone();
-    // setV4B_FRONT();
     raiseToPosition(HIGH, 1);
+    armRested = false;
+  }
+
+  public void raiseMiddle() {
+    raiseToPosition(MIDDLE, 1);
+    armRested = false;
+  }
+
+  public void raiseMiddleAuto() {
+    raiseToPosition(MIDDLE_AUTO, 1);
+    armRested = false;
+  }
+
+  public void raiseLow() {
+    raiseToPosition(LOW, 1);
     armRested = false;
   }
 
@@ -44,29 +57,9 @@ public class Grabber {
     raiseToPosition(STACK, 1);
   }
 
-  public void raiseMiddle() {
-    // grabCone();
-    // setV4B_FRONT();
-    raiseToPosition(MIDDLE, 1);
-    armRested = false;
-  }
-
-  public void raiseMiddleAuto() {
-    // grabCone();
-    // setV4B_FRONT();
-    raiseToPosition(MIDDLE_AUTO, 1);
-    armRested = false;
-  }
-
-  public void raiseLow() {
-    //    grabCone();
-    // setV4B_FRONT();
-    raiseToPosition(LOW, 1);
-    armRested = false;
-  }
-
   public void restArm() {
-    grabCone();
+    if(!Objects.equals(armStatusPrev, "rest")) // automatically drop the cone at rest
+      grabCone();
     raiseToPosition(REST, 1);
     armRested = true;
   }
@@ -83,26 +76,26 @@ public class Grabber {
     } else if (Objects.equals(armStatus, "middle")) {
       setV4B_FRONT();
       raiseMiddle();
+      armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "rest")) {
       setV4B_BACK();
-      if (!v4bISFRONT) {
+      if (!v4bFRONT) {
         if (Math.abs(rightSlide.encoderReading()) > 2) {
           restArm();
         } else {
-          resetClaw();
-          leftSlide.setPower(0);
-          rightSlide.setPower(0);
-          leftSlide.resetEncoder(true);
-          rightSlide.resetEncoder(true);
-          v4b.resetEncoder(true);
+          resetGrabber();
         }
         armStatusPrev = armStatus;
       }
     }
-    //    else if (Objects.equals(armStatus, "manual")) {
-    //      raiseToPosition(manualPos, 0.5);
-    //      armStatusPrev = armStatus;
-    //    }
+  }
+
+  public void resetGrabber(){
+    leftSlide.setPower(0);
+    rightSlide.setPower(0);
+    leftSlide.resetEncoder(true);
+    rightSlide.resetEncoder(true);
+    v4b.resetEncoder(true);
   }
 
   public void raiseToPosition(int pos, double power) {
@@ -149,7 +142,7 @@ public class Grabber {
       v4b.setPower(1);
     } else {
       v4b.setPower(0);
-      v4bISFRONT = true;
+      v4bFRONT = true;
     }
   }
 
@@ -157,7 +150,7 @@ public class Grabber {
     if (v4b.encoderReading() > 150) {
       v4b.setPower(-1);
     } else {
-      v4bISFRONT = false;
+      v4bFRONT = false;
       v4b.setPower(0);
       v4b.resetEncoder(true);
     }
