@@ -58,8 +58,8 @@ public class Grabber {
   }
 
   public void restArm() {
-    if(!Objects.equals(armStatusPrev, "rest")) // automatically drop the cone at rest
-      grabCone();
+    if (!Objects.equals(armStatusPrev, "rest")) // automatically drop the cone at rest
+    grabCone();
     raiseToPosition(REST, 1);
     armRested = true;
   }
@@ -90,7 +90,7 @@ public class Grabber {
     }
   }
 
-  public void resetGrabber(){
+  public void resetGrabber() {
     leftSlide.setPower(0);
     rightSlide.setPower(0);
     leftSlide.resetEncoder(true);
