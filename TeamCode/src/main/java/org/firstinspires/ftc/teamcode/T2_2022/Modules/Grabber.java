@@ -59,8 +59,6 @@ public class Grabber {
   }
 
   public void restArm() {
-    if (!Objects.equals(armStatusPrev, "rest")) // automatically drop the cone at rest
-    grabCone();
     raiseToPosition(REST, 1);
     armRested = true;
   }
@@ -148,6 +146,7 @@ public class Grabber {
   }
 
   public void retractV4b() {
+    grabCone();
     if (v4b.encoderReading() > 150) {
       v4b.setPower(-1);
     } else {
