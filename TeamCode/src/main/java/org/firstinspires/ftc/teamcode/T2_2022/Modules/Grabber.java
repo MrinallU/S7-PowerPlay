@@ -59,15 +59,14 @@ public class Grabber {
   }
 
   public void restArm() {
-
     raiseToPosition(REST, 1);
     armRested = true;
   }
 
   public void updateArmPos(String armStatus) {
     if (Objects.equals(armStatus, "high")) {
-      extendV4b();
       raiseTop();
+      extendV4b();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
       extendV4b();
@@ -79,8 +78,10 @@ public class Grabber {
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "rest")) {
       retractV4b();
-      restArm();
-      armStatusPrev = armStatus;
+      if (!v4bExtended) {
+        restArm();
+        armStatusPrev = armStatus;
+      }
     }
   }
 
@@ -141,14 +142,9 @@ public class Grabber {
   }
 
   public void retractV4b() {
-    boolean claw_is_close = false;
-    if(rightSlide.retMotorEx().getCurrentPosition() > 300){
-      claw.setPosition(CLAW_CLOSE);
-    }
-    
-    if(claw.getPosition() < 0.12 && claw.getPosition()>0.08)
     if (v4b.encoderReading() > 185) {
-      v4b.setPower(-1);
+      if (Objects.equals(clawStatus, "open")) grabCone();
+      if (claw.getPosition() < 0.12) v4b.setPower(-1);
     } else {
       v4bExtended = false;
       v4b.setPower(0);
