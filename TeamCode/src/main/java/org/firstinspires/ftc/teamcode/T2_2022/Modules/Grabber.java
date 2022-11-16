@@ -7,8 +7,10 @@ import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN_ELEVATED = 0.4, CLAW_OPEN_REST = 0.4, CLAW_CLOSE = 0.1;  public int manualPos = 0;
-  public final int HIGH = 2500, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;  boolean armRested = true, v4bExtended;
+  public final double CLAW_OPEN_ELEVATED = 0.4, CLAW_OPEN_REST = 0.4, CLAW_CLOSE = 0.1;
+  public int manualPos = 0;
+  public final int HIGH = 2500, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
+  boolean armRested = true, v4bExtended;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
@@ -141,10 +143,8 @@ public class Grabber {
 
   public void retractV4b() {
     if (v4b.encoderReading() > 185) {
-      if(Objects.equals(clawStatus, "open"))
-        grabCone();
-      if(claw.getPosition() < 0.12)
-        v4b.setPower(-1);
+      if (Objects.equals(clawStatus, "open")) grabCone();
+      if (claw.getPosition() < 0.12) v4b.setPower(-1);
     } else {
       v4bExtended = false;
       v4b.setPower(0);

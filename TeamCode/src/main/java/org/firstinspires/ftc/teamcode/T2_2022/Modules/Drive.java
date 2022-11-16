@@ -103,7 +103,9 @@ public class Drive extends Base {
     return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
   }
 
-  public double getFleftVelo(){return fLeftMotor.retMotorEx().getVelocity();}
+  public double getFleftVelo() {
+    return fLeftMotor.retMotorEx().getVelocity();
+  }
 
   // Path Traversal
 
