@@ -103,6 +103,8 @@ public class Drive extends Base {
     return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
   }
 
+  public double getFleftVelo(){return fLeftMotor.retMotorEx().getVelocity();}
+
   // Path Traversal
 
   // Kinda Like:
@@ -183,14 +185,14 @@ public class Drive extends Base {
           yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
 
       if (limitPower) {
-        if (Math.abs(yDiff) > 7) {
+        if (Math.abs(yDiff) > 5) { // raise if too unstable
           if (yPow < 0) {
             yPow = Math.min(-powerLowerBound, yPow);
           } else {
             yPow = Math.max(powerLowerBound, yPow);
           }
         }
-        if (Math.abs(xDiff) > 7) {
+        if (Math.abs(xDiff) > 5) {
           if (xPow < 0) {
             xPow = Math.min(-powerLowerBound, xPow);
           } else {

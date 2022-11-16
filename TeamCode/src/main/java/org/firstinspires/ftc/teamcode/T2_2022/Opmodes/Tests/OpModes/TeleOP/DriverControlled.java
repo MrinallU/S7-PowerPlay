@@ -90,20 +90,17 @@ public class DriverControlled extends Base {
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
       drive = floor(gamepad1.right_stick_x * 0.8);
-      strafe = floor(-gamepad1.right_stick_y * 0.8);
+      strafe = floor(-gamepad1.left_stick_y * 0.8);
       turn = turnFloor(gamepad1.left_stick_x * 0.8);
       computeDrivePowers(gamepad1);
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
-      telemetry.addData("slideMode: ", armStat);
-      if (Objects.equals(armStat, "manual")) {
-        telemetry.addData("manualPos: ", grabber.manualPos);
-      }
-      telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.addData(
           "Current Pos: ",
           dt.getCurrentPosition().xP + " " + dt.getCurrentPosition().xP + " " + dt.getAngle());
+      telemetry.addData("Odo Tick Inch Count: ", dt.getFleftVelo());
+      telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.update();
     }
   }
