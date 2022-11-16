@@ -291,7 +291,7 @@ public abstract class Base extends LinearOpMode {
   }
 
   // Driver Controlled Movemement
-  public void computeDrivePowers(Gamepad gamepad) {
+  public void  computeDrivePowers(Gamepad gamepad) {
     currAngle = 0;
     if (basicDrive) {
       driveType = "Robot Centric";
@@ -313,9 +313,9 @@ public abstract class Base extends LinearOpMode {
       } else if (gamepad.dpad_left) {
         dt.driveFieldCentric(0, -dpadTurnSpeed, 0);
       } else if (gamepad.dpad_up) {
-        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
+        dt.driveFieldCentric(0, 0, dpadDriveSpeed);
       } else if (gamepad.dpad_down) {
-        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
+        dt.driveFieldCentric(0, 0, -dpadDriveSpeed );
       } else {
         dt.driveFieldCentric(drive, turn, strafe);
       }

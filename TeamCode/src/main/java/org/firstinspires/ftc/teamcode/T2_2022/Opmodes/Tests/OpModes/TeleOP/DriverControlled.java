@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.TeleOP;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
+import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 @TeleOp(name = "TeleOp", group = "OdomBot")
 public class DriverControlled extends Base {
   @Override
   public void runOpMode() throws InterruptedException {
     initHardware(0, this);
+    Motor fLeftMotor = new Motor(hardwareMap, "front_left_motor");
     telemetry.addData("Status", "Initialized");
     telemetry.update();
 
@@ -53,13 +55,13 @@ public class DriverControlled extends Base {
       }
 
       // replace manual control in favour for automated control
-      //      if (gamepad2.dpad_up) {
-      //        grabber.v4b.setPower(1);
-      //      } else if (gamepad2.dpad_down) {
-      //        grabber.v4b.setPower(-1);
-      //      } else {
-      //        grabber.v4b.setPower(0);
-      //      }
+      if (gamepad2.dpad_up) {
+        grabber.v4b.setPower(1);
+      } else if (gamepad2.dpad_down) {
+        grabber.v4b.setPower(-1);
+      } else {
+        grabber.v4b.setPower(0);
+      }
 
       rLP = rP;
       rP = gamepad1.right_bumper;
@@ -90,7 +92,7 @@ public class DriverControlled extends Base {
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
       drive = floor(gamepad1.right_stick_x * 0.8);
-      strafe = floor(-gamepad1.right_stick_y * 0.8);
+      strafe = floor(-gamepad1.left_stick_y * 0.8);
       turn = turnFloor(gamepad1.left_stick_x * 0.8);
       computeDrivePowers(gamepad1);
 
@@ -104,6 +106,7 @@ public class DriverControlled extends Base {
       telemetry.addData(
           "Current Pos: ",
           dt.getCurrentPosition().xP + " " + dt.getCurrentPosition().xP + " " + dt.getAngle());
+      telemetry.addData("Odo Tick Inch Count: ", fLeftMotor.retMotorEx().getCurrentPosition());
       telemetry.update();
     }
   }
