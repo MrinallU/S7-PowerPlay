@@ -52,15 +52,6 @@ public class DriverControlled extends Base {
         armStat = "middle";
       }
 
-      // replace manual control in favour for automated control
-      //      if (gamepad2.dpad_up) {
-      //        grabber.v4b.setPower(1);
-      //      } else if (gamepad2.dpad_down) {
-      //        grabber.v4b.setPower(-1);
-      //      } else {
-      //        grabber.v4b.setPower(0);
-      //      }
-
       rLP = rP;
       rP = gamepad1.right_bumper;
       if (!rLP && rP) {
@@ -90,7 +81,7 @@ public class DriverControlled extends Base {
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
       drive = floor(gamepad1.right_stick_x * 0.8);
-      strafe = floor(-gamepad1.left_stick_y * 0.8);
+      strafe = floor(-gamepad1.right_stick_y * 0.8);
       turn = turnFloor(gamepad1.left_stick_x * 0.8);
       computeDrivePowers(gamepad1);
 
@@ -99,7 +90,6 @@ public class DriverControlled extends Base {
       telemetry.addData(
           "Current Pos: ",
           dt.getCurrentPosition().xP + " " + dt.getCurrentPosition().xP + " " + dt.getAngle());
-      telemetry.addData("Odo Tick Inch Count: ", dt.getFleftVelo());
       telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.update();
     }

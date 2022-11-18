@@ -11,23 +11,25 @@ public class RedPrimary extends Base {
     ElapsedTime timer = new ElapsedTime();
     initHardware(0, this);
     sleep(500);
+    int location = 3;
     telemetry.addData("Status", "Initialized");
     telemetry.update();
+    while(!isStarted() && !isStopRequested()){
+      camera.getLatestDetections();
+      location = camera.getDetection();
+      telemetry.addData("Status: ", "Initialized");
+      telemetry.addData("Pos: ", location);
+      telemetry.update();
+    }
 
     waitForStart();
+    telemetry.addData("Pos:", location);
+    telemetry.update();
     matchTime.reset();
     dt.resetCache();
     grabber.grabCone();
     sleep(500);
 
-    int location;
-    timer.reset();
-    while (camera.getLatestDetections().size() == 0 && timer.milliseconds() <= 2000) {}
-    if (camera.getLatestDetections().size() > 0) {
-      location = camera.getDetection();
-    } else {
-      location = 2;
-    }
 
     timer.reset();
     while (timer.milliseconds() <= 525) {

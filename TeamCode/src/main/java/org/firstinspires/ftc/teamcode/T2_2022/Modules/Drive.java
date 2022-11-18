@@ -74,8 +74,8 @@ public class Drive extends Base {
     yV = nY;
 
     // integrate velocity over time
-    yEncPos += (yV * (time.seconds() - prevTime)) / 162.15; // <-- Tick to inch conversion factor
-    xEncPosv += (xV * (time.seconds() - prevTime)) / 162.15;
+    yEncPos += (yV * (time.seconds() - prevTime)) / 43.708; // <-- Tick to inch conversion factor
+    xEncPosv += (xV * (time.seconds() - prevTime)) / 43.708;
     prevTime = time.seconds();
   }
 
@@ -103,8 +103,9 @@ public class Drive extends Base {
     return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
   }
 
-  public double getFleftVelo(){return fLeftMotor.retMotorEx().getVelocity();}
-
+  public double getFLeftTicks(){
+    return fLeftMotor.retMotorEx().getCurrentPosition();
+  }
   // Path Traversal
 
   // Kinda Like:

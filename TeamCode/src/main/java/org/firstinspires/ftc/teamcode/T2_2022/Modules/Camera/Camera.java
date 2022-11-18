@@ -19,7 +19,10 @@ public class Camera {
   private rectangle_thresholder_pipeline p1;
   private auto_floodfill_detection p2;
   private april_tag_detection_pipeline p3;
-
+  double fx = 578.272;
+  double fy = 578.272;
+  double cx = 402.145;
+  double cy = 221.506;
   public Camera(HardwareMap hw) {
 
     p1 = new rectangle_thresholder_pipeline();
@@ -39,16 +42,14 @@ public class Camera {
         new OpenCvCamera.AsyncCameraOpenListener() {
           @Override
           public void onOpened() {
-            webcam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
-          }
+            webcam.startStreaming(800, 448, OpenCvCameraRotation.SIDEWAYS_LEFT);          }
 
           @Override
           public void onError(int errorCode) {}
         });
 
     p2 = new auto_floodfill_detection(true, webcam);
-    p3 = new april_tag_detection_pipeline();
-  }
+    p3 = new april_tag_detection_pipeline(0.166, fx, fy, cx, cy);  }
 
   public int getSignalColor() {
     return p1.getOut();
@@ -71,7 +72,10 @@ public class Camera {
   }
 
   public int getDetection() {
-    return p3.getLatestDetections().get(0).id;
+    if(getLatestDetections().size() > 0){
+      return p3.getLatestDetections().get(0).id;
+    }
+    return 5;
   }
 
   public void stop() {
