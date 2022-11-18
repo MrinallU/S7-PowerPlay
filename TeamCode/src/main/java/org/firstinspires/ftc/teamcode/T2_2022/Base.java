@@ -40,7 +40,7 @@ public abstract class Base extends LinearOpMode {
   public String armStat;
 
   // Positions and Bounds
-  public double dpadTurnSpeed = 0.175, dpadDriveSpeed = 0.2;
+  public double dpadTurnSpeed = 0.175, dpadDriveSpeed = 0.6;
 
   // Button Variables
   public boolean yP = false, yLP = false;
@@ -309,9 +309,9 @@ public abstract class Base extends LinearOpMode {
       driveType = "Field Centric";
 
       if (gamepad.dpad_right) {
-        dt.driveFieldCentric(0, dpadTurnSpeed, 0);
+        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
       } else if (gamepad.dpad_left) {
-        dt.driveFieldCentric(0, -dpadTurnSpeed, 0);
+        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
       } else if (gamepad.dpad_up) {
         dt.driveFieldCentric(0, 0, dpadDriveSpeed);
       } else if (gamepad.dpad_down) {

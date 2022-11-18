@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
+import org.firstinspires.ftc.teamcode.Utils.Point;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Autonomous(name = "Red_Primary", group = "OdomBot")
 public class RedPrimary extends Base {
@@ -11,25 +15,40 @@ public class RedPrimary extends Base {
     ElapsedTime timer = new ElapsedTime();
     initHardware(0, this);
     sleep(500);
+    int location = 3;
     telemetry.addData("Status", "Initialized");
     telemetry.update();
+    sleep(500);
+    while(!isStarted() && !isStopRequested()){
+      camera.getLatestDetections();
+      location = camera.getDetection();
+      telemetry.addData("Status: ", "Initialized");
+      telemetry.addData("Pos: ", location);
+      telemetry.update();
+    }
+
 
     waitForStart();
+    telemetry.addData("Pos:", location);
+    telemetry.update();
     matchTime.reset();
     dt.resetCache();
     grabber.grabCone();
     sleep(500);
 
-    int location;
-    timer.reset();
-    while (camera.getLatestDetections().size() == 0 && timer.milliseconds() <= 2000) {}
-    if (camera.getLatestDetections().size() > 0) {
-      location = camera.getDetection();
-    } else {
-      location = 2;
-    }
 
-    timer.reset();
+    ArrayList<Point> path1 = new ArrayList<>();
+
+    path1.addAll(new ArrayList<>(
+            Arrays.asList(
+                    new Point(14, -7), new Point(35, -12), new Point(57, 10)
+            )
+    ));
+    sleep(500);
+    LinearPathConstantHeading(path1, 0, 0.7, 1, 1, 1, 1, 8, 100000);
+
+
+    /*timer.reset();
     while (timer.milliseconds() <= 525) {
       dt.driveFieldCentric(0.15, 0, 0, 1);
     }
@@ -83,11 +102,11 @@ public class RedPrimary extends Base {
       while (timer.milliseconds() <= 1000) {
         dt.driveFieldCentric(-0.2, 0, 0, 1);
       }
-    } else {
+    } else if(location == 3){
       while (timer.milliseconds() <= 1000) {
         dt.driveFieldCentric(0.2, 0, 0, 1);
       }
     }
-    dt.stopDrive();
+    dt.stopDrive();*/
   }
 }
