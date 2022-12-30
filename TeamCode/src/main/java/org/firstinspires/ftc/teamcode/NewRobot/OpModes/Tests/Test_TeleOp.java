@@ -54,8 +54,9 @@ public class Test_TeleOp extends Base {
           first = false;
           slideSystem.initialGrab();
         } else {
-          slideSystem.setBackClawClawOpen();
           slideSystem.setFrontClawClose();
+          slideSystem.setBackClawClawOpen();
+          slideSystem.closeTransferMec();
           doneScoring = false;
         }
       }

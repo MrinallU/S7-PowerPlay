@@ -189,4 +189,9 @@ public class SlideSystem {
   public void setBackClawClawOpen() {
     backClaw.setPosition(backClawOpen);
   }
+
+  public void closeTransferMec(){
+    transferMecLeft.setPosition(transferMecClose);
+    transferMecRight.setPosition(transferMecClose);
+  }
 }
