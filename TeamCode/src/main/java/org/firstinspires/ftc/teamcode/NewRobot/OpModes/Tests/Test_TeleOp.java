@@ -6,7 +6,8 @@ import org.firstinspires.ftc.teamcode.NewRobot.Base;
 @TeleOp(name = "New_Robot_TeleOP", group = "OdomBot")
 public class Test_TeleOp extends Base {
 
-  boolean clawToggle = false, first = true, doneScoring = true;
+  boolean first = true;
+  boolean doneScoring = true;
 
   @Override
   public void runOpMode() throws InterruptedException {
@@ -53,14 +54,9 @@ public class Test_TeleOp extends Base {
           first = false;
           slideSystem.initialGrab();
         } else {
-          if (!clawToggle) {
-            slideSystem.setFrontClawClose();
-          } else {
-            slideSystem.setBackClawClawOpen();
-            slideSystem.setFrontClawClose();
-          }
+          slideSystem.setBackClawClawOpen();
+          slideSystem.setFrontClawClose();
           doneScoring = false;
-          clawToggle = !clawToggle;
         }
       }
 
