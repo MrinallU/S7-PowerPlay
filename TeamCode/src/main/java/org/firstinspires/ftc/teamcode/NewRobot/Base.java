@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.Drive;
-import org.firstinspires.ftc.teamcode.NewRobot.Modules.Grabber;
+import org.firstinspires.ftc.teamcode.NewRobot.Modules.SlideSystem;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
@@ -28,7 +28,7 @@ public abstract class Base extends LinearOpMode {
   public BNO055IMU gyro;
 
   public Drive dt = null;
-  public Grabber grabber = null;
+  public SlideSystem slideSystem = null;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
@@ -73,8 +73,6 @@ public abstract class Base extends LinearOpMode {
     Motor odoR = new Motor(hardwareMap, "enc_right");
     Motor odoN = new Motor(hardwareMap, "enc_x");
 
-    Motor hLeftS = new Motor(hardwareMap, "horizontalLeftSlide");
-    Motor hRightS = new Motor(hardwareMap, "horiztonalRightSlide");
     Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
     Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
 
@@ -90,6 +88,8 @@ public abstract class Base extends LinearOpMode {
     Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
     Servo cll = hardwareMap.get(Servo.class, "backClawLiftLeft");
     Servo clr = hardwareMap.get(Servo.class, "backClawLiftRight");
+    Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
+    Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -121,7 +121,7 @@ public abstract class Base extends LinearOpMode {
             angle,
             allHubs);
 
-    grabber = new Grabber(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clr);
+    slideSystem = new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clr);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
@@ -304,9 +304,9 @@ public abstract class Base extends LinearOpMode {
       } else if (gamepad.dpad_left) {
         dt.driveFieldCentric(0, -dpadTurnSpeed, 0);
       } else if (gamepad.dpad_up) {
-        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
+        dt.driveFieldCentric(0, 0, dpadDriveSpeed);
       } else if (gamepad.dpad_down) {
-        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
+        dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
       } else {
         dt.driveFieldCentric(drive, turn, strafe);
       }

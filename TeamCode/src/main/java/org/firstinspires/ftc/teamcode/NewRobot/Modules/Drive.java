@@ -248,8 +248,6 @@ public class Drive extends Base {
     double fRightPow, bRightPow, fLeftPow, bLeftPow;
     double botHeading = -Math.toRadians(gyro.getAngularOrientation().firstAngle);
 
-    System.out.println(drive + " " + turn + " " + strafe);
-
     double rotX = drive * Math.cos(botHeading) - strafe * Math.sin(botHeading);
     double rotY = drive * Math.sin(botHeading) + strafe * Math.cos(botHeading);
 

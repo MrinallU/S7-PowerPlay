@@ -36,9 +36,9 @@ public class Test_TeleOp extends Base {
       // Drive
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
-      drive = floor(gamepad1.right_stick_x);
-      strafe = floor(-gamepad1.right_stick_y);
-      turn = turnFloor(gamepad1.left_stick_x);
+      drive = floor(gamepad1.right_stick_x * 0.8);
+      strafe = floor(-gamepad1.right_stick_y * 0.8);
+      turn = turnFloor(gamepad1.left_stick_x * 0.8);
       computeDrivePowers(gamepad1);
 
       // the front claw automatically opens when extending...
@@ -47,13 +47,13 @@ public class Test_TeleOp extends Base {
       if (aP && !aLP) {
         if (first) {
           first = false;
-          grabber.initialGrab();
+          slideSystem.initialGrab();
         } else {
           if (!clawToggle) {
-            grabber.setFrontClawClose();
+            slideSystem.setFrontClawClose();
           } else {
-            grabber.setBackClawClawOpen();
-            grabber.setFrontClawClose();
+            slideSystem.setBackClawClawOpen();
+            slideSystem.setFrontClawClose();
           }
           doneScoring = false;
           clawToggle = !clawToggle;
@@ -61,7 +61,7 @@ public class Test_TeleOp extends Base {
       }
 
       if (!doneScoring) {
-        doneScoring = grabber.score();
+        doneScoring = slideSystem.score();
       }
       // Display Values
       telemetry.addData("Drive Type", driveType);

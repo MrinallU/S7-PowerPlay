@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
-public class Grabber {
-  Motor horizontalLeftSlide, horiztonalRightSlide, verticalLeftSlide, verticalRightSlide;
-  Servo frontClaw, backClaw, transferMecLeft, transferMecRight, backClawLiftLeft, backClawLiftRight;
+public class SlideSystem {
+  Motor verticalLeftSlide, verticalRightSlide;
+  Servo horizontalRightSlide, horizontalLeftSlide, frontClaw, backClaw, transferMecLeft, transferMecRight, backClawLiftLeft, backClawLiftRight;
   final double horizontalSlideExtendPos = 1000,
       horizontalSlideRetractPos = 0,
-      verticalSlideExtendPos = 1000,
+      verticalSlideExtendPos = 1,
       verticalSlideRetractPos = 0,
       frontClawOpen = 1,
       frontClawClose = 0,
@@ -23,9 +23,9 @@ public class Grabber {
   ElapsedTime timer = new ElapsedTime();
   String lastCmd = "null";
 
-  public Grabber(
-      Motor horizontalLeftSlide,
-      Motor horiztonalRightSlide,
+  public SlideSystem(
+      Servo horizontalLeftSlide,
+      Servo horizontalRightSlide,
       Motor verticalLeftSlide,
       Motor verticalRightSlide,
       Servo frontClaw,
@@ -35,7 +35,7 @@ public class Grabber {
       Servo backClawLiftLeft,
       Servo backClawLiftRight) {
     this.horizontalLeftSlide = horizontalLeftSlide;
-    this.horiztonalRightSlide = horiztonalRightSlide;
+    this.horizontalRightSlide = horizontalRightSlide;
     this.verticalLeftSlide = verticalLeftSlide;
     this.verticalRightSlide = verticalRightSlide;
     this.frontClaw = frontClaw;
@@ -44,12 +44,15 @@ public class Grabber {
     this.transferMecRight = transferMecRight;
     this.backClawLiftLeft = backClawLiftLeft;
     this.backClawLiftRight = backClawLiftRight;
+
     setFrontClawOpen();
     setBackClawClawOpen();
-    backClawLiftRight.setPosition(backClawLiftRetract);
-    backClawLiftLeft.setPosition(backClawLiftRetract);
-    transferMecLeft.setPosition(transferMecClose);
-    transferMecRight.setPosition(transferMecClose);
+    this.backClawLiftRight.setPosition(backClawLiftRetract);
+    this.backClawLiftLeft.setPosition(backClawLiftRetract);
+    this.transferMecLeft.setPosition(transferMecClose);
+    this.transferMecRight.setPosition(transferMecClose);
+    this.horizontalLeftSlide.setPosition(horizontalSlideRetractPos);
+    this.horizontalRightSlide.setPosition(horizontalSlideRetractPos);
   }
 
   public void initialGrab() {
@@ -61,28 +64,46 @@ public class Grabber {
   // keep running this method until the true parameter is returned.
   // todo: adjust the timers as necessary
   public boolean score() {
-    retractHorizontalSlides();
-    retractVerticalSlides();
-
-    if (!Objects.equals(lastCmd, "transferring")) {
-      if (!Objects.equals(lastCmd, "score")) {
+    if (!Objects.equals(lastCmd, "transferring")&&!Objects.equals(lastCmd, "score")&&!Objects.equals(lastCmd, "slidedelay")) {
+      if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
-        lastCmd = "score";
-      } else if (timer.milliseconds() < 2000) {
+        lastCmd = "dropping";
+      } else if (timer.milliseconds() < 500) { // half a second for the claws to grab or drop the cone
         return false;
       }
     }
 
-    setBackClawClose();
-    if (!Objects.equals(lastCmd, "transferring")) {
-      lastCmd = "transferring";
-      timer.reset();
-    } else if (timer.milliseconds() < 500) {
-      return false;
+    retractHorizontalSlides();
+    retractVerticalSlides();
+
+    if (!Objects.equals(lastCmd, "transferring")&&!Objects.equals(lastCmd, "slidedelay")) {
+      if (!Objects.equals(lastCmd, "score")) {
+        timer.reset();
+        lastCmd = "score";
+      } else if (timer.milliseconds() < 2000) { // two seconds for the slides to retract
+        return false;
+      }
     }
+
     setFrontClawOpen();
+    setBackClawClose();
+    if(!Objects.equals(lastCmd, "slidedelay")) {
+      if (!Objects.equals(lastCmd, "transferring")) {
+        lastCmd = "transferring";
+        timer.reset();
+      } else if (timer.milliseconds() < 500) { // half a second for the bucket to fully grab onto the cone and for the front claw to let go of the cone.
+        return false;
+      }
+    }
 
     extendHorizontalSlides();
+    if (!Objects.equals(lastCmd, "slidedelay")) {
+      lastCmd = "slidedelay";
+      timer.reset();
+    } else if (timer.milliseconds() < 500) { // half a second for the transfer mechanism to extend to avoid collision
+      return false;
+    }
+
     extendVerticalSlides();
     lastCmd = "null";
     return true;
@@ -96,33 +117,18 @@ public class Grabber {
 
   public void extendHorizontalSlides() {
     setFrontClawOpen();
-    horizontalLeftSlide.setTarget(horizontalSlideExtendPos);
-    horizontalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-    horizontalLeftSlide.toPosition();
-    horizontalLeftSlide.setPower(1);
-
-    horiztonalRightSlide.setTarget(horizontalSlideExtendPos);
-    horiztonalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-    horiztonalRightSlide.toPosition();
-    horiztonalRightSlide.setPower(1);
-
     transferMecLeft.setPosition(transferMecExtend);
     transferMecRight.setPosition(transferMecExtend);
+    horizontalLeftSlide.setPosition(horizontalSlideExtendPos);
+    horizontalRightSlide.setPosition(horizontalSlideExtendPos);
   }
 
   public void retractHorizontalSlides() {
     transferMecLeft.setPosition(transferMecClose);
     transferMecRight.setPosition(transferMecClose);
 
-    horizontalLeftSlide.setTarget(horizontalSlideRetractPos);
-    horizontalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-    horizontalLeftSlide.toPosition();
-    horizontalLeftSlide.setPower(1);
-
-    horiztonalRightSlide.setTarget(horizontalSlideRetractPos);
-    horiztonalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-    horiztonalRightSlide.toPosition();
-    horiztonalRightSlide.setPower(1);
+    horizontalLeftSlide.setPosition(horizontalSlideRetractPos);
+    horizontalRightSlide.setPosition(horizontalSlideRetractPos);
   }
 
   public void extendVerticalSlides() {
