@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.NewRobot.OpModes.Tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NewRobot.Base;
 
@@ -36,7 +35,6 @@ public class Test_TeleOp extends Base {
       if (gamepad1.x) {
         targetAngle = -currAngle; // todo: subtract from the botHeading in field centric
       }
-
 
       // Drive
       // todo fully integrate the angle reset.

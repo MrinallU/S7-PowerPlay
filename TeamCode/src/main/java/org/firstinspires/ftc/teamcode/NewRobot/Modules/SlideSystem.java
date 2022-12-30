@@ -103,7 +103,7 @@ public class SlideSystem {
         timer.reset();
       } else if (timer.milliseconds()
           < 500) { // half a second for the bucket to fully grab onto the cone and for the front
-                   // claw to let go of the cone.
+        // claw to let go of the cone.
         return false;
       }
     }
