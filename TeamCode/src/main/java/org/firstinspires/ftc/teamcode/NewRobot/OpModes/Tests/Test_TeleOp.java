@@ -8,7 +8,8 @@ import org.firstinspires.ftc.teamcode.NewRobot.Base;
 @TeleOp(name = "New_Robot_TeleOP", group = "OdomBot")
 public class Test_TeleOp extends Base {
 
-  boolean clawToggle = false, first=true, doneScoring =true;
+  boolean clawToggle = false, first = true, doneScoring = true;
+
   @Override
   public void runOpMode() throws InterruptedException {
     initHardware(0, this);
@@ -40,18 +41,17 @@ public class Test_TeleOp extends Base {
       turn = turnFloor(gamepad1.left_stick_x);
       computeDrivePowers(gamepad1);
 
-
       // the front claw automatically opens when extending...
       aLP = aP;
       aP = gamepad1.a;
-      if(aP&&!aLP){
-        if(first){
+      if (aP && !aLP) {
+        if (first) {
           first = false;
           grabber.initialGrab();
-        }else {
+        } else {
           if (!clawToggle) {
             grabber.setFrontClawClose();
-          }else{
+          } else {
             grabber.setBackClawClawOpen();
             grabber.setFrontClawClose();
           }
@@ -60,7 +60,7 @@ public class Test_TeleOp extends Base {
         }
       }
 
-      if(!doneScoring){
+      if (!doneScoring) {
         doneScoring = grabber.score();
       }
       // Display Values

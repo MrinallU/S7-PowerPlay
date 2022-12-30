@@ -1,14 +1,14 @@
-//package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Tests;
+// package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Tests;
 //
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.Servo;
-//import com.qualcomm.robotcore.hardware.TouchSensor;
-//import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
-//import org.firstinspires.ftc.teamcode.Utils.Motor;
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+// import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+// import com.qualcomm.robotcore.hardware.Servo;
+// import com.qualcomm.robotcore.hardware.TouchSensor;
+// import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
+// import org.firstinspires.ftc.teamcode.Utils.Motor;
 //
-//@TeleOp(name = "v4b_test", group = "Tests")
-//public class v4b_test extends LinearOpMode {
+// @TeleOp(name = "v4b_test", group = "Tests")
+// public class v4b_test extends LinearOpMode {
 //  @Override
 //  public void runOpMode() throws InterruptedException {
 //    Servo s = hardwareMap.get(Servo.class, "claw");
@@ -71,4 +71,4 @@
 //    //      telemetry.update();
 //    //    }
 //  }
-//}
+// }

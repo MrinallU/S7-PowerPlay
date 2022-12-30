@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN_ELEVATED = 0.4, CLAW_OPEN_REST = 0.4, CLAW_CLOSE = 0.2;  public final int HIGH = 2500, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;  boolean armRested = true, v4bExtended;
+  public final double CLAW_OPEN_ELEVATED = 0.4, CLAW_OPEN_REST = 0.4, CLAW_CLOSE = 0.2;
+  public final int HIGH = 2500, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
+  boolean armRested = true, v4bExtended;
   public final ElapsedTime GrabberTimer = new ElapsedTime();
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
@@ -80,8 +81,8 @@ public class Grabber {
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "rest")) {
       retractV4b();
-        restArm();
-        armStatusPrev = armStatus;
+      restArm();
+      armStatusPrev = armStatus;
     }
   }
 
@@ -138,11 +139,11 @@ public class Grabber {
   }
 
   public void retractV4b() {
-    if(Objects.equals(clawStatus, "open")) {
+    if (Objects.equals(clawStatus, "open")) {
       grabCone();
       GrabberTimer.reset();
     }
-    if(GrabberTimer.seconds()>2) {
+    if (GrabberTimer.seconds() > 2) {
       v4bLeft.setPosition(0);
       v4bRight.setPosition(0);
     }

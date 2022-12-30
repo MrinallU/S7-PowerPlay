@@ -14,7 +14,7 @@ public class RedPrimary extends Base {
     int location = 3;
     telemetry.addData("Status", "Initialized");
     telemetry.update();
-    while(!isStarted() && !isStopRequested()){
+    while (!isStarted() && !isStopRequested()) {
       camera.getLatestDetections();
       location = camera.getDetection();
       telemetry.addData("Status: ", "Initialized");
@@ -29,7 +29,6 @@ public class RedPrimary extends Base {
     dt.resetCache();
     grabber.grabCone();
     sleep(500);
-
 
     timer.reset();
     while (timer.milliseconds() <= 525) {

@@ -317,7 +317,7 @@ public abstract class Base extends LinearOpMode {
       } else if (gamepad.dpad_up) {
         dt.driveFieldCentric(0, 0, dpadDriveSpeed);
       } else if (gamepad.dpad_down) {
-        dt.driveFieldCentric(0, 0, -dpadDriveSpeed );
+        dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
       } else {
         dt.driveFieldCentric(drive, turn, strafe);
       }
