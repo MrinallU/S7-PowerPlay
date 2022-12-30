@@ -7,7 +7,14 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class SlideSystem {
   Motor verticalLeftSlide, verticalRightSlide;
-  Servo horizontalRightSlide, horizontalLeftSlide, frontClaw, backClaw, transferMecLeft, transferMecRight, backClawLiftLeft, backClawLiftRight;
+  Servo horizontalRightSlide,
+      horizontalLeftSlide,
+      frontClaw,
+      backClaw,
+      transferMecLeft,
+      transferMecRight,
+      backClawLiftLeft,
+      backClawLiftRight;
   final double horizontalSlideExtendPos = 1000,
       horizontalSlideRetractPos = 0,
       verticalSlideExtendPos = 1,
@@ -64,11 +71,14 @@ public class SlideSystem {
   // keep running this method until the true parameter is returned.
   // todo: adjust the timers as necessary
   public boolean score() {
-    if (!Objects.equals(lastCmd, "transferring")&&!Objects.equals(lastCmd, "score")&&!Objects.equals(lastCmd, "slidedelay")) {
+    if (!Objects.equals(lastCmd, "transferring")
+        && !Objects.equals(lastCmd, "score")
+        && !Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
-      } else if (timer.milliseconds() < 500) { // half a second for the claws to grab or drop the cone
+      } else if (timer.milliseconds()
+          < 500) { // half a second for the claws to grab or drop the cone
         return false;
       }
     }
@@ -76,7 +86,7 @@ public class SlideSystem {
     retractHorizontalSlides();
     retractVerticalSlides();
 
-    if (!Objects.equals(lastCmd, "transferring")&&!Objects.equals(lastCmd, "slidedelay")) {
+    if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
@@ -87,11 +97,13 @@ public class SlideSystem {
 
     setFrontClawOpen();
     setBackClawClose();
-    if(!Objects.equals(lastCmd, "slidedelay")) {
+    if (!Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
-      } else if (timer.milliseconds() < 500) { // half a second for the bucket to fully grab onto the cone and for the front claw to let go of the cone.
+      } else if (timer.milliseconds()
+          < 500) { // half a second for the bucket to fully grab onto the cone and for the front
+                   // claw to let go of the cone.
         return false;
       }
     }
@@ -100,7 +112,8 @@ public class SlideSystem {
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
-    } else if (timer.milliseconds() < 500) { // half a second for the transfer mechanism to extend to avoid collision
+    } else if (timer.milliseconds()
+        < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
 

@@ -29,26 +29,26 @@ public class Camera {
     p1 = new rectangle_thresholder_pipeline();
     this.hardwareMap = hw;
     int cameraMonitorViewId =
-            hardwareMap
-                    .appContext
-                    .getResources()
-                    .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        hardwareMap
+            .appContext
+            .getResources()
+            .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
     webcam =
-            OpenCvCameraFactory.getInstance()
-                    .createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
+        OpenCvCameraFactory.getInstance()
+            .createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
     webcam.setPipeline(p1);
     webcam.setMillisecondsPermissionTimeout(2500);
     webcam.openCameraDeviceAsync(
-            new OpenCvCamera.AsyncCameraOpenListener() {
-              @Override
-              public void onOpened() {
-                webcam.startStreaming(800, 448, OpenCvCameraRotation.SIDEWAYS_LEFT);
-              }
+        new OpenCvCamera.AsyncCameraOpenListener() {
+          @Override
+          public void onOpened() {
+            webcam.startStreaming(800, 448, OpenCvCameraRotation.SIDEWAYS_LEFT);
+          }
 
-              @Override
-              public void onError(int errorCode) {}
-            });
+          @Override
+          public void onError(int errorCode) {}
+        });
 
     p2 = new auto_floodfill_detection(true, webcam);
     p3 = new april_tag_detection_pipeline(0.166, fx, fy, cx, cy);
