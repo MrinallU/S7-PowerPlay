@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NewRobot.Base;
 
-@Disabled
 @TeleOp(name = "New_Robot_TeleOP", group = "OdomBot")
 public class Test_TeleOp extends Base {
 
@@ -33,12 +32,19 @@ public class Test_TeleOp extends Base {
         basicDrive = !basicDrive;
       }
 
+      // Reset Angle
+      if (gamepad1.x) {
+        targetAngle = -currAngle; // todo: subtract from the botHeading in field centric
+      }
+
+
       // Drive
+      // todo fully integrate the angle reset.
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
-      drive = floor(gamepad1.right_stick_x * 0.8);
-      strafe = floor(-gamepad1.right_stick_y * 0.8);
-      turn = turnFloor(gamepad1.left_stick_x * 0.8);
+      drive = floor(gamepad1.right_stick_x);
+      strafe = floor(-gamepad1.right_stick_y * 1.1); // 1.1 counteracts imperfect strafing
+      turn = turnFloor(gamepad1.left_stick_x);
       computeDrivePowers(gamepad1);
 
       // the front claw automatically opens when extending...
