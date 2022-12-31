@@ -46,6 +46,7 @@ public abstract class Base extends LinearOpMode {
   public boolean yP2 = false, yLP2 = false;
   public boolean rSP2 = false, rSLP2 = false;
   public boolean bP2 = false, bLP2 = false;
+  public boolean xP2 = false, xLP2 = false;
   public boolean slowDrive = false, fastDrive = false;
   public boolean basicDrive = false;
 
