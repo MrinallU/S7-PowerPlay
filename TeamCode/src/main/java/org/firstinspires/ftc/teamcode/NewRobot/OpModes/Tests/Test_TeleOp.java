@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.NewRobot.Base;
 
 @TeleOp(name = "New_Robot_TeleOP", group = "OdomBot")
 public class Test_TeleOp extends Base {
-  int stage=0;
+  int stage = 0;
   boolean first = true;
   boolean doneScoring = true;
   boolean cycleMode = true;
@@ -49,14 +49,14 @@ public class Test_TeleOp extends Base {
       // Always reset grabber before changing mode!!
       bLP2 = bP2;
       bP2 = gamepad2.b;
-      if(!bLP2&&bP2){
+      if (!bLP2 && bP2) {
         cycleMode = !cycleMode;
-        stage = 0; 
+        stage = 0;
       }
 
       xLP2 = xP2;
       xP2 = gamepad2.x;
-      if(!bLP2&&bP2){
+      if (!bLP2 && bP2) {
         slideSystem.resetGrabber();
       }
 
@@ -68,17 +68,17 @@ public class Test_TeleOp extends Base {
           first = false;
           slideSystem.initialGrab();
         } else {
-          if(cycleMode) {
+          if (cycleMode) {
             slideSystem.setFrontClawClose();
             slideSystem.setBackClawClawOpen();
             slideSystem.closeTransferMec();
-          }else{
-            if(stage==0){
+          } else {
+            if (stage == 0) {
               slideSystem.extendTransferMec();
-            }else if(stage%2!=0){
+            } else if (stage % 2 != 0) {
               slideSystem.setFrontClawClose();
               slideSystem.setBackClawClawOpen();
-            }else{
+            } else {
               slideSystem.setBackClawClawOpen();
             }
           }
@@ -87,17 +87,19 @@ public class Test_TeleOp extends Base {
       }
 
       if (!doneScoring) {
-        if(cycleMode) {
+        if (cycleMode) {
           doneScoring = slideSystem.score();
-        }else{
-          if(stage==0){
+        } else {
+          if (stage == 0) {
             doneScoring = true;
-          }else if(stage%2!=0) {
+          } else if (stage % 2 != 0) {
             doneScoring = slideSystem.scoreCircuitsStage1();
-          }else{
+          } else {
             doneScoring = slideSystem.scoreCircuitsStage2();
           }
-          if(doneScoring){stage++;}
+          if (doneScoring) {
+            stage++;
+          }
         }
       }
       // Display Values

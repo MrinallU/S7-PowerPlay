@@ -124,13 +124,13 @@ public class SlideSystem {
 
   public boolean scoreCircuitsStage1() {
     if (!Objects.equals(lastCmd, "transferring")
-            && !Objects.equals(lastCmd, "score")
-            && !Objects.equals(lastCmd, "slidedelay")) {
+        && !Objects.equals(lastCmd, "score")
+        && !Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
       } else if (timer.milliseconds()
-              < 500) { // half a second for the claws to grab or drop the cone
+          < 500) { // half a second for the claws to grab or drop the cone
         return false;
       }
     }
@@ -152,7 +152,7 @@ public class SlideSystem {
         lastCmd = "transferring";
         timer.reset();
       } else if (timer.milliseconds()
-              < 500) { // half a second for the bucket to fully grab onto the cone and for the front
+          < 500) { // half a second for the bucket to fully grab onto the cone and for the front
         // claw to let go of the cone.
         return false;
       }
@@ -164,7 +164,7 @@ public class SlideSystem {
       lastCmd = "slidedelay";
       timer.reset();
     } else if (timer.milliseconds()
-            < 500) { // half a second for the transfer mechanism to extend to avoid collision
+        < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
 
@@ -173,18 +173,17 @@ public class SlideSystem {
     return true;
   }
 
-  public boolean scoreCircuitsStage2(){
-      if (!Objects.equals(lastCmd, "dropping")) {
-        timer.reset();
-        lastCmd = "dropping";
-      } else if (timer.milliseconds()
-              < 500) { // half a second for the claws to grab or drop the cone
-        return false;
-      }
+  public boolean scoreCircuitsStage2() {
+    if (!Objects.equals(lastCmd, "dropping")) {
+      timer.reset();
+      lastCmd = "dropping";
+    } else if (timer.milliseconds() < 500) { // half a second for the claws to grab or drop the cone
+      return false;
+    }
 
-      lastCmd = "null";
-      retractVerticalSlides();
-      return true;
+    lastCmd = "null";
+    retractVerticalSlides();
+    return true;
   }
 
   public void resetGrabber() {
@@ -252,12 +251,12 @@ public class SlideSystem {
     backClaw.setPosition(backClawOpen);
   }
 
-  public void closeTransferMec(){
+  public void closeTransferMec() {
     transferMecLeft.setPosition(transferMecClose);
     transferMecRight.setPosition(transferMecClose);
   }
 
-  public void extendTransferMec(){
+  public void extendTransferMec() {
     transferMecLeft.setPosition(transferMecExtend);
     transferMecRight.setPosition(transferMecExtend);
   }
