@@ -52,6 +52,7 @@ public class Test_TeleOp extends Base {
       if (!bLP2 && bP2) {
         cycleMode = !cycleMode;
         stage = 0;
+        first = false;
       }
 
       xLP2 = xP2;
@@ -64,14 +65,15 @@ public class Test_TeleOp extends Base {
       aLP = aP;
       aP = gamepad1.a;
       if (aP && !aLP) {
-        if (first) {
-          first = false;
-          slideSystem.initialGrab();
-        } else {
           if (cycleMode) {
-            slideSystem.setFrontClawClose();
-            slideSystem.setBackClawClawOpen();
-            slideSystem.closeTransferMec();
+            if (first) {
+              first = false;
+              slideSystem.initialGrab();
+            }else {
+              slideSystem.setFrontClawClose();
+              slideSystem.setBackClawClawOpen();
+              slideSystem.closeTransferMec();
+            }
           } else {
             if (stage == 0) {
               slideSystem.extendTransferMec();
@@ -83,7 +85,6 @@ public class Test_TeleOp extends Base {
             }
           }
           doneScoring = false;
-        }
       }
 
       if (!doneScoring) {
