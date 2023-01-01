@@ -65,26 +65,26 @@ public class Test_TeleOp extends Base {
       aLP = aP;
       aP = gamepad1.a;
       if (aP && !aLP) {
-          if (cycleMode) {
-            if (first) {
-              first = false;
-              slideSystem.initialGrab();
-            }else {
-              slideSystem.setFrontClawClose();
-              slideSystem.setBackClawClawOpen();
-              slideSystem.closeTransferMec();
-            }
+        if (cycleMode) {
+          if (first) {
+            first = false;
+            slideSystem.initialGrab();
           } else {
-            if (stage == 0) {
-              slideSystem.extendTransferMec();
-            } else if (stage % 2 != 0) {
-              slideSystem.setFrontClawClose();
-              slideSystem.setBackClawClawOpen();
-            } else {
-              slideSystem.setBackClawClawOpen();
-            }
+            slideSystem.setFrontClawClose();
+            slideSystem.setBackClawClawOpen();
+            slideSystem.closeTransferMec();
           }
-          doneScoring = false;
+        } else {
+          if (stage == 0) {
+            slideSystem.extendTransferMec();
+          } else if (stage % 2 != 0) {
+            slideSystem.setFrontClawClose();
+            slideSystem.setBackClawClawOpen();
+          } else {
+            slideSystem.setBackClawClawOpen();
+          }
+        }
+        doneScoring = false;
       }
 
       if (!doneScoring) {
