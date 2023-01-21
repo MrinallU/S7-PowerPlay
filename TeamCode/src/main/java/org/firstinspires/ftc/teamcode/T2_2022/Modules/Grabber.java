@@ -1,37 +1,42 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN_ELEVATED = 0.4, CLAW_OPEN_REST = 0.4, CLAW_CLOSE = 0.2;
+  public final double CLAW_OPEN_ELEVATED = 0.3, CLAW_OPEN_REST = 0.35, CLAW_CLOSE = 0.12;
   public int manualPos = 0;
-  public final int HIGH = 2500, MIDDLE = 1650, MIDDLE_AUTO = 1700, LOW = 700, REST = 0, STACK = 600;
-  boolean armRested = true, v4bExtended;
+  public final int HIGH = 1450, MIDDLE = 860, MIDDLE_AUTO = 2150, MIDDLE_LOCK = 1900, LOW = 100, REST = 0, STACK = 400, STACK_UP = 1300;
+  public boolean armRested = true, v4bExtended=false, v4bMoving=false, clawToggle = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;
   public Servo claw;
   public TouchSensor touchSensor;
 
-  public Grabber(Motor l, Motor r, Motor vb, Servo g, TouchSensor t) {
+  public Grabber(Motor l, Motor r, Servo g, TouchSensor t) {
     leftSlide = l;
     rightSlide = r;
-    v4b = vb;
+
     claw = g;
     touchSensor = t;
 
     rightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-    v4b.setDirection(DcMotorSimple.Direction.FORWARD);
+    //v4b.setDirection(DcMotorSimple.Direction.FORWARD);
     leftSlide.resetEncoder(true);
     rightSlide.resetEncoder(true);
-    v4b.resetEncoder(true);
+    //v4b.resetEncoder(true);
     clawStatus = "open";
     v4bExtended = false;
-    resetClaw();
+    v4bMoving = false;
+    clawToggle = false;
+    grabCone();
   }
 
   public void raiseTop() {
@@ -54,6 +59,21 @@ public class Grabber {
     armRested = false;
   }
 
+  public void stackUp(){
+    raiseToPosition(STACK_UP, 1);
+    armRested = false;
+  }
+
+  public void lock(){
+    raiseToPosition(MIDDLE_LOCK, 1);
+    armRested = false;
+  }
+
+  public void raiseStack2(){
+    raiseToPosition(STACK - 65, 1);
+    armRested = false;
+  }
+
   public void raiseStack() {
     raiseToPosition(STACK, 1);
   }
@@ -63,25 +83,26 @@ public class Grabber {
     armRested = true;
   }
 
-  public void updateArmPos(String armStatus) {
+  public void updateArmPos(String armStatus, Gamepad gamepad) {
     if (Objects.equals(armStatus, "high")) {
       raiseTop();
-      if(rightSlide.retMotorEx().getCurrentPosition() > 550){
-        extendV4b();
-      }
+
+      extendV4b(gamepad);
+
+
+
 
 
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
-      extendV4b();
+      extendV4b(gamepad);
       raiseLow();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "middle")) {
-      extendV4b();
+      extendV4b(gamepad);
       raiseMiddle();
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "rest")) {
-
       retractV4b();
       restArm();
     }
@@ -134,22 +155,31 @@ public class Grabber {
     clawStatus = "open";
   }
 
-  public void extendV4b() {
-    if (v4b.encoderReading() < 205) {
-      v4b.setPower(1);
-    } else {
+  public void extendV4b(Gamepad gamepad) {
+    if (v4b.encoderReading() < 190 && !gamepad.dpad_up) {
+      v4bMoving = true;
+      v4b.setPower(0.4);
+    } else if(!gamepad.dpad_up){
       v4b.setPower(0);
+      v4bMoving = false;
       v4bExtended = true;
     }
   }
 
   public void retractV4b() {
     if (v4b.encoderReading() > 185) {
-      v4b.setPower(-1);
+      v4b.setPower(-0.55);
+      clawStatus = "close";
+      clawToggle = false;
     } else {
+      v4bMoving = false;
       v4bExtended = false;
       v4b.setPower(0);
       v4b.resetEncoder(true);
+      if(rightSlide.retMotorEx().getCurrentPosition() <= 100){
+        if(!clawToggle){resetClaw(); clawToggle = true;}
+      }
+
     }
   }
 }

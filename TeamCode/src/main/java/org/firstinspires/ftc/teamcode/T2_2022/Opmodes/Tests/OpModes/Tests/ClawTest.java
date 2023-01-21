@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
+@Disabled
 @TeleOp(name = "claw_test", group = "Tests")
 public class ClawTest extends LinearOpMode {
   @Override
@@ -14,10 +16,10 @@ public class ClawTest extends LinearOpMode {
     Servo s = hardwareMap.get(Servo.class, "claw");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
-        rs = new Motor(hardwareMap, "rightSlide"),
-        v4b = new Motor(hardwareMap, "v4b");
+        rs = new Motor(hardwareMap, "rightSlide");
+    //v4b = new Motor(hardwareMap, "v4b");
     TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
-    Grabber grabber = new Grabber(ls, rs, v4b, s, touch);
+    Grabber grabber = new Grabber(ls, rs, s, touch);
     double curPos = 1;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
 

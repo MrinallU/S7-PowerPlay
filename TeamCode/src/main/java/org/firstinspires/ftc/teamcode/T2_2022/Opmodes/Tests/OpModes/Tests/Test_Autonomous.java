@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.T2_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
 @Disabled
-@Autonomous(name = "Test_Autonomous", group = "Tests")
+@Autonomous(name = "Test_Auto", group = "Tests")
 public class Test_Autonomous extends Base {
 
   @Override

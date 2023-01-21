@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
-
+@Disabled
 @TeleOp(name = "slide_test", group = "Tests")
 public class SlideTest extends LinearOpMode {
   @Override
@@ -17,7 +18,7 @@ public class SlideTest extends LinearOpMode {
         rs = new Motor(hardwareMap, "rightSlide"),
         v4b = new Motor(hardwareMap, "v4b");
     TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
-    Grabber grabber = new Grabber(ls, rs, v4b, s, touch);
+    Grabber grabber = new Grabber(ls, rs, s, touch);
     int curPos = 0, curPos2 = 0;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
 

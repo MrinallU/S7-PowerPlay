@@ -42,6 +42,8 @@ public class rectangle_thresholder_pipeline extends OpenCvPipeline {
     Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
     Core.inRange(hsvMat, lower, upper, binaryMat);
 
+    
+
     double w1 = 0, w2 = 0;
     // process the pixel value for each rectangle  (255 = W, 0 = B)
     for (int i = (int) topLeft1.x; i <= bottomRight1.x; i++) {

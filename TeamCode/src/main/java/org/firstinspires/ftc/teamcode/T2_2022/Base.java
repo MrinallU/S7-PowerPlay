@@ -16,6 +16,7 @@ import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Camera;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Drive;
+//import org.firstinspires.ftc.teamcode.T2_2022.Modules.newOdoLib;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -32,10 +33,12 @@ public abstract class Base extends LinearOpMode {
   public Drive dt = null;
   public Grabber grabber;
   public Camera camera;
+  public Servo v4bRight, v4bLeft;
+  //public newOdoLib odometry;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
-  public double initAng = 0;
+  public double initAng;
   public String driveType;
   public String armStat;
 
@@ -57,11 +60,13 @@ public abstract class Base extends LinearOpMode {
   public boolean dpR2 = false, dpRL2 = false;
   public boolean sPL2 = false, spLL2 = false;
   public boolean lb2 = false, lbl2 = false;
+  public boolean rpB2 = false, rpBL2 = false;
   public boolean slowDrive = false, fastDrive = false;
   public boolean basicDrive = false;
 
   public void initHardware(int angle, OpMode m) throws InterruptedException {
     initHardware(0, 0, angle, m);
+
 
     initAng = angle;
   }
@@ -82,8 +87,8 @@ public abstract class Base extends LinearOpMode {
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
-        rs = new Motor(hardwareMap, "rightSlide"),
-        v = new Motor(hardwareMap, "v4b");
+        rs = new Motor(hardwareMap, "rightSlide");
+        //v = new Motor(hardwareMap, "v4b");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
@@ -91,6 +96,7 @@ public abstract class Base extends LinearOpMode {
     bRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
+
     Servo s = hardwareMap.get(Servo.class, "claw");
 
     // Gyro
@@ -104,25 +110,32 @@ public abstract class Base extends LinearOpMode {
     parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
     camera = new Camera(hardwareMap);
+
     camera.switchToAprilTagDetection();
 
+
+     v4bRight = hardwareMap.get(Servo.class, "v4bRight");
+     v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
     gyro = hardwareMap.get(BNO055IMU.class, "imu");
     gyro.initialize(parameters);
 
     // Sensors
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
+    //odometry = new newOdoLib(fLeftMotor, fRightMotor, bLeftMotor, bRightMotor, gyro, this, xPos, yPos, angle, angle, allHubs);
+
     // Modules
     dt =
         new Drive(
             fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
 
-    grabber = new Grabber(ls, rs, v, s, t);
+    grabber = new Grabber(ls, rs, s, t);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
     dpadTurnSpeed = 0.175;
-    dpadDriveSpeed = 0.2;
+    dpadDriveSpeed = 0.6;
+    dt.initAng = angle;
     initAng = angle;
     yP = false;
     yLP = false;
@@ -153,6 +166,8 @@ public abstract class Base extends LinearOpMode {
     basicDrive = false;
     sPL2 = false;
     spLL2 = false;
+    rpB2 = false;
+    rpBL2 = false;
     armStat = "rest";
   }
 
@@ -254,7 +269,7 @@ public abstract class Base extends LinearOpMode {
 
   public void moveToPosition(
       double targetXPos, double targetYPos, double targetAngle, double timeout) {
-    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.1);
+    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.4);
   }
 
   public void moveToPosition(
@@ -305,20 +320,35 @@ public abstract class Base extends LinearOpMode {
       } else {
         dt.driveRobotCentric(drive, turn, strafe);
       }
+
     } else {
       driveType = "Field Centric";
 
-      if (gamepad.dpad_right) {
-        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
+      /*if (gamepad.dpad_right) {
+        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0, 1);
       } else if (gamepad.dpad_left) {
-        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
+        dt.driveFieldCentric(dpadDriveSpeed, 0, 0,1);
       } else if (gamepad.dpad_up) {
-        dt.driveFieldCentric(0, 0, dpadDriveSpeed);
+        dt.driveFieldCentric(0, 0, -dpadDriveSpeed,1);
       } else if (gamepad.dpad_down) {
-        dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
-      } else {
-        dt.driveFieldCentric(drive, turn, strafe);
-      }
+        dt.driveFieldCentric(0, 0, dpadDriveSpeed,1);
+     }*/
+
+      dt.driveFieldCentric(drive, turn, strafe);
+
+
+//      if (gamepad.dpad_right) {
+//        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
+//      } else if (gamepad.dpad_left) {
+//        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
+//      } else if (gamepad.dpad_up) {
+//        dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
+//      } else if (gamepad.dpad_down) {
+//        dt.driveFieldCentric(0, 0, dpadDriveSpeed);
+//      }
+//      else {
+//        dt.driveFieldCentric(drive, turn, strafe);
+//      }
     }
   }
 

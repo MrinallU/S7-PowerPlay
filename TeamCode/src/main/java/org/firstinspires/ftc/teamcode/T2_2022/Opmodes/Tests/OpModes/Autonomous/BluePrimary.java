@@ -6,87 +6,89 @@ import org.firstinspires.ftc.teamcode.T2_2022.Base;
 
 @Autonomous(name = "Blue_Primary", group = "OdomBot")
 public class BluePrimary extends Base {
-  @Override
-  public void runOpMode() throws InterruptedException {
-    ElapsedTime timer = new ElapsedTime();
-    initHardware(0, this);
-    sleep(500);
-    telemetry.addData("Status", "Initialized");
-    telemetry.update();
+    @Override
+    public void runOpMode() throws InterruptedException {
+        ElapsedTime timer = new ElapsedTime();
+        initHardware(0, this);
+        sleep(500);
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+        int location = 3;
+        while (!isStarted() && !isStopRequested()) {
+            camera.getLatestDetections();
+            location = camera.getDetection();
+            telemetry.addData("Status: ", "Initialized");
+            telemetry.addData("Pos: ", location);
+            telemetry.update();
+        }
 
-    waitForStart();
-    matchTime.reset();
-    dt.resetCache();
-    grabber.grabCone();
-    sleep(500);
+        waitForStart();
+        matchTime.reset();
 
-    int location;
-    timer.reset();
-    while (camera.getLatestDetections().size() == 0 && timer.milliseconds() <= 2000) {}
-    if (camera.getLatestDetections().size() > 0) {
-      location = camera.getDetection();
-    } else {
-      location = 2;
-    }
+        if(location == 1){
+            timer.reset();
+        }
 
-    timer.reset();
-    while (timer.milliseconds() <= 525) {
-      dt.driveFieldCentric(-0.15, 0, 0, 1);
-    }
-
-    timer.reset();
-    while (timer.milliseconds() <= 1200) {
-      dt.driveFieldCentric(0, 0, 0.3, 1);
-    }
-    dt.stopDrive();
-    sleep(300);
-    turnTo(0, 2000);
-    sleep(300);
-
-    timer.reset();
-    while (timer.milliseconds() <= 1100) {
-      dt.driveFieldCentric(-0.2, 0, 0, 1);
-    }
-    dt.stopDrive();
-    //        sleep(900);
-    // Raise slide and drop
-    grabber.raiseMiddleAuto();
-    sleep(2000);
-
-    timer.reset();
-    while (timer.milliseconds() <= 850) {
-      dt.driveFieldCentric(0, 0, 0.1, 1);
-    }
-    dt.stopDrive();
-
-    grabber.releaseCone();
-    sleep(500);
-    grabber.grabCone();
-
-    timer.reset();
-    while (timer.milliseconds() <= 1000) {
-      dt.driveFieldCentric(0, 0, -0.1, 1);
-    }
-    dt.stopDrive();
-
-    grabber.restArm();
-    sleep(1000);
-
-    // park
-    timer.reset();
-    if (location == 3) {
-      while (timer.milliseconds() <= 3000) {
-        dt.driveFieldCentric(0.2, 0, 0, 1);
+      /*moveToPosition(5,  -4,  0, 5000);
+      sleep(300);
+      moveToPosition(38,  -7,  0, 5000);
+      sleep(300);
+      grabber.raiseToPosition(1500, 1);
+      moveToPosition(24.5, -8, -90, 5000);
+      sleep(300);
+      int targetY = 0;
+      ElapsedTime t = new ElapsedTime();
+      while(t.milliseconds()<=2000&&Math.abs(-11.5-dt.getY())>2){
+          dt.updateencodo();
+          dt.resetCache();
+          double error = -11.5 - dt.getY();
+          double p = -0.05 * error;
+          dt.driveFieldCentric(p , 0, 0);
       }
-    } else if (location == 2) {
-      while (timer.milliseconds() <= 1000) {
-        dt.driveFieldCentric(0.2, 0, 0, 1);
+      dt.stopDrive();
+      grabber.releaseCone();
+      sleep(300);
+      t.reset();
+      while(t.milliseconds()<=2000&&Math.abs(-6-dt.getY())>2){
+          dt.updateencodo();
+          dt.resetCache();
+          double error = -6 - dt.getY();
+          double p = -0.05 * error;
+          dt.driveFieldCentric(p , 0, 0);
       }
-    } else {
-      while (timer.milliseconds() <= 1000) {
-        dt.driveFieldCentric(-0.2, 0, 0, 1);
+      dt.stopDrive();
+      sleep(300);
+      grabber.restArm();
+      moveToPosition(30, -6, 90, 3000);
+      sleep(200);
+      grabber.resetClaw();
+
+      if(location == 1){
+          grabber.restArm();
+          t.reset();
+          while(t.milliseconds()<=800){
+              dt.resetCache();
+              dt.driveFieldCentric(-0.5, 0, 0);
+          }
+          dt.stopDrive();
+      }else if(location == 2){
+          grabber.restArm();
+          t.reset();
+          while(t.milliseconds() <= 600){
+              dt.resetCache();
+              dt.driveFieldCentric(-0.3, 0, 0);
+          }
+      }else {
+          grabber.restArm();
+          t.reset();
+          while (t.milliseconds() <= 600) {
+              dt.resetCache();
+              dt.driveFieldCentric(0.5, 0, 0);
+          }
+          dt.stopDrive();
       }
-    }
-    dt.stopDrive();
+
   }
+}*/
+    }
 }
