@@ -1,25 +1,21 @@
-package org.firstinspires.ftc.teamcode.Template.Modules;
+package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
 public class Odometry {
   // Constants
-  public final double WHEEL_DIAMETER = 4;
-  public final double TICKS_PER_DRIVE_ROTATION = 1120;
-  public final double TICKS_PER_ENCODER_ROTATION = 1120;
-  public final double ENCODER_WHEEL_DIAMETER = 2;
-  private final double ENCODER_TICKS_PER_REVOLUTION = 1120;
+  public final double ENCODER_WHEEL_DIAMETER = 1.37795;
+  private final double ENCODER_TICKS_PER_REVOLUTION = 8154;
   private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * (ENCODER_WHEEL_DIAMETER * 0.5);
-  private final double ENCODER_WIDTH =
-      12.0; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
+  private final double ENCODER_WIDTH = 12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
 
   private boolean verbose = false;
   public String outStr = "";
 
   // Variables
   private double xPos, yPos, angle;
-  private double lastLeftEnc, lastRightEnc, lastNormalEnc;
+  private double lastLeftEnc=0, lastRightEnc=0, lastNormalEnc=0;
 
   public Odometry(double xPos, double yPos, double angle) {
     this.xPos = xPos;
@@ -48,13 +44,13 @@ public class Odometry {
     double dyR = 0.5 * (rightDist + leftDist);
     double headingChangeRadians = (rightDist - leftDist) / ENCODER_WIDTH;
     double dxR = -dN * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
-    double avgHeadingRadians = Math.toRadians(angle) + headingChangeRadians / 2.0;
+    double avgHeadingRadians = Math.toRadians(ang) + headingChangeRadians / 2.0;
     double cos = Math.cos(avgHeadingRadians);
     double sin = Math.sin(avgHeadingRadians);
 
     xPos += dxR * sin + dyR * cos;
     yPos += -dxR * cos + dyR * sin;
-    angle = Angle.normalize(ang);
+    angle = ang;
     lastNormalEnc = n;
     lastLeftEnc = l;
     lastRightEnc = r;

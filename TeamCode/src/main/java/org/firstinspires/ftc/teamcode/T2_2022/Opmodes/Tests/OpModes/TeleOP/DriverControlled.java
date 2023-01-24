@@ -15,16 +15,16 @@ public class DriverControlled extends Base {
     ElapsedTime timer = new ElapsedTime();
     Servo v4bRight, v4bLeft;
     double v4bRightOut = 0.85, v4bLeftOut = 0.15;
-    v4bRight = hardwareMap.get(Servo.class, "v4bRight");
-    v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
+//    v4bRight = hardwareMap.get(Servo.class, "v4bRight");
+//    v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
 
     double multiplier = 0.8;
 
     int [] STACK_HEIGHTS = {0, 250, 330, 480, 575 };
     int stack_counter = 4;
 
-    v4bRight.setPosition(0);
-    v4bLeft.setPosition(1);
+//    v4bRight.setPosition(0);
+//    v4bLeft.setPosition(1);
 
     boolean buttonCurr = false, buttonLast = false;
 
@@ -63,8 +63,7 @@ public class DriverControlled extends Base {
       dt.resetCache();
       currAngle = dt.getAngle();
 
-      //dt.updatePosition();
-      //odometry.updatePosition();
+      dt.updatePosition();
 
       // Change Drive Mode
       yLP = yP;
@@ -92,116 +91,116 @@ public class DriverControlled extends Base {
       turn = turnFloor(gamepad1.left_stick_x * multiplier);
       computeDrivePowers(gamepad1);
 
-      middleLast = middleCurr;
-      middleCurr = gamepad2.dpad_down;
-      if(middleCurr && !middleLast){
-        v4bRight.setPosition(0);
-        v4bLeft.setPosition(1);
-        if(v4bRight.getPosition() < 0.1){
-          grabber.resetClaw();
-          clawOpen = true;
-        }
-      }
-
-      lbl2 = lb2;
-      lb2 = gamepad2.left_bumper;
-      if(lb2 && !lbl2){
-        v4bRightOut += 0.05;
-        v4bLeftOut -= 0.05;
-      }
-
-      boolean rbl2 = false;
-      boolean rb2 = false;
-      rbl2 =  rb2;
-      rb2 = gamepad2.right_bumper;
-      if(rb2 && !rbl2){
-        v4bRightOut -= 0.05;
-        v4bLeftOut += 0.05;
-      }
-
-
-
-
-
-
-      buttonLast = buttonCurr;
-      buttonCurr = gamepad2.y;
-      if(buttonCurr && !buttonLast){
-        grabber.raiseToPosition(grabber.HIGH, 1);
-        v4bRight.setPosition(v4bRightOut);
-        v4bLeft.setPosition(v4bLeftOut);
-
-      }
-
-      midLast = midCurr;
-      midCurr = gamepad2.x;
-      if(midCurr && !midLast){
-        grabber.raiseToPosition(grabber.MIDDLE, 1);
-        v4bRight.setPosition(v4bRightOut);
-        v4bLeft.setPosition(v4bLeftOut);
-      }
-
-
-
-      bLP2 = bP2;
-      bP2 = gamepad2.b;
-      if(bP2 && !bLP2){
-        grabber.raiseToPosition(grabber.LOW, 1);
-        v4bRight.setPosition(v4bRightOut);
-        v4bLeft.setPosition(v4bLeftOut);
-      }
+//      middleLast = middleCurr;
+//      middleCurr = gamepad2.dpad_down;
+//      if(middleCurr && !middleLast){
+//        v4bRight.setPosition(0);
+//        v4bLeft.setPosition(1);
+//        if(v4bRight.getPosition() < 0.1){
+//          grabber.resetClaw();
+//          clawOpen = true;
+//        }
+//      }
+//
+//      lbl2 = lb2;
+//      lb2 = gamepad2.left_bumper;
+//      if(lb2 && !lbl2){
+//        v4bRightOut += 0.05;
+//        v4bLeftOut -= 0.05;
+//      }
+//
+//      boolean rbl2 = false;
+//      boolean rb2 = false;
+//      rbl2 =  rb2;
+//      rb2 = gamepad2.right_bumper;
+//      if(rb2 && !rbl2){
+//        v4bRightOut -= 0.05;
+//        v4bLeftOut += 0.05;
+//      }
+//
+//
+//
+//
+//
+//
+//      buttonLast = buttonCurr;
+//      buttonCurr = gamepad2.y;
+//      if(buttonCurr && !buttonLast){
+//        grabber.raiseToPosition(grabber.HIGH, 1);
+//        v4bRight.setPosition(v4bRightOut);
+//        v4bLeft.setPosition(v4bLeftOut);
+//
+//      }
+//
+//      midLast = midCurr;
+//      midCurr = gamepad2.x;
+//      if(midCurr && !midLast){
+//        grabber.raiseToPosition(grabber.MIDDLE, 1);
+//        v4bRight.setPosition(v4bRightOut);
+//        v4bLeft.setPosition(v4bLeftOut);
+//      }
 
 
 
-      buttonLastB = buttonCurrB;
-      buttonCurrB = gamepad2.dpad_up;
-      if(buttonCurrB && !buttonLastB){
-        //grabber.raiseToPosition(0, 1);
-        v4bRight.setPosition(0.3);
-        v4bLeft.setPosition(0.7);
-      }
+//      bLP2 = bP2;
+//      bP2 = gamepad2.b;
+//      if(bP2 && !bLP2){
+//        grabber.raiseToPosition(grabber.LOW, 1);
+//        v4bRight.setPosition(v4bRightOut);
+//        v4bLeft.setPosition(v4bLeftOut);
+//      }
 
-      dpDL2 = dpD2;
-      dpD2 = gamepad2.a;
-      if(dpD2 && !dpDL2){
-        barDown = true;
-        timer.reset();
-        v4bRight.setPosition(0.3);
-        v4bLeft.setPosition(0.7);
-      }
 
-      if(barDown){
-        if(timer.milliseconds()>500){
-          grabber.raiseToPosition(0, 1);
-          barDown = false;
-        }
-      }
 
-      clawLast = clawCurr;
-      clawCurr = gamepad1.right_bumper;
-      if(clawCurr && !clawLast){
-        clawOpen = !clawOpen;
-        if(clawOpen){
-          if(grabber.rightSlide.retMotorEx().getCurrentPosition() < 200){
-            grabber.resetClaw();
-          }else{
-            grabber.releaseCone();
-          }
-        }else{
-          grabber.grabCone();
-        }
-      }
+//      buttonLastB = buttonCurrB;
+//      buttonCurrB = gamepad2.dpad_up;
+//      if(buttonCurrB && !buttonLastB){
+//        //grabber.raiseToPosition(0, 1);
+//        v4bRight.setPosition(0.3);
+//        v4bLeft.setPosition(0.7);
+//      }
 
-      if(gamepad2.dpad_right){
-        v4bRight.setPosition(v4bRight.getPosition() + 0.01);
-        v4bLeft.setPosition(v4bLeft.getPosition() - 0.01);
-      }
+//      dpDL2 = dpD2;
+//      dpD2 = gamepad2.a;
+//      if(dpD2 && !dpDL2){
+//        barDown = true;
+//        timer.reset();
+//        v4bRight.setPosition(0.3);
+//        v4bLeft.setPosition(0.7);
+//      }
+//
+//      if(barDown){
+//        if(timer.milliseconds()>500){
+//          grabber.raiseToPosition(0, 1);
+//          barDown = false;
+//        }
+//      }
 
-      if(gamepad2.dpad_left){
-        v4bRight.setPosition(v4bRight.getPosition() - 0.01);
-        v4bLeft.setPosition(v4bLeft.getPosition() + 0.01);
-      }
-    }
+//      clawLast = clawCurr;
+//      clawCurr = gamepad1.right_bumper;
+//      if(clawCurr && !clawLast){
+//        clawOpen = !clawOpen;
+//        if(clawOpen){
+//          if(grabber.rightSlide.retMotorEx().getCurrentPosition() < 200){
+//            grabber.resetClaw();
+//          }else{
+//            grabber.releaseCone();
+//          }
+//        }else{
+//          grabber.grabCone();
+//        }
+//      }
+
+//      if(gamepad2.dpad_right){
+//        v4bRight.setPosition(v4bRight.getPosition() + 0.01);
+//        v4bLeft.setPosition(v4bLeft.getPosition() - 0.01);
+//      }
+//
+//      if(gamepad2.dpad_left){
+//        v4bRight.setPosition(v4bRight.getPosition() - 0.01);
+//        v4bLeft.setPosition(v4bLeft.getPosition() + 0.01);
+//      }
+//    }
 
 
       /*dpUL2 = dpU2;
@@ -288,17 +287,16 @@ public class DriverControlled extends Base {
       computeDrivePowers(gamepad1);*/
 
       // Display Values
-
       telemetry.addData("Drive Type", driveType);
-
+      telemetry.addData("encLeft, encRight, encNormal ",dt.getTicks());
       telemetry.addData("Odo Tick Inch Count: ", dt.getCurrentPosition());
-      telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
+      //telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
       telemetry.addData("Stack Pickup Height: ", stack_counter + 1);
       telemetry.addData("V4bPositions " , v4bLeftOut  + v4bRightOut);
-;
       telemetry.update();
     }
   }
+}
 
 
 

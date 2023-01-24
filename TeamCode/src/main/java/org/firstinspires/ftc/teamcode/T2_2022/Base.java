@@ -31,7 +31,7 @@ public abstract class Base extends LinearOpMode {
   public BNO055IMU gyro;
 
   public Drive dt = null;
-  public Grabber grabber;
+ // public Grabber grabber;
   public Camera camera;
   public Servo v4bRight, v4bLeft;
   //public newOdoLib odometry;
@@ -81,10 +81,14 @@ public abstract class Base extends LinearOpMode {
     }
 
     // Motors
-    Motor fLeftMotor = new Motor(hardwareMap, "front_left_motor");
-    Motor bLeftMotor = new Motor(hardwareMap, "back_left_motor");
-    Motor fRightMotor = new Motor(hardwareMap, "front_right_motor");
-    Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
+    Motor fLeftMotor = new Motor(hardwareMap, "front_left_motor", false);
+    Motor bLeftMotor = new Motor(hardwareMap, "back_left_motor", false);
+    Motor fRightMotor = new Motor(hardwareMap, "front_right_motor", false);
+    Motor bRightMotor = new Motor(hardwareMap, "back_right_motor", false);
+
+    Motor odoL = new Motor(hardwareMap, "enc_left");
+    Motor odoR = new Motor(hardwareMap, "enc_right");
+//    Motor odoN = new Motor(hardwareMap, "enc_x");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
         rs = new Motor(hardwareMap, "rightSlide");
@@ -96,8 +100,9 @@ public abstract class Base extends LinearOpMode {
     bRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
-
-    Servo s = hardwareMap.get(Servo.class, "claw");
+//    v4bRight = hardwareMap.get(Servo.class, "v4bRight");
+//    v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
+//    Servo s = hardwareMap.get(Servo.class, "claw");
 
     // Gyro
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -113,23 +118,29 @@ public abstract class Base extends LinearOpMode {
 
     camera.switchToAprilTagDetection();
 
-
-     v4bRight = hardwareMap.get(Servo.class, "v4bRight");
-     v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
     gyro = hardwareMap.get(BNO055IMU.class, "imu");
     gyro.initialize(parameters);
 
     // Sensors
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
-    //odometry = new newOdoLib(fLeftMotor, fRightMotor, bLeftMotor, bRightMotor, gyro, this, xPos, yPos, angle, angle, allHubs);
-
     // Modules
     dt =
-        new Drive(
-            fLeftMotor, bLeftMotor, fRightMotor, bRightMotor, gyro, m, xPos, yPos, angle, allHubs);
-
-    grabber = new Grabber(ls, rs, s, t);
+            new Drive(
+                    fLeftMotor,
+                    bLeftMotor,
+                    fRightMotor,
+                    bRightMotor,
+                    odoL,
+                    odoR,
+                    fLeftMotor,
+                    gyro,
+                    m,
+                    xPos,
+                    yPos,
+                    angle,
+                    allHubs);
+//    grabber = new Grabber(ls, rs, s, t);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
@@ -177,45 +188,45 @@ public abstract class Base extends LinearOpMode {
 
   // Autonomous Movement (Note that you do not have to insert the current position into any of the
   // weighpoints)
-  public void SplinePathConstantHeading(
-      ArrayList<Point> pts,
-      double heading,
-      double driveSpeedCap,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
-    Point curLoc = dt.getCurrentPosition();
-    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.traversePath(
-        wps, heading, driveSpeedCap, false, -1, xError, yError, angleError, lookAheadDist, timeout);
-  }
-
-  public void SplinePathConstantHeading(
-      ArrayList<Point> pts,
-      double heading,
-      double driveSpeedCap,
-      double powLb,
-      double xError,
-      double yError,
-      double angleError,
-      int lookAheadDist,
-      double timeout) {
-    Point curLoc = dt.getCurrentPosition();
-    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.traversePath(
-        wps,
-        heading,
-        driveSpeedCap,
-        true,
-        powLb,
-        xError,
-        yError,
-        angleError,
-        lookAheadDist,
-        timeout);
-  }
+//  public void SplinePathConstantHeading(
+//      ArrayList<Point> pts,
+//      double heading,
+//      double driveSpeedCap,
+//      double xError,
+//      double yError,
+//      double angleError,
+//      int lookAheadDist,
+//      double timeout) {
+//    Point curLoc = dt.getCurrentPosition();
+//    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
+//    dt.traversePath(
+//        wps, heading, driveSpeedCap, false, -1, xError, yError, angleError, lookAheadDist, timeout);
+//  }
+//
+//  public void SplinePathConstantHeading(
+//      ArrayList<Point> pts,
+//      double heading,
+//      double driveSpeedCap,
+//      double powLb,
+//      double xError,
+//      double yError,
+//      double angleError,
+//      int lookAheadDist,
+//      double timeout) {
+//    Point curLoc = dt.getCurrentPosition();
+//    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
+//    dt.traversePath(
+//        wps,
+//        heading,
+//        driveSpeedCap,
+//        true,
+//        powLb,
+//        xError,
+//        yError,
+//        angleError,
+//        lookAheadDist,
+//        timeout);
+//  }
 
   public void LinearPathConstantHeading(
       ArrayList<Point> pts,
@@ -235,6 +246,25 @@ public abstract class Base extends LinearOpMode {
     dt.traversePath(
         wps, heading, driveSpeedCap, powLb, xError, yError, angleError, lookAheadDist, timeout);
   }
+
+
+    public void PlainPathConstantHeading(
+            ArrayList<Point> pts,
+            double heading,
+            double driveSpeedCap,
+            double powLb,
+            double xError,
+            double yError,
+            double angleError,
+            int lookAheadDist,
+            double timeout) {
+        Point curLoc = dt.getCurrentPosition();
+        ArrayList<Point> wps = new ArrayList<>();
+        wps.addAll(pts);
+
+        dt.traversePath(
+                pts, true, heading, driveSpeedCap, false,powLb, xError, yError, angleError, lookAheadDist, timeout);
+    }
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     dt.turnTo(targetAngle, timeout, powerCap, minDifference);
@@ -264,12 +294,13 @@ public abstract class Base extends LinearOpMode {
         posAccuracy,
         angleAccuracy,
         timeout,
-        powerLb);
+        powerLb,
+            10);
   }
 
   public void moveToPosition(
       double targetXPos, double targetYPos, double targetAngle, double timeout) {
-    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.4);
+    moveToPosition(targetXPos, targetYPos, targetAngle, 2, 2, timeout, 0.1);
   }
 
   public void moveToPosition(
