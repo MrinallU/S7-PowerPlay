@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
-@Disabled
+
 @TeleOp(name = "slide_test", group = "Tests")
 public class SlideTest extends LinearOpMode {
   @Override
@@ -15,8 +16,9 @@ public class SlideTest extends LinearOpMode {
     Servo s = hardwareMap.get(Servo.class, "claw");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
-        rs = new Motor(hardwareMap, "rightSlide"),
-        v4b = new Motor(hardwareMap, "v4b");
+        rs = new Motor(hardwareMap, "rightSlide");
+       // v4b = new Motor(hardwareMap, "v4b");
+
     TouchSensor touch = hardwareMap.get(TouchSensor.class, "touch_sensor");
     Grabber grabber = new Grabber(ls, rs, s, touch);
     int curPos = 0, curPos2 = 0;
@@ -26,23 +28,23 @@ public class SlideTest extends LinearOpMode {
 
     while (opModeIsActive()) {
       if (gamepad1.dpad_up && !lU) {
-        curPos += 10;
+        curPos += 100;
       }
 
       if (gamepad1.a && !lA) {
-        curPos2 += 10;
+        curPos2 += 100;
       }
 
       if (gamepad1.b && !lB) {
-        curPos2 -= 10;
+        curPos2 -= 100;
       }
 
       if (gamepad1.dpad_down && !lD) {
-        curPos -= 10;
+        curPos -= 100;
       }
 
       if (gamepad1.dpad_left && !lL) {
-        grabber.raiseToPosition(curPos, curPos2, 0.9);
+          grabber.raiseToPosition(curPos, curPos2, 1);
       }
 
       lU = gamepad1.dpad_up;
