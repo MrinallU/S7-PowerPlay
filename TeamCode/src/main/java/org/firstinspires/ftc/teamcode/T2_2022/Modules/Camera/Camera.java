@@ -24,7 +24,6 @@ public class Camera {
   double cy = 221.506;
   private april_tag_detection_pipeline p3;
 
-
   public Camera(HardwareMap hw) {
 
     p1 = new rectangle_thresholder_pipeline();
@@ -76,7 +75,7 @@ public class Camera {
   }
 
   public int getDetection() {
-    if(p3.getLatestDetections().size() > 0){
+    if (p3.getLatestDetections().size() > 0) {
       return p3.getLatestDetections().get(0).id;
     }
     return 5;

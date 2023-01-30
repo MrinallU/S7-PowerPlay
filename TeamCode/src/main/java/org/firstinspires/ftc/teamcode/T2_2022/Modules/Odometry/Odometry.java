@@ -7,14 +7,15 @@ public class Odometry {
   public final double ENCODER_WHEEL_DIAMETER = 1.37795;
   private final double ENCODER_TICKS_PER_REVOLUTION = 8154;
   private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * (ENCODER_WHEEL_DIAMETER * 0.5);
-  private final double ENCODER_WIDTH = 12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
-  public Pose2d robotPose = new Pose2d(new Translation2d(0,0),  new Rotation2d(0));
+  private final double ENCODER_WIDTH =
+      12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
+  public Pose2d robotPose = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
   private boolean verbose = false;
   public String outStr = "";
 
   // Variables
   private double xPos, yPos, angle;
-  private double lastLeftEnc=0, lastRightEnc=0, lastNormalEnc=0;
+  private double lastLeftEnc = 0, lastRightEnc = 0, lastNormalEnc = 0;
 
   public Odometry(double xPos, double yPos, double angle) {
     this.xPos = xPos;
@@ -70,9 +71,12 @@ public class Odometry {
     }
 
     // Initialize the Twist
-    Transform2d transform = new Transform2d(new Translation2d(dx * s - dy * c, dx * c + dy * s),
+    Transform2d transform =
+        new Transform2d(
+            new Translation2d(dx * s - dy * c, dx * c + dy * s),
             new Rotation2d(cosTheta, sinTheta));
-    Pose2d newPose = robotPose.transformBy(transform); // Use the twist to transform the robot location
+    Pose2d newPose =
+        robotPose.transformBy(transform); // Use the twist to transform the robot location
     robotPose = new Pose2d(newPose.getTranslation(), new Rotation2d(angle));
   }
 
@@ -101,7 +105,9 @@ public class Odometry {
     return robotPose.getTranslation().getY();
   }
 
-  public double getAngle() {return Angle.normalize(robotPose.getRotation().getDegrees()); }
+  public double getAngle() {
+    return Angle.normalize(robotPose.getRotation().getDegrees());
+  }
 
   public void resetOdometry(double xPos, double yPos, double angle) {
     this.xPos = xPos;

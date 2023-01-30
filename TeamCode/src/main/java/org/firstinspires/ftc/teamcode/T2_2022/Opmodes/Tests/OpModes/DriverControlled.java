@@ -22,7 +22,7 @@ public class DriverControlled extends Base {
     claw = hardwareMap.get(Servo.class, "claw");
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
     Grabber grabber = new Grabber(ls, rs, claw, t);
-    claw.setPosition(grabber.CLAW_CLOSE); //0 open
+    claw.setPosition(grabber.CLAW_CLOSE); // 0 open
     v4bRight.setPosition(0);
     v4bLeft.setPosition(1);
 
@@ -95,19 +95,16 @@ public class DriverControlled extends Base {
       turn = gamepad1.left_stick_x * multiplier;
       computeDrivePowers(gamepad1);
 
-
-
       middleLast = middleCurr;
       middleCurr = gamepad2.dpad_down;
-      if(middleCurr && !middleLast){
+      if (middleCurr && !middleLast) {
         v4bRight.setPosition(0);
         v4bLeft.setPosition(1);
-        if(v4bRight.getPosition() < 0.1){
+        if (v4bRight.getPosition() < 0.1) {
           claw.setPosition(grabber.CLAW_OPEN_REST);
           clawOpen = true;
         }
       }
-
 
       //
       //
@@ -117,7 +114,7 @@ public class DriverControlled extends Base {
       //
       buttonLast = buttonCurr;
       buttonCurr = gamepad2.y;
-      if(buttonCurr && !buttonLast){
+      if (buttonCurr && !buttonLast) {
         up = true;
         grabber.raiseToPosition(2550, 1);
         v4bRight.setPosition(v4bRightOut);
@@ -126,7 +123,7 @@ public class DriverControlled extends Base {
 
       midLast = midCurr;
       midCurr = gamepad2.x;
-      if(midCurr && !midLast){
+      if (midCurr && !midLast) {
         up = true;
         grabber.raiseToPosition(1600, 1);
         v4bRight.setPosition(v4bRightOut);
@@ -135,126 +132,122 @@ public class DriverControlled extends Base {
 
       bLP2 = bP2;
       bP2 = gamepad2.b;
-      if(bP2 && !bLP2){
+      if (bP2 && !bLP2) {
         up = true;
         grabber.raiseToPosition(600, 1);
         v4bRight.setPosition(v4bRightOut);
         v4bLeft.setPosition(v4bLeftOut);
       }
 
-
-
       buttonLastB = buttonCurrB;
       buttonCurrB = gamepad2.dpad_up;
-      if(buttonCurrB && !buttonLastB){
-        //grabber.raiseToPosition(0, 1);
+      if (buttonCurrB && !buttonLastB) {
+        // grabber.raiseToPosition(0, 1);
         v4bRight.setPosition(0.3);
         v4bLeft.setPosition(0.7);
       }
 
       dpDL2 = dpD2;
       dpD2 = gamepad2.a;
-      if(dpD2 && !dpDL2){
+      if (dpD2 && !dpDL2) {
         up = false;
         grabber.raiseToPosition(0, 1);
         v4bRight.setPosition(0.2);
         v4bLeft.setPosition(0.8);
       }
 
-
       clawLast = clawCurr;
       clawCurr = gamepad1.right_bumper;
-      if(clawCurr && !clawLast){
+      if (clawCurr && !clawLast) {
         clawOpen = !clawOpen;
-        if(!clawOpen){
-          if(up){
+        if (!clawOpen) {
+          if (up) {
             grabber.releaseCone();
-          }else{
+          } else {
             grabber.resetClaw();
           }
-        }else{
+        } else {
           grabber.grabCone();
-
         }
       }
 
-      if(gamepad2.dpad_right){
+      if (gamepad2.dpad_right) {
         v4bRight.setPosition(v4bRight.getPosition() + 0.02);
         v4bLeft.setPosition(v4bLeft.getPosition() - 0.02);
       }
 
-      if(gamepad2.dpad_left){
+      if (gamepad2.dpad_left) {
         v4bRight.setPosition(v4bRight.getPosition() - 0.02);
         v4bLeft.setPosition(v4bLeft.getPosition() + 0.02);
       }
     }
 
-      /*dpUL2 = dpU2;
-      dpU2 = gamepad2.y;
-      if (!dpUL2 && dpU2) {
-        armStat = "high";
-      }
+    /*dpUL2 = dpU2;
+    dpU2 = gamepad2.y;
+    if (!dpUL2 && dpU2) {
+      armStat = "high";
+    }
 
-      dpDL2 = dpD2;
-      dpD2 = gamepad2.a;
-      if (!dpDL2 && dpD2) {
-        armStat = "rest";
-      }
+    dpDL2 = dpD2;
+    dpD2 = gamepad2.a;
+    if (!dpDL2 && dpD2) {
+      armStat = "rest";
+    }
 
-      bLP2 = bP2;
-      bP2 = gamepad2.b;
-      if (bP2 && !bLP2) {
-        armStat = "low";
-      }
+    bLP2 = bP2;
+    bP2 = gamepad2.b;
+    if (bP2 && !bLP2) {
+      armStat = "low";
+    }
 
-      dpLL2 = dpL2;
-      dpL2 = gamepad2.x;
-      if (!dpLL2 && dpL2) {
-        armStat = "middle";
-      }
+    dpLL2 = dpL2;
+    dpL2 = gamepad2.x;
+    if (!dpLL2 && dpL2) {
+      armStat = "middle";
+    }
 
-      // replace manual control in favour for automated control
-      if (gamepad2.dpad_up){
-        grabber.v4b.setPower(0.6);
-      } else if (gamepad2.dpad_down) {
-        grabber.v4b.setPower(-0.6);
-      } else {
-        grabber.v4b.setPower(0);
-      }
+    // replace manual control in favour for automated control
+    if (gamepad2.dpad_up){
+      grabber.v4b.setPower(0.6);
+    } else if (gamepad2.dpad_down) {
+      grabber.v4b.setPower(-0.6);
+    } else {
+      grabber.v4b.setPower(0);
+    }
 
-      rLP = rP;
-      rP = gamepad1.right_bumper;
-      if (!rLP && rP && !grabber.v4bMoving) {
-        if (Objects.equals(grabber.clawStatus, "closed")) {
-          if (grabber.rightSlide.retMotorEx().getCurrentPosition() > 200) {
-            grabber.releaseCone();
-            telemetry.addData("works", true);
-          } else {
-            grabber.resetClaw();
-            telemetry.addData("works", true);
-          }
+    rLP = rP;
+    rP = gamepad1.right_bumper;
+    if (!rLP && rP && !grabber.v4bMoving) {
+      if (Objects.equals(grabber.clawStatus, "closed")) {
+        if (grabber.rightSlide.retMotorEx().getCurrentPosition() > 200) {
+          grabber.releaseCone();
+          telemetry.addData("works", true);
         } else {
-          grabber.grabCone();
+          grabber.resetClaw();
+          telemetry.addData("works", true);
         }
-      }*/
+      } else {
+        grabber.grabCone();
+      }
+    }*/
 
-      /*lbl2 = lb2;
-      lb2 = gamepad2.left_bumper;
-      if (lb2 && !lbl2) {
-        armStat = "stack";
-        grabber.raiseToPosition(STACK_HEIGHTS[stack_counter], 1);
-        if(stack_counter >= 1){
-          stack_counter -= 1;
-        }
+    /*lbl2 = lb2;
+    lb2 = gamepad2.left_bumper;
+    if (lb2 && !lbl2) {
+      armStat = "stack";
+      grabber.raiseToPosition(STACK_HEIGHTS[stack_counter], 1);
+      if(stack_counter >= 1){
+        stack_counter -= 1;
+      }
 
-      }*/
+    }*/
 
-      /*rpBL2 = rpB2;
-      rpB2 = gamepad2.right_bumper;
-      if(rpB2 && !rpBL2){
-        armStat = "stackUp";
-        grabber.stackUp();
-      }*/
+    /*rpBL2 = rpB2;
+    rpB2 = gamepad2.right_bumper;
+    if(rpB2 && !rpBL2){
+      armStat = "stackUp";
+      grabber.stackUp();
+    }*/
 
     // Grabber
     // grabber.updateArmPos(armStat, gamepad2);
@@ -262,9 +255,9 @@ public class DriverControlled extends Base {
     // Drive
     slowDrive = gamepad1.left_bumper;
     fastDrive = gamepad1.left_trigger > 0.05;
-    if(up){
+    if (up) {
       multiplier = 0.75;
-    }else{
+    } else {
       multiplier = 0.85;
     }
     drive = floor(-gamepad1.right_stick_x * multiplier);

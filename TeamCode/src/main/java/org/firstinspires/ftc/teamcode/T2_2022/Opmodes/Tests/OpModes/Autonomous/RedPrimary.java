@@ -14,7 +14,8 @@
 //                            new Point(16, -52),
 //                            new Point(20, -52),
 //                           new Point(25, -52)
-//                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new Point(-20, 55)
+//                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new
+// Point(-20, 55)
 //                    )));
 //    path2.addAll(
 //            new ArrayList<>(
@@ -26,7 +27,8 @@
 //                            new Point(6, -65)
 //
 ////                            new Point(23, -8)
-//                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new Point(-20, 55)
+//                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new
+// Point(-20, 55)
 //                    )));
 //// TO TRY
 ////    path1.addAll(
@@ -37,7 +39,8 @@
 ////                            new Point(10, -50),
 ////                            new Point(17, -50),
 ////                            new Point(25, -50)
-////                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new Point(-20, 55)
+////                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new
+// Point(-20, 55)
 ////                    )));
 ////    path2.addAll(
 ////            new ArrayList<>(
@@ -47,10 +50,10 @@
 //////                            new Point(2, -47),
 ////                            new Point(2, -39)
 //////                            new Point(23, -8)
-////                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new Point(-20, 55)
+////                            // ,new Point(-26, 26)//new Point(38, -53), new Point(-26, 39), new
+// Point(-20, 55)
 ////                    )));
 //
-
 
 //
 //    waitForStart();

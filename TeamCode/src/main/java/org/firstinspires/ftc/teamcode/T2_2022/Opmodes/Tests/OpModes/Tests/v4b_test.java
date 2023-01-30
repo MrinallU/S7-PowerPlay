@@ -21,7 +21,6 @@ public class v4b_test extends LinearOpMode {
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor");
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor");
 
-
     v4bRight = hardwareMap.get(Servo.class, "v4bRight");
     v4bLeft = hardwareMap.get(Servo.class, "v4bLeft");
     Servo s = hardwareMap.get(Servo.class, "claw");
@@ -31,15 +30,9 @@ public class v4b_test extends LinearOpMode {
 
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
-
-    Motor ls = new Motor(hardwareMap, "leftSlide"),
-            rs = new Motor(hardwareMap, "rightSlide");
-
+    Motor ls = new Motor(hardwareMap, "leftSlide"), rs = new Motor(hardwareMap, "rightSlide");
 
     Grabber arm = new Grabber(ls, rs, s, t);
-
-
-
 
     boolean buttonCurr = false, buttonLast = false;
 
@@ -50,9 +43,6 @@ public class v4b_test extends LinearOpMode {
     boolean clawLast = false, clawCurr = false;
 
     boolean clawOpen = false;
-
-
-
 
     /*Servo s = hardwareMap.get(Servo.class, "claw");
 
@@ -67,74 +57,72 @@ public class v4b_test extends LinearOpMode {
     v4bRight.setPosition(0);
     v4bLeft.setPosition(1);
     waitForStart();
-    while(opModeIsActive()){
+    while (opModeIsActive()) {
 
-//      middleLast = middleCurr;
-//      middleCurr = gamepad1.y;
-//      if(middleCurr && !middleLast){
-//        v4bRight.setPosition(0);
-//        v4bLeft.setPosition(1);
-//        if(v4bRight.getPosition() < 0.1){
-//          arm.resetClaw();
-//          clawOpen = true;
-//        }
-//      }
-//
-//      buttonLast = buttonCurr;
-//      buttonCurr = gamepad1.a;
-//      if(buttonCurr && !buttonLast){
-//        arm.raiseToPosition(arm.HIGH, 1);
-//        v4bRight.setPosition(0.7);
-//        v4bLeft.setPosition(0.3);
-//
-//      }
-//
-//      buttonLastB = buttonCurrB;
-//      buttonCurrB = gamepad1.b;
-//      if(buttonCurrB && !buttonLastB){
-//        arm.raiseToPosition(0, 1);
-//        v4bRight.setPosition(0.3);
-//        v4bLeft.setPosition(0.7);
-//      }
-//
-//      clawLast = clawCurr;
-//      clawCurr = gamepad1.right_bumper;
-//      if(clawCurr && !clawLast){
-//        clawOpen = !clawOpen;
-//        if(clawOpen){
-//          if(arm.rightSlide.retMotorEx().getCurrentPosition() < 200){
-//            arm.resetClaw();
-//          }else{
-//            arm.releaseCone();
-//          }
-//        }else{
-//          arm.grabCone();
-//        }
-//      }
+      //      middleLast = middleCurr;
+      //      middleCurr = gamepad1.y;
+      //      if(middleCurr && !middleLast){
+      //        v4bRight.setPosition(0);
+      //        v4bLeft.setPosition(1);
+      //        if(v4bRight.getPosition() < 0.1){
+      //          arm.resetClaw();
+      //          clawOpen = true;
+      //        }
+      //      }
+      //
+      //      buttonLast = buttonCurr;
+      //      buttonCurr = gamepad1.a;
+      //      if(buttonCurr && !buttonLast){
+      //        arm.raiseToPosition(arm.HIGH, 1);
+      //        v4bRight.setPosition(0.7);
+      //        v4bLeft.setPosition(0.3);
+      //
+      //      }
+      //
+      //      buttonLastB = buttonCurrB;
+      //      buttonCurrB = gamepad1.b;
+      //      if(buttonCurrB && !buttonLastB){
+      //        arm.raiseToPosition(0, 1);
+      //        v4bRight.setPosition(0.3);
+      //        v4bLeft.setPosition(0.7);
+      //      }
+      //
+      //      clawLast = clawCurr;
+      //      clawCurr = gamepad1.right_bumper;
+      //      if(clawCurr && !clawLast){
+      //        clawOpen = !clawOpen;
+      //        if(clawOpen){
+      //          if(arm.rightSlide.retMotorEx().getCurrentPosition() < 200){
+      //            arm.resetClaw();
+      //          }else{
+      //            arm.releaseCone();
+      //          }
+      //        }else{
+      //          arm.grabCone();
+      //        }
+      //      }
 
-      if(gamepad1.dpad_up){
+      if (gamepad1.dpad_up) {
         fLeftMotor.setPower(1);
-      }else{
+      } else {
         fLeftMotor.setPower(0);
       }
 
-
-      if(gamepad1.dpad_down){
+      if (gamepad1.dpad_down) {
         fRightMotor.setPower(1);
-      }else{
+      } else {
         fRightMotor.setPower(0);
       }
 
-
-      if(gamepad1.dpad_left) {
+      if (gamepad1.dpad_left) {
         bRightMotor.setPower(1);
-      }else {
+      } else {
         bRightMotor.setPower(0);
       }
 
-      if(gamepad1.dpad_right){
+      if (gamepad1.dpad_right) {
         bLeftMotor.setPower(1);
-      }else{
+      } else {
         bLeftMotor.setPower(0);
       }
 
@@ -144,12 +132,9 @@ public class v4b_test extends LinearOpMode {
       telemetry.addData("Back Left:", bLeftMotor.retMotorEx().getCurrentPosition());
 
       telemetry.update();
-
-
-
     }
 
-  //
+    //
     //
     //    while (opModeIsActive()) {
     //      if (gamepad1.dpad_up && !lU) {

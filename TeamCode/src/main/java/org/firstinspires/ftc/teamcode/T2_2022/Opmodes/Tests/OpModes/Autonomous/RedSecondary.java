@@ -1,11 +1,11 @@
-///*package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Autonomous;
+/// *package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Autonomous;
 //
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-//import com.qualcomm.robotcore.util.ElapsedTime;
-//import org.firstinspires.ftc.teamcode.T2_2022.Base;
+// import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+// import com.qualcomm.robotcore.util.ElapsedTime;
+// import org.firstinspires.ftc.teamcode.T2_2022.Base;
 //
-//@Autonomous(name = "Red_Secondary", group = "OdomBot")
-//public class RedSecondary extends Base {
+// @Autonomous(name = "Red_Secondary", group = "OdomBot")
+// public class RedSecondary extends Base {
 //  @Override
 //  public void runOpMode() throws InterruptedException {
 //    ElapsedTime timer = new ElapsedTime();
@@ -90,4 +90,4 @@
 //    }
 //    dt.stopDrive();
 //  }
-//}
+// }

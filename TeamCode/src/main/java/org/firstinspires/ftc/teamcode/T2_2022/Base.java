@@ -13,12 +13,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Camera;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Drive;
-//import org.firstinspires.ftc.teamcode.T2_2022.Modules.newOdoLib;
+// import org.firstinspires.ftc.teamcode.T2_2022.Modules.newOdoLib;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -33,10 +32,10 @@ public abstract class Base extends LinearOpMode {
   public BNO055IMU gyro;
 
   public Drive dt = null;
- public Grabber grabber;
+  public Grabber grabber;
   public Camera camera;
   public Servo v4bRight, v4bLeft;
-  //public newOdoLib odometry;
+  // public newOdoLib odometry;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
@@ -69,11 +68,11 @@ public abstract class Base extends LinearOpMode {
   public void initHardware(int angle, OpMode m, Telemetry tele) throws InterruptedException {
     initHardware(0, 0, angle, m, tele);
 
-
     initAng = angle;
   }
 
-  public void initHardware(int xPos, int yPos, int angle, OpMode m, Telemetry telemetry) throws InterruptedException {
+  public void initHardware(int xPos, int yPos, int angle, OpMode m, Telemetry telemetry)
+      throws InterruptedException {
     // Hubs
     List<LynxModule> allHubs;
     allHubs = hardwareMap.getAll(LynxModule.class);
@@ -90,11 +89,11 @@ public abstract class Base extends LinearOpMode {
 
     Motor odoL = new Motor(hardwareMap, "enc_left");
     Motor odoR = new Motor(hardwareMap, "enc_right");
-//    Motor odoN = new Motor(hardwareMap, "enc_x");
+    //    Motor odoN = new Motor(hardwareMap, "enc_x");
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
         rs = new Motor(hardwareMap, "rightSlide", false);
-        //v = new Motor(hardwareMap, "v4b");
+    // v = new Motor(hardwareMap, "v4b");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
@@ -127,24 +126,24 @@ public abstract class Base extends LinearOpMode {
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
     // Modules
-      grabber = new Grabber(ls, rs, s, t);
+    grabber = new Grabber(ls, rs, s, t);
     dt =
-            new Drive(
-                    fLeftMotor,
-                    bLeftMotor,
-                    fRightMotor,
-                    bRightMotor,
-                    odoL,
-                    odoR,
-                    rs,
-                    grabber,
-                    gyro,
-                    m,
-                    xPos,
-                    yPos,
-                    angle,
-                    allHubs,
-                    telemetry);
+        new Drive(
+            fLeftMotor,
+            bLeftMotor,
+            fRightMotor,
+            bRightMotor,
+            odoL,
+            odoR,
+            rs,
+            grabber,
+            gyro,
+            m,
+            xPos,
+            yPos,
+            angle,
+            allHubs,
+            telemetry);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
@@ -187,73 +186,52 @@ public abstract class Base extends LinearOpMode {
   }
 
   public void SplinePathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-            int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-      dt.SimplePP(pts, lookAheadDist, heading, posError, angleError,
-              0.05, 0.05, 0.01, timeout);
-
+    dt.SimplePP(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
-    public void LinearPathConstantHeading(
-            ArrayList<Point> pts,
-            double heading,
-            double posError,
-            double angleError,
-            int lookAheadDist,
-            double timeout) {
-        ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
-        dt.SimplePP(wps, lookAheadDist, heading, posError, angleError,
-                0.05, 0.05, 0.01, timeout);
+  public void LinearPathConstantHeading(
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
+    ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
+    dt.SimplePP(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+  }
 
-    }
+  public void PlainPathConstantHeading(
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
+    dt.SimplePP(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+  }
 
-    public void PlainPathConstantHeading(
-            ArrayList<Point> pts,
-            double heading,
-            double posError,
-            double angleError,
-            int lookAheadDist,
-            double timeout) {
-        dt.SimplePP(pts, lookAheadDist, heading, posError, angleError,
-                0.05, 0.05, 0.01, timeout);
+  public void PlainPathVaryingHeading(
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+    PlainPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+  }
 
-    }
+  public void LinearPathVaryingHeading(
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+    LinearPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+  }
 
-    public void PlainPathVaryingHeading(
-            ArrayList<Point> pts,
-            double posError,
-            double angleError,
-            int lookAheadDist,
-            double timeout) {
-        PlainPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist,
-          timeout);
-    }
-
-    public void LinearPathVaryingHeading(
-            ArrayList<Point> pts,
-            double posError,
-            double angleError,
-            int lookAheadDist,
-            double timeout) {
-        LinearPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist,
-                timeout);
-    }
-
-    public void SplinePathVaryingHeading(
-            ArrayList<Point> pts,
-            double posError,
-            double angleError,
-            int lookAheadDist,
-            double timeout) {
-        SplinePathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist,
-                timeout);
-    }
+  public void SplinePathVaryingHeading(
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+    SplinePathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+  }
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     dt.turnTo(targetAngle, timeout, powerCap, minDifference);
@@ -285,18 +263,17 @@ public abstract class Base extends LinearOpMode {
 
     } else {
       driveType = "Field Centric";
-        if (gamepad.dpad_right) {
-            dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
-        } else if (gamepad.dpad_left) {
-            dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
-        } else if (gamepad.dpad_up) {
-            dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
-        } else if (gamepad.dpad_down) {
-            dt.driveFieldCentric(0, 0, dpadDriveSpeed);
-        }
-        else {
-            dt.driveFieldCentric(drive, turn, strafe);
-        }
+      if (gamepad.dpad_right) {
+        dt.driveFieldCentric(-dpadDriveSpeed, 0, 0);
+      } else if (gamepad.dpad_left) {
+        dt.driveFieldCentric(dpadDriveSpeed, 0, 0);
+      } else if (gamepad.dpad_up) {
+        dt.driveFieldCentric(0, 0, -dpadDriveSpeed);
+      } else if (gamepad.dpad_down) {
+        dt.driveFieldCentric(0, 0, dpadDriveSpeed);
+      } else {
+        dt.driveFieldCentric(drive, turn, strafe);
+      }
     }
   }
 
