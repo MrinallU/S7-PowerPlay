@@ -13,7 +13,7 @@ public class Test_Autonomous extends Base {
 
   @Override
   public void runOpMode() throws InterruptedException {
-    initHardware(0, this);
+    initHardware(0, this, telemetry);
     sleep(500);
     telemetry.addData("Status", "Initialized");
     telemetry.update();
@@ -52,7 +52,7 @@ public class Test_Autonomous extends Base {
       dt.resetCache();
 
       // Reset Angle
-      currAngle = dt.getAngle();
+      currAngle = dt.getAngleImu();
       if (gamepad1.x) {
         targetAngle = -currAngle - 180;
       }

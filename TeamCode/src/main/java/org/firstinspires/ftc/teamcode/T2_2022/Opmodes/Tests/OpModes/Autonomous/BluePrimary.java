@@ -9,7 +9,7 @@ public class BluePrimary extends Base {
     @Override
     public void runOpMode() throws InterruptedException {
         ElapsedTime timer = new ElapsedTime();
-        initHardware(0, this);
+        initHardware(0, this, telemetry);
         sleep(500);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
