@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.T2_2022;
 
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -29,13 +30,13 @@ public abstract class Base extends LinearOpMode {
   public ElapsedTime matchTime = new ElapsedTime();
 
   // Gyro and Angles
+  public BHI260IMU imu;
   public BNO055IMU gyro;
 
   public Drive dt = null;
   public Grabber grabber;
   public Camera camera;
   public Servo v4bRight, v4bLeft;
-  // public newOdoLib odometry;
 
   // Constants and Conversions
   public double targetAngle, currAngle, drive, turn, strafe, multiplier = 1;
@@ -93,7 +94,6 @@ public abstract class Base extends LinearOpMode {
 
     Motor ls = new Motor(hardwareMap, "leftSlide"),
         rs = new Motor(hardwareMap, "rightSlide", false);
-    // v = new Motor(hardwareMap, "v4b");
 
     // Reverse the right side motors
     // Reverse left motors if you are using NeveRests
@@ -194,7 +194,7 @@ public abstract class Base extends LinearOpMode {
       double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.SimplePP(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void LinearPathConstantHeading(
@@ -205,7 +205,7 @@ public abstract class Base extends LinearOpMode {
       int lookAheadDist,
       double timeout) {
     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
-    dt.SimplePP(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void PlainPathConstantHeading(
@@ -215,7 +215,7 @@ public abstract class Base extends LinearOpMode {
       double angleError,
       int lookAheadDist,
       double timeout) {
-    dt.SimplePP(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void PlainPathVaryingHeading(
@@ -248,6 +248,7 @@ public abstract class Base extends LinearOpMode {
   // Driver Controlled Movemement
   public void computeDrivePowers(Gamepad gamepad) {
     currAngle = 0;
+
     if (basicDrive) {
       driveType = "Robot Centric";
 
@@ -278,6 +279,11 @@ public abstract class Base extends LinearOpMode {
   }
 
   // Misc Utility Functions
+  public void update(){
+    dt.resetCache();
+    dt.updatePosition();
+  }
+
   public String formatDegrees(double degrees) {
     return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
   }

@@ -103,7 +103,6 @@ public class Grabber {
     if (Objects.equals(armStatus, "high")) {
       raiseTop();
       extendV4b(gamepad);
-
       armStatusPrev = armStatus;
     } else if (Objects.equals(armStatus, "low")) {
       extendV4b(gamepad);
@@ -180,8 +179,6 @@ public class Grabber {
   public void retractV4b() {
     if (v4b.encoderReading() > 185) {
       v4b.setPower(-0.55);
-      clawStatus = "close";
-      clawToggle = false;
     } else {
       v4bMoving = false;
       v4bExtended = false;

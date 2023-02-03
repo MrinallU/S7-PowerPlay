@@ -272,6 +272,8 @@ public class DriverControlled extends Base {
     // telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
     telemetry.addData("Stack Pickup Height: ", stack_counter + 1);
     telemetry.addData("V4bPositions ", v4bLeftOut + v4bRightOut);
+    telemetry.addData("yaw", gyro.getAngularOrientation().thirdAngle);
+    telemetry.addData("pitch", gyro.getAngularOrientation().secondAngle);
     telemetry.update();
   }
 }

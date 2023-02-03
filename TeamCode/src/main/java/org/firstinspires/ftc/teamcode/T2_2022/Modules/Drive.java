@@ -14,7 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.Odometry.Odometry;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.Point;
@@ -29,10 +28,7 @@ public class Drive extends Base {
   protected OpMode opMode;
   protected List<LynxModule> allHubs;
 
-  ElapsedTime time = new ElapsedTime();
   Telemetry output;
-  double prevTime = 0;
-  public double yEncPos = 0, xEncPosv = 0;
   public boolean dropSlides = false, dropSlides2 = false, dropSlides3 = false, dropSlides4 = false;
 
   public Drive(
@@ -51,7 +47,6 @@ public class Drive extends Base {
       int angle,
       List<LynxModule> allHubs,
       Telemetry t) {
-
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
@@ -67,7 +62,8 @@ public class Drive extends Base {
     odometry = new Odometry(xPos, yPos, angle);
   }
 
-  public void SimplePP(
+  // Very similar to the carrot chasing algo (https://arxiv.org/abs/2012.13227)
+  public void ChaseTheCarrot(
       ArrayList<Point> wp,
       int switchTolerance,
       double heading,
@@ -87,16 +83,14 @@ public class Drive extends Base {
                     ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
                     : Math.abs(heading - odometry.getAngle()) > angleError)))
         && time.milliseconds() < timeout) {
-      resetCache();
-      updatePosition();
+      update();
       double x = getX();
       double y = getY();
       double theta = odometry.getAngle();
 
       Point destPt;
       while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1) {
-        resetCache();
-        updatePosition();
+        update();
         pt++;
       }
 
@@ -128,65 +122,10 @@ public class Drive extends Base {
         yPow = yDiff * normalMovementConstant;
       }
 
-      driveFieldCentricAuto(-yPow, turnPow, xPow);
+      driveFieldCentricAuto(-yPow, -turnPow, xPow);
     }
   }
 
-  public void NormalMTP(double tx, double ty, double tang, boolean slow, double timeout) {
-    ElapsedTime time = new ElapsedTime();
-    time.reset();
-    updatePosition();
-    while ((Math.abs(getX() - tx) > 1
-            || Math.abs(getY() - ty) > 1
-            || Math.abs(tang - odometry.getAngle()) > 1)
-        && time.milliseconds() < timeout) {
-      resetCache();
-      updatePosition();
-      if (dropSlides && time.milliseconds() > 300) {
-        g.stackUp();
-      } else if (dropSlides2 && time.milliseconds() > 300) {
-        g.raiseStack2();
-      } else if (dropSlides3 && time.milliseconds() > 300) {
-        g.raiseStack3();
-      } else if (dropSlides4 && time.milliseconds() > 300) {
-        g.restArm();
-      }
-      double x = getX();
-      double y = getY();
-      double theta = odometry.getAngle();
-
-      double xDiff = tx - x;
-      double yDiff = ty - y;
-      double angDiff = theta - tang;
-
-      double xPow;
-      double yPow;
-
-      xPow = xDiff * 0.05;
-      yPow = yDiff * 0.05;
-      if (slow) {
-        xPow = xDiff * 0.04;
-        yPow = yDiff * 0.04;
-      }
-
-      if (Math.abs(xDiff) < 1) {
-        xPow = 0;
-      }
-      if (Math.abs(yDiff) < 1) {
-        yPow = 0;
-      }
-      if (Math.abs(angDiff) < 1) {
-        angDiff = 0;
-      }
-
-      driveFieldCentricAuto(-yPow, 0.009 * angDiff, xPow);
-    }
-    stopDrive();
-  }
-
-  public void NormalMTP(double tx, double ty, double tang, double timeout) {
-    NormalMTP(tx, ty, tang, false, timeout);
-  }
 
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
@@ -296,6 +235,12 @@ public class Drive extends Base {
   }
 
   public void setDrivePowers(double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+//    if(gyro.getAngularOrientation().thirdAngle > 5){ // anti-tip
+//      dt.stopDrive();
+//      dt.setDrivePowers(-0.5, 0, -0.5, 0);
+//      return;
+//    }
+
     bLeftMotor.setPower(bLeftPow);
     fLeftMotor.setPower(fLeftPow);
     bRightMotor.setPower(bRightPow);
