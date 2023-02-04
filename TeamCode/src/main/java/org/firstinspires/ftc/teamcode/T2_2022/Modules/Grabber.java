@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
-
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;

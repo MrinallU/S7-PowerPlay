@@ -31,20 +31,20 @@ public class Drive extends Base {
   public boolean dropSlides = false, dropSlides2 = false, dropSlides3 = false, dropSlides4 = false;
 
   public Drive(
-          Motor fLeftMotor,
-          Motor bLeftMotor,
-          Motor fRightMotor,
-          Motor bRightMotor,
-          Motor odoL,
-          Motor odoR,
-          Motor odoN,
-          BNO055IMU gyro,
-          OpMode m,
-          int xPos,
-          int yPos,
-          int angle,
-          List<LynxModule> allHubs,
-          Telemetry t) {
+      Motor fLeftMotor,
+      Motor bLeftMotor,
+      Motor fRightMotor,
+      Motor bRightMotor,
+      Motor odoL,
+      Motor odoR,
+      Motor odoN,
+      BNO055IMU gyro,
+      OpMode m,
+      int xPos,
+      int yPos,
+      int angle,
+      List<LynxModule> allHubs,
+      Telemetry t) {
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
@@ -61,25 +61,25 @@ public class Drive extends Base {
 
   // Very similar to the carrot chasing algo (https://arxiv.org/abs/2012.13227)
   public void ChaseTheCarrot(
-          ArrayList<Point> wp,
-          int switchTolerance,
-          double heading,
-          double error,
-          double angleError,
-          double normalMovementConstant,
-          double finalMovementConstant,
-          double turnConstant,
-          double timeout) {
+      ArrayList<Point> wp,
+      int switchTolerance,
+      double heading,
+      double error,
+      double angleError,
+      double normalMovementConstant,
+      double finalMovementConstant,
+      double turnConstant,
+      double timeout) {
     ElapsedTime time = new ElapsedTime();
     int pt = 0;
     time.reset();
     while ((pt < wp.size() - 1
             || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > error
-            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
-            || (heading == Double.MAX_VALUE
-            ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
-            : Math.abs(heading - odometry.getAngle()) > angleError)))
-            && time.milliseconds() < timeout) {
+                || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
+                || (heading == Double.MAX_VALUE
+                    ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
+                    : Math.abs(heading - odometry.getAngle()) > angleError)))
+        && time.milliseconds() < timeout) {
       update();
       double x = getX();
       double y = getY();
@@ -105,9 +105,9 @@ public class Drive extends Base {
       double xDiff = destPt.xP - x;
       double yDiff = destPt.yP - y;
       double angleDiff =
-              heading == Double.MAX_VALUE
-                      ? wp.get(wp.size() - 1).ang - odometry.getAngle()
-                      : heading - theta;
+          heading == Double.MAX_VALUE
+              ? wp.get(wp.size() - 1).ang - odometry.getAngle()
+              : heading - theta;
       double xPow, yPow, turnPow;
 
       turnPow = angleDiff * turnConstant;
@@ -123,14 +123,13 @@ public class Drive extends Base {
     }
   }
 
-
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = odometry.getAngle();
     ElapsedTime time = new ElapsedTime();
     while (Math.abs(currAngle - targetAngle) > minDifference
-            && time.milliseconds() < timeout
-            && ((LinearOpMode) opMode).opModeIsActive()) {
+        && time.milliseconds() < timeout
+        && ((LinearOpMode) opMode).opModeIsActive()) {
       resetCache();
       updatePosition();
       currAngle = odometry.getAngle();
@@ -170,8 +169,8 @@ public class Drive extends Base {
 
   public double getAngleImu() {
     Orientation angles =
-            gyro.getAngularOrientation(
-                    AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
+        gyro.getAngularOrientation(
+            AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // ZYX is Original
     return Angle.normalize(angles.firstAngle + initAng);
   }
 
@@ -232,11 +231,11 @@ public class Drive extends Base {
   }
 
   public void setDrivePowers(double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
-//    if(gyro.getAngularOrientation().thirdAngle > 5){ // anti-tip
-//      dt.stopDrive();
-//      dt.setDrivePowers(-0.5, 0, -0.5, 0);
-//      return;
-//    }
+    //    if(gyro.getAngularOrientation().thirdAngle > 5){ // anti-tip
+    //      dt.stopDrive();
+    //      dt.setDrivePowers(-0.5, 0, -0.5, 0);
+    //      return;
+    //    }
 
     bLeftMotor.setPower(bLeftPow);
     fLeftMotor.setPower(fLeftPow);
@@ -249,11 +248,11 @@ public class Drive extends Base {
   }
 
   public double[] scalePowers(
-          double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
+      double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
     double maxPow =
-            Math.max(
-                    Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
-                    Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
+        Math.max(
+            Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)),
+            Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
     if (maxPow > 1) {
       fLeftPow /= maxPow;
       bLeftPow /= maxPow;

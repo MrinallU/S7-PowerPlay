@@ -39,15 +39,15 @@ public class Blue_Secondary extends Base {
       telemetry.update();
     }
 
-//    dt.NormalMTP(3, -51, 0, true, 3000);
-//    sleep(200);
-//    if (location == 2) {
-//      // dt.NormalMTP(3, -51, 0, true, 3000);
-//    } else if (location == 3) {
-//      dt.NormalMTP(-8, -51, 0, true, 3000);
-//    } else {
-//      dt.NormalMTP(17, -51, 0, true, 3000);
-//    }
+    //    dt.NormalMTP(3, -51, 0, true, 3000);
+    //    sleep(200);
+    //    if (location == 2) {
+    //      // dt.NormalMTP(3, -51, 0, true, 3000);
+    //    } else if (location == 3) {
+    //      dt.NormalMTP(-8, -51, 0, true, 3000);
+    //    } else {
+    //      dt.NormalMTP(17, -51, 0, true, 3000);
+    //    }
 
     v4bRight.setPosition(v4bRIn);
     v4bLeft.setPosition(v4bLIn);

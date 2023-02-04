@@ -9,7 +9,7 @@ public class Odometry {
   private final double ENCODER_TICKS_PER_REVOLUTION = 8154;
   private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * (ENCODER_WHEEL_DIAMETER * 0.5);
   private final double ENCODER_WIDTH =
-          12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
+      12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
   private boolean verbose = false;
   public String outStr = "";
 
@@ -54,7 +54,7 @@ public class Odometry {
 
     double dx = dxR * sin + dyR * cos;
     double dy = -dxR * cos + dyR * sin;
-    angle = new Rotation2d(headingChangeRadians+angle.getRadians());
+    angle = new Rotation2d(headingChangeRadians + angle.getRadians());
     double dtheta = Angle.normalizeRadians(headingChangeRadians);
 
     // rather than assuming the robot travels in straight lines between updates
@@ -77,7 +77,8 @@ public class Odometry {
     dy = dx * c + dy * s;
     double rotatedDx = dx * angle.getCos() - dy * angle.getSin();
     double rotatedDy = dx * angle.getSin() + dy * angle.getCos();
-    xPos += rotatedDx; yPos += rotatedDy;
+    xPos += rotatedDx;
+    yPos += rotatedDy;
     angle.plus(new Rotation2d(cosTheta, sinTheta));
   }
 

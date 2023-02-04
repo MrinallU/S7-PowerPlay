@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.Camera.Camera;
@@ -21,10 +23,6 @@ import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public abstract class Base extends LinearOpMode {
   // Sleep Times
@@ -74,7 +72,7 @@ public abstract class Base extends LinearOpMode {
   }
 
   public void initHardware(int xPos, int yPos, int angle, OpMode m, Telemetry telemetry)
-          throws InterruptedException {
+      throws InterruptedException {
     // Hubs
     List<LynxModule> allHubs;
     allHubs = hardwareMap.getAll(LynxModule.class);
@@ -116,7 +114,7 @@ public abstract class Base extends LinearOpMode {
     parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
     parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
     parameters.calibrationDataFile =
-            "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        "BNO055IMUCalibration.json"; // see the calibration sample opmode
     parameters.loggingEnabled = true;
     parameters.loggingTag = "IMU";
     parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
@@ -132,23 +130,24 @@ public abstract class Base extends LinearOpMode {
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
     // Modules
-    slideSystem = new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
+    slideSystem =
+        new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
     dt =
-            new Drive(
-                    fLeftMotor,
-                    bLeftMotor,
-                    fRightMotor,
-                    bRightMotor,
-                    odoL,
-                    odoR,
-                    vRightS,
-                    gyro,
-                    m,
-                    xPos,
-                    yPos,
-                    angle,
-                    allHubs,
-                    telemetry);
+        new Drive(
+            fLeftMotor,
+            bLeftMotor,
+            fRightMotor,
+            bRightMotor,
+            odoL,
+            odoR,
+            vRightS,
+            gyro,
+            m,
+            xPos,
+            yPos,
+            angle,
+            allHubs,
+            telemetry);
 
     // reset constants
     targetAngle = currAngle = drive = turn = strafe = multiplier = 1;
@@ -191,50 +190,50 @@ public abstract class Base extends LinearOpMode {
   }
 
   public void SplinePathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
     dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void LinearPathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
     dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void PlainPathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
+      ArrayList<Point> pts,
+      double heading,
+      double posError,
+      double angleError,
+      int lookAheadDist,
+      double timeout) {
     dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
   }
 
   public void PlainPathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
     PlainPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
   }
 
   public void LinearPathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
     LinearPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
   }
 
   public void SplinePathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+      ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
     SplinePathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
   }
 
@@ -284,7 +283,7 @@ public abstract class Base extends LinearOpMode {
   }
 
   // Misc Utility Functions
-  public void update(){
+  public void update() {
     dt.resetCache();
     dt.updatePosition();
   }

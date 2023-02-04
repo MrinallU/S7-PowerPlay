@@ -126,7 +126,6 @@ public class Drive extends Base {
     }
   }
 
-
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = odometry.getAngle();
@@ -235,11 +234,11 @@ public class Drive extends Base {
   }
 
   public void setDrivePowers(double bLeftPow, double fLeftPow, double bRightPow, double fRightPow) {
-//    if(gyro.getAngularOrientation().thirdAngle > 5){ // anti-tip
-//      dt.stopDrive();
-//      dt.setDrivePowers(-0.5, 0, -0.5, 0);
-//      return;
-//    }
+    //    if(gyro.getAngularOrientation().thirdAngle > 5){ // anti-tip
+    //      dt.stopDrive();
+    //      dt.setDrivePowers(-0.5, 0, -0.5, 0);
+    //      return;
+    //    }
 
     bLeftMotor.setPower(bLeftPow);
     fLeftMotor.setPower(fLeftPow);

@@ -23,7 +23,7 @@ public class SlideSystem {
       frontClawClose = 0,
       backClawOpen = 1,
       backClawClose = 0,
-      clawJointExtend  = 1,
+      clawJointExtend = 1,
       clawJointClose = 0,
       transferMecExtend = 1,
       transferMecClose = 0,
@@ -42,8 +42,7 @@ public class SlideSystem {
       Servo transferMecLeft,
       Servo transferMecRight,
       Servo backClawLiftLeft,
-      Servo clawJoint
-  ) {
+      Servo clawJoint) {
     this.horizontalLeftSlide = horizontalLeftSlide;
     this.horizontalRightSlide = horizontalRightSlide;
     this.verticalLeftSlide = verticalLeftSlide;
@@ -54,7 +53,6 @@ public class SlideSystem {
     this.transferMecRight = transferMecRight;
     this.backClawLiftLeft = backClawLiftLeft;
     this.clawJoint = clawJoint;
-
 
     setFrontClawOpen();
     setBackClawClawOpen();
@@ -76,14 +74,13 @@ public class SlideSystem {
   public boolean score() {
 
     if (!Objects.equals(lastCmd, "transferring")
-            && !Objects.equals(lastCmd, "score")
-            && !Objects.equals(lastCmd, "slidedelay")
-            && !Objects.equals(lastCmd, "dropping")) {
+        && !Objects.equals(lastCmd, "score")
+        && !Objects.equals(lastCmd, "slidedelay")
+        && !Objects.equals(lastCmd, "dropping")) {
       if (!Objects.equals(lastCmd, "grabbing")) {
         timer.reset();
         lastCmd = "grabbing";
-      } else if (timer.milliseconds()
-              < 500) { // half a second for the cone to grab
+      } else if (timer.milliseconds() < 500) { // half a second for the cone to grab
         return false;
       }
     }
@@ -98,12 +95,10 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
-      } else if (timer.milliseconds()
-          < 500) { // half a second for the transfer mec to close
+      } else if (timer.milliseconds() < 500) { // half a second for the transfer mec to close
         return false;
       }
     }
-    
 
     retractHorizontalSlides();
 
@@ -269,7 +264,11 @@ public class SlideSystem {
   public void setClawJointClose() {
     clawJoint.setPosition(clawJointClose);
   }
-  public void setClawJointOpen()  {clawJoint.setPosition(clawJointExtend);}
+
+  public void setClawJointOpen() {
+    clawJoint.setPosition(clawJointExtend);
+  }
+
   public void setBackClawClose() {
     backClaw.setPosition(backClawClose);
   }

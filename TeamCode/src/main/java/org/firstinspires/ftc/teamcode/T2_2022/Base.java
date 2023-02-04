@@ -279,7 +279,7 @@ public abstract class Base extends LinearOpMode {
   }
 
   // Misc Utility Functions
-  public void update(){
+  public void update() {
     dt.resetCache();
     dt.updatePosition();
   }
