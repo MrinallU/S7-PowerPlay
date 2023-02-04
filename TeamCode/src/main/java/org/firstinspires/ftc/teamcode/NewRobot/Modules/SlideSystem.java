@@ -82,9 +82,9 @@ public class SlideSystem {
         return false;
       }
     }
-
-    retractHorizontalSlides();
+    
     retractVerticalSlides();
+    retractHorizontalSlides();
 
     if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "score")) {
