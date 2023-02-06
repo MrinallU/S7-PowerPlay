@@ -129,6 +129,105 @@ public class Drive extends Base {
     }
   }
 
+  // Kinda Like:
+  // https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf
+  public void traversePath(
+          ArrayList<Point> wp,
+          double heading,
+          double driveSpeedCap,
+          boolean limitPower,
+          double powerLowerBound,
+          double xError,
+          double yError,
+          double angleError,
+          int lookAheadDist,
+          double timeout) {
+    ElapsedTime time = new ElapsedTime();
+    int lastLhInd = 0;
+    time.reset();
+    while ((lastLhInd < wp.size() - 1
+            || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > xError
+            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > yError
+            || (heading == Double.MAX_VALUE? Math.abs(wp.get(wp.size()-1).ang - getAngleImu()) > angleError : Math.abs(heading - getAngleImu()) > angleError)))
+            && time.milliseconds() < timeout) {
+      resetCache();
+      updatePosition();
+      double x = getX();
+      double y = getY();
+      double theta = getAngleImu();
+
+      // find point which fits the look ahead criteria
+      Point nxtP = null;
+      int i = 0, cnt = 0, possInd = -1;
+      double maxDist = -1;
+
+      for (int j = lastLhInd; j < wp.size(); j++) {
+        Point p = wp.get(j);
+        double ptDist = getRobotDistanceFromPoint(p);
+        if (Math.abs(ptDist) <= lookAheadDist
+                && i > lastLhInd
+                && Math.abs(ptDist) > maxDist) {
+          nxtP = p;
+          possInd = i;
+          maxDist = Math.abs(ptDist);
+        }
+        i++;
+      }
+
+      if (possInd == -1) {
+        possInd = lastLhInd;
+        nxtP = wp.get(lastLhInd);
+      }
+      if (nxtP == null) {
+        stop();
+        break;
+      }
+
+      // assign powers to follow the look-ahead point
+      double xDiff = nxtP.xP - x;
+      double yDiff = nxtP.yP - y;
+      double angDiff, splineAngle;
+
+      splineAngle = Math.atan2(yDiff, xDiff);
+      if (heading == Double.MAX_VALUE) {
+        angDiff = theta - nxtP.ang;
+      } else {
+        angDiff = theta - heading;
+      }
+
+      if (Math.abs(angDiff) < angleError) angDiff = 0;
+
+      double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
+      double relAngToP =
+              Angle.normalizeRadians(
+                      splineAngle - (Math.toRadians(theta) - Math.toRadians(90))); // mtp 2.0
+      double relX = Math.sin(relAngToP) * dist, relY = Math.cos(relAngToP) * dist;
+      double xPow = (relX / (Math.abs(relY) + Math.abs(relX))) * driveSpeedCap,
+              yPow = (relY / (Math.abs(relX) + Math.abs(relY))) * driveSpeedCap;
+
+      xPow = xDiff*0.05;
+      yPow = -yDiff*0.05;
+
+      if (Math.abs(getRobotDistanceFromPoint(wp.get(wp.size()-1))) < 5){
+        xPow = xDiff*0.1;
+        yPow = -yDiff*0.1;
+      }else{
+        xPow = xDiff*0.1;
+        yPow = -yDiff*0.1;
+      }
+
+      if(Math.abs(xDiff)<=xError){xPow=0;}
+      if(Math.abs(yDiff)<=yError){yPow=0;}
+
+      System.out.println(wp.size());
+      driveFieldCentric(yPow, 0.03 * angDiff, xPow);
+      lastLhInd = possInd;
+    }
+    stopDrive();
+  }
+
+
+
   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
     // GM0
     double currAngle = odometry.getAngle();
