@@ -5,11 +5,11 @@ import org.firstinspires.ftc.teamcode.Utils.Rotation2d;
 
 public class Odometry {
   // Constants
-  public final double ENCODER_WHEEL_DIAMETER = 2;
-  private final double ENCODER_TICKS_PER_REVOLUTION = 1120;
+  public final double ENCODER_WHEEL_DIAMETER = 1.37795;
+  private final double ENCODER_TICKS_PER_REVOLUTION = 8154;
   private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * (ENCODER_WHEEL_DIAMETER * 0.5);
-  private final double ENCODER_WIDTH =
-          12; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
+//  private final double ENCODER_WIDTH =
+//          12.9665; // DISTANCE BETWEEN FRONT FACING ENCODER WHEELS IN INCHES
   public String outStr = "";
 
   // Variables

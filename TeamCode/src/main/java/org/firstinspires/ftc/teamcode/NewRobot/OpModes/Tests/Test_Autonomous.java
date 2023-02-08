@@ -22,8 +22,7 @@ public class Test_Autonomous extends Base {
 
     waitForStart();
     matchTime.reset();
-    update();
-    dt.resetCache();
+    dt.update();
 
     ArrayList<Point> path1 = new ArrayList<>();
     path1.add(new Point(9, 16));

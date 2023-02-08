@@ -185,7 +185,7 @@ public abstract class Base extends LinearOpMode {
       double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
   }
 
   public void LinearPathConstantHeading(
@@ -196,7 +196,7 @@ public abstract class Base extends LinearOpMode {
       int lookAheadDist,
       double timeout) {
     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
   }
 
   public void PlainPathConstantHeading(
@@ -206,7 +206,7 @@ public abstract class Base extends LinearOpMode {
       double angleError,
       int lookAheadDist,
       double timeout) {
-    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, timeout);
+    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
   }
 
   public void PlainPathVaryingHeading(

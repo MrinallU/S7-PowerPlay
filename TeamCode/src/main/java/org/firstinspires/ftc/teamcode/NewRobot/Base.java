@@ -284,11 +284,6 @@ public abstract class Base extends LinearOpMode {
     }
   }
 
-  // Misc Utility Functions
-  public void update() {
-    dt.resetCache();
-    dt.updatePosition();
-  }
 
   public String formatDegrees(double degrees) {
     return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));

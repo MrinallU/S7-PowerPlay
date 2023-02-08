@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -75,8 +76,11 @@ public class Drive extends Base {
       double normalMovementConstant,
       double finalMovementConstant,
       double turnConstant,
+      double movementD,
+      double turnD,
       double timeout) {
     ElapsedTime time = new ElapsedTime();
+    double prevTime = 0, prevXDiff = 0, prevYDiff = 0, prevAngleDiff = 0, dx, dy, dtheta;
     int pt = 0;
     time.reset();
     while ((pt < wp.size() - 1
@@ -96,7 +100,6 @@ public class Drive extends Base {
         update();
         pt++;
       }
-
       /*
             splineAngle = Math.atan2(yDiff, xDiff);
             double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
@@ -114,17 +117,22 @@ public class Drive extends Base {
           heading == Double.MAX_VALUE
               ? wp.get(wp.size() - 1).ang - odometry.getAngle()
               : heading - theta;
-      double xPow, yPow, turnPow;
 
-      turnPow = angleDiff * turnConstant;
+      double xPow=0, yPow=0, turnPow=0;
+      xPow += movementD * (xDiff - prevXDiff) / (time.seconds() - prevTime);
+      yPow += movementD * (yDiff - prevYDiff) / (time.seconds() - prevTime);
+      turnPow += turnD * (angleDiff - prevAngleDiff) / (time.seconds() - prevTime);
+
+      turnPow += angleDiff * turnConstant;
       if (pt == wp.size() - 1) {
-        xPow = xDiff * finalMovementConstant;
-        yPow = yDiff * finalMovementConstant;
+        xPow += xDiff * finalMovementConstant;
+        yPow += yDiff * finalMovementConstant;
       } else {
-        xPow = xDiff * normalMovementConstant;
-        yPow = yDiff * normalMovementConstant;
+        xPow += xDiff * normalMovementConstant;
+        yPow += yDiff * normalMovementConstant;
       }
 
+      prevTime = time.seconds();
       driveFieldCentricAuto(-yPow, -turnPow, xPow);
     }
   }
@@ -135,8 +143,6 @@ public class Drive extends Base {
           ArrayList<Point> wp,
           double heading,
           double driveSpeedCap,
-          boolean limitPower,
-          double powerLowerBound,
           double xError,
           double yError,
           double angleError,
@@ -275,6 +281,10 @@ public class Drive extends Base {
   public double getAngleImu() {
     Orientation orientation = gyro.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
     return Angle.normalize(Angle.radians_to_degrees(orientation.firstAngle+initAng));
+  }
+
+  public YawPitchRollAngles getRobotYawPitchRollAngles(){
+    return gyro.getRobotYawPitchRollAngles();
   }
 
   // Driving

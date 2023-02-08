@@ -265,6 +265,11 @@ public class Drive extends Base {
     return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
   }
 
+  public void update() {
+    resetCache();
+    updatePosition();
+  }
+
   // Misc. Functions / Overloaded Method Storage
 
   public double getRobotDistanceFromPoint(Point p2) {
