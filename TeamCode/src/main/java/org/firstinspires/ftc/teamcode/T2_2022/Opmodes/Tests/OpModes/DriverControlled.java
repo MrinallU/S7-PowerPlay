@@ -182,6 +182,33 @@ public class DriverControlled extends Base {
         v4bRight.setPosition(v4bRight.getPosition() - 0.02);
         v4bLeft.setPosition(v4bLeft.getPosition() + 0.02);
       }
+
+      // Drive
+      slowDrive = gamepad1.left_bumper;
+      fastDrive = gamepad1.left_trigger > 0.05;
+      if (up) {
+        multiplier = 0.75;
+      } else {
+        multiplier = 0.85;
+      }
+      drive = -gamepad1.right_stick_x * multiplier;
+      strafe = -gamepad1.right_stick_y * multiplier;
+      turn = gamepad1.left_stick_x * multiplier;
+      computeDrivePowers(gamepad1);
+
+      // Display Values
+      telemetry.addData("Drive Type", driveType);
+      telemetry.addData("encLeft, encRight, encNormal ", dt.getTicks());
+      telemetry.addData("Odo Tick Inch Count: ", dt.getCurrentPosition());
+      // telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
+      telemetry.addData("Stack Pickup Height: ", stack_counter + 1);
+      telemetry.addData("V4bPositions ", v4bLeftOut + v4bRightOut);
+      telemetry.addData("heading", dt.getAngleImu());
+      telemetry.addData("yaw", dt.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+      telemetry.addData("pitch", dt.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
+      telemetry.addData("roll", dt.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
+
+      telemetry.update();
     }
 
     /*dpUL2 = dpU2;
@@ -254,30 +281,6 @@ public class DriverControlled extends Base {
     // Grabber
     // grabber.updateArmPos(armStat, gamepad2);
 
-    // Drive
-    slowDrive = gamepad1.left_bumper;
-    fastDrive = gamepad1.left_trigger > 0.05;
-    if (up) {
-      multiplier = 0.75;
-    } else {
-      multiplier = 0.85;
-    }
-    drive = floor(-gamepad1.right_stick_x * multiplier);
-    strafe = floor(-gamepad1.right_stick_y * multiplier);
-    turn = turnFloor(gamepad1.left_stick_x * multiplier);
-    computeDrivePowers(gamepad1);
 
-    // Display Values
-    telemetry.addData("Drive Type", driveType);
-    telemetry.addData("encLeft, encRight, encNormal ", dt.getTicks());
-    telemetry.addData("Odo Tick Inch Count: ", dt.getCurrentPosition());
-    // telemetry.addData("Four Bar Pos: ", grabber.v4b.retMotorEx().getCurrentPosition());
-    telemetry.addData("Stack Pickup Height: ", stack_counter + 1);
-    telemetry.addData("V4bPositions ", v4bLeftOut + v4bRightOut);
-    telemetry.addData("yaw", dt.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-    telemetry.addData("pitch", dt.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
-    telemetry.addData("roll", dt.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
-
-    telemetry.update();
   }
 }

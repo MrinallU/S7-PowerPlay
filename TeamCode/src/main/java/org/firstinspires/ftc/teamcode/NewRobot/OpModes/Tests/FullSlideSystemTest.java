@@ -40,6 +40,7 @@ public class FullSlideSystemTest extends LinearOpMode {
     Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
     Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
     Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
+
     telemetry.addData("Status", "Initialized");
     telemetry.update();
 
@@ -104,6 +105,8 @@ public class FullSlideSystemTest extends LinearOpMode {
           }
         }
       }
+
+
       // Display Values
       telemetry.addData("Stage", stage);
       telemetry.update();

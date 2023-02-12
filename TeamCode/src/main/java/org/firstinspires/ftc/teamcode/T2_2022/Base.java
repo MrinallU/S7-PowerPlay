@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.T2_2022;
 
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -77,10 +78,10 @@ public abstract class Base extends LinearOpMode {
     // Hubs
     List<LynxModule> allHubs;
     allHubs = hardwareMap.getAll(LynxModule.class);
-
     for (LynxModule hub : allHubs) {
       hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
     }
+   PhotonCore.enable();
 
     // Motors
     Motor fLeftMotor = new Motor(hardwareMap, "front_left_motor", true);
@@ -125,7 +126,6 @@ public abstract class Base extends LinearOpMode {
             fRightMotor,
             bRightMotor,
             odoL,
-            rs,
             odoN,
             grabber,
             gyro,
@@ -206,7 +206,7 @@ public abstract class Base extends LinearOpMode {
       double angleError,
       int lookAheadDist,
       double timeout) {
-    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.04, 0.04, 0.01, 0.01, 0, timeout);
   }
 
   public void PlainPathVaryingHeading(
@@ -269,11 +269,6 @@ public abstract class Base extends LinearOpMode {
     }
   }
 
-  // Misc Utility Functions
-  public void update() {
-    dt.resetCache();
-    dt.updatePosition();
-  }
 
   public String formatDegrees(double degrees) {
     return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));

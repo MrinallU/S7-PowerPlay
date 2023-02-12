@@ -25,7 +25,7 @@ import java.util.List;
 public class Drive extends Base {
 
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
-  protected Motor odoR, odoL, odoN;
+  protected Motor odoL, odoN;
   protected Grabber g;
   protected IMU gyro;
   protected Odometry odometry;
@@ -41,7 +41,6 @@ public class Drive extends Base {
       Motor fRightMotor,
       Motor bRightMotor,
       Motor odoL,
-      Motor odoR,
       Motor odoN,
       Grabber grab,
       IMU gyro,
@@ -56,7 +55,6 @@ public class Drive extends Base {
     this.bLeftMotor = bLeftMotor;
     this.bRightMotor = bRightMotor;
     this.odoL = odoL;
-    this.odoR = odoR;
     this.odoN = odoN;
     this.gyro = gyro;
     this.opMode = m;
@@ -133,6 +131,9 @@ public class Drive extends Base {
       }
 
       prevTime = time.seconds();
+      prevXDiff = xDiff;
+      prevYDiff = yDiff;
+      prevAngleDiff = angleDiff;
       driveFieldCentricAuto(-yPow, -turnPow, xPow);
     }
   }
@@ -279,8 +280,7 @@ public class Drive extends Base {
   }
 
   public double getAngleImu() {
-    Orientation orientation = gyro.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-    return Angle.normalize(Angle.radians_to_degrees(orientation.firstAngle+initAng));
+    return Angle.normalize(getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)+initAng); // add init angle
   }
 
   public YawPitchRollAngles getRobotYawPitchRollAngles(){
@@ -380,6 +380,11 @@ public class Drive extends Base {
 
   public double getRobotDistanceFromPoint(Point p2) {
     return Math.sqrt((p2.yP - getY()) * (p2.yP - getY()) + (p2.xP - getX()) * (p2.xP - getX()));
+  }
+
+  public void update() {
+    resetCache();
+    updatePosition();
   }
 
   // BULK-READING FUNCTIONS

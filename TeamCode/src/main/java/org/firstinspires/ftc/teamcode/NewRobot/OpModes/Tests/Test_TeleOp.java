@@ -59,7 +59,7 @@ public class Test_TeleOp extends Base {
 
       xLP2 = xP2;
       xP2 = gamepad2.x;
-      if (!bLP2 && bP2) {
+      if (!xLP2 && xP2) {
         slideSystem.resetGrabber();
       }
 
@@ -72,16 +72,15 @@ public class Test_TeleOp extends Base {
             first = false;
             slideSystem.initialGrab();
           } else {
-            slideSystem.setFrontClawClose();
             slideSystem.setBackClawClawOpen();
-            slideSystem.closeTransferMec();
+            slideSystem.setFrontClawClose();
           }
         } else {
           if (stage == 0) {
             slideSystem.extendTransferMec();
           } else if (stage % 2 != 0) {
-            slideSystem.setFrontClawClose();
             slideSystem.setBackClawClawOpen();
+            slideSystem.setFrontClawClose();
           } else {
             slideSystem.setBackClawClawOpen();
           }
@@ -105,6 +104,7 @@ public class Test_TeleOp extends Base {
           }
         }
       }
+
       // Display Values
       telemetry.addData("Drive Type", driveType);
       telemetry.addData("Odometry Info", dt.getCurrentPosition());

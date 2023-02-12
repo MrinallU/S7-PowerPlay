@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
+import org.firstinspires.ftc.teamcode.Utils.Point;
+
+import java.util.ArrayList;
 
 /*
 ** make slides go down while moving.
@@ -22,13 +26,14 @@ park 2.5 s (possible reduction to 1.5) (500 strafe) 1s drive.
 public class Blue_Secondary extends Base {
 
   double v4bRightOut = 0.8, v4bLeftOut = 0.2, v4bRIn = 0, v4bLIn = 1;
-
+  ArrayList<Point> p1 = new ArrayList<>();
   @SuppressLint("SuspiciousIndentation")
   @Override
   public void runOpMode() throws InterruptedException {
     initHardware(0, this, telemetry);
     sleep(1000);
     grabber.grabCone();
+    p1.add(new Point(-4, -28));
 
     telemetry.addData("Status", "Initialized");
     telemetry.update();
@@ -41,6 +46,9 @@ public class Blue_Secondary extends Base {
       telemetry.update();
     }
 
+    PlainPathConstantHeading(p1, 0, 1, 1, 100, 5000);
+    telemetry.addData("Status: ", dt.getCurrentPosition());
+    telemetry.update();
     //    dt.NormalMTP(3, -51, 0, true, 3000);
     //    sleep(200);
     //    if (location == 2) {
@@ -51,9 +59,10 @@ public class Blue_Secondary extends Base {
     //      dt.NormalMTP(17, -51, 0, true, 3000);
     //    }
 
-    v4bRight.setPosition(v4bRIn);
-    v4bLeft.setPosition(v4bLIn);
-    grabber.restArm();
+//    v4bRight.setPosition(v4bRIn);
+//    v4bLeft.setPosition(v4bLIn);
+//    grabber.restArm();
     dt.stopDrive();
+    sleep(300000);
   }
 }

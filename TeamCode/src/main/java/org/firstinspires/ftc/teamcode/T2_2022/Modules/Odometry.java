@@ -39,20 +39,14 @@ public class Odometry {
     double dN = n - lastNormalEnc;
     lastNormalEnc = n;
     lastLeftEnc = l;
-
     double leftDist = -dL * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
     double dyR = leftDist;
-    double headingChangeRadians = new Rotation2d( Math.toRadians(ang)).minus(angle).getRadians();
     double dxR = -dN * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
-    double avgHeadingRadians = angle.getRadians() + headingChangeRadians / 2.0;
-    double cos = Math.cos(avgHeadingRadians);
-    double sin = Math.sin(avgHeadingRadians);
-
-    double dx = dxR * sin + dyR * cos;
-    double dy = -dxR * cos + dyR * sin;
-    //System.out.println(dx + " deltas " + dy);
+    double cos = Math.cos((Angle.degrees_to_radians(ang)));
+    double sin = Math.sin((Angle.degrees_to_radians(ang)));
+    double dx = (dxR * sin) + (dyR * cos);
+    double dy = (-dxR * cos) + (dyR * sin);
     angle = new Rotation2d(Math.toRadians(ang));
-    double dtheta = Angle.normalizeRadians(headingChangeRadians);
     xPos+=dx; yPos+=dy;
     // rather than assuming the robot travels in straight lines between updates
     // a pose exponential assumes non-linearity helping us to reduce drift.
