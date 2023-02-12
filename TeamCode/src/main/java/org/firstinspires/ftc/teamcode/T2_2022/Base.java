@@ -88,11 +88,8 @@ public abstract class Base extends LinearOpMode {
     Motor bLeftMotor = new Motor(hardwareMap, "back_left_motor", true);
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor", true);
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor", true);
-
-    Motor odoL = new Motor(hardwareMap, "enc_left");
-    //Motor odoR = new Motor(hardwareMap, "enc_right");
-    Motor odoN = new Motor(hardwareMap, "enc_x");
-
+    Motor odoL = new Motor(hardwareMap, "enc_left"),
+            odoN = new Motor(hardwareMap, "enc_x");
     Motor ls = new Motor(hardwareMap, "leftSlide", true),
         rs = new Motor(hardwareMap, "rightSlide", true);
 

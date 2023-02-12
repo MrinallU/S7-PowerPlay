@@ -129,6 +129,9 @@ public class Drive extends Base {
       }
 
       prevTime = time.seconds();
+      prevXDiff = xDiff;
+      prevYDiff = yDiff;
+      prevAngleDiff = angleDiff;
       driveFieldCentricAuto(-yPow, -turnPow, xPow);
     }
   }
@@ -272,8 +275,7 @@ public class Drive extends Base {
 
 
   public double getAngleImu() {
-    Orientation orientation = gyro.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-    return Angle.normalize(Angle.radians_to_degrees(orientation.firstAngle)+initAng);
+    return Angle.normalize(getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)+initAng); // add init angle
   }
 
   public YawPitchRollAngles getRobotYawPitchRollAngles(){
