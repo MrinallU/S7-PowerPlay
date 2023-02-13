@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.teamcode.NewRobot.Modules.Camera.Pipelines;
 
+import java.util.ArrayList;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -34,8 +35,6 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.apriltag.AprilTagDetectorJNI;
 import org.openftc.easyopencv.OpenCvPipeline;
-
-import java.util.ArrayList;
 
 public class april_tag_detection_pipeline extends OpenCvPipeline {
   private long nativeApriltagPtr;

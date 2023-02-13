@@ -10,7 +10,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import java.util.List;
+import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.Camera.Camera;
@@ -18,12 +19,6 @@ import org.firstinspires.ftc.teamcode.NewRobot.Modules.Drive;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.SlideSystem;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
-import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
-import org.firstinspires.ftc.teamcode.Utils.Point;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public abstract class Base extends LinearOpMode {
   // Sleep Times
@@ -87,8 +82,8 @@ public abstract class Base extends LinearOpMode {
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor", true);
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor", true);
 
-    //Motor odoL = new Motor(hardwareMap, "enc_left");
-    //Motor odoN = new Motor(hardwareMap, "enc_x");
+    // Motor odoL = new Motor(hardwareMap, "enc_left");
+    // Motor odoN = new Motor(hardwareMap, "enc_x");
 
     Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
     Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
@@ -116,7 +111,6 @@ public abstract class Base extends LinearOpMode {
 
     gyro = hardwareMap.get(IMU.class, "imu");
 
-
     // Sensors
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
@@ -129,7 +123,7 @@ public abstract class Base extends LinearOpMode {
             bLeftMotor,
             fRightMotor,
             bRightMotor,
-            //odoL,
+            // odoL,
             //    odoN,
             gyro,
             m,
@@ -179,68 +173,68 @@ public abstract class Base extends LinearOpMode {
     armStat = "rest";
   }
 
-/*
-  public void SplinePathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
-    Point curLoc = dt.getCurrentPosition();
-    ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
-  }
+  /*
+   public void SplinePathConstantHeading(
+           ArrayList<Point> pts,
+           double heading,
+           double posError,
+           double angleError,
+           int lookAheadDist,
+           double timeout) {
+     Point curLoc = dt.getCurrentPosition();
+     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
+     dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+   }
 
-  public void LinearPathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
-    ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
-  }
+   public void LinearPathConstantHeading(
+           ArrayList<Point> pts,
+           double heading,
+           double posError,
+           double angleError,
+           int lookAheadDist,
+           double timeout) {
+     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
+     dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+   }
 
-  public void PlainPathConstantHeading(
-          ArrayList<Point> pts,
-          double heading,
-          double posError,
-          double angleError,
-          int lookAheadDist,
-          double timeout) {
-    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
-  }
+   public void PlainPathConstantHeading(
+           ArrayList<Point> pts,
+           double heading,
+           double posError,
+           double angleError,
+           int lookAheadDist,
+           double timeout) {
+     dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+   }
 
-  public void PlainPathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
-    PlainPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
-  }
+   public void PlainPathVaryingHeading(
+           ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+     PlainPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+   }
 
-  public void LinearPathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
-    LinearPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
-  }
+   public void LinearPathVaryingHeading(
+           ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+     LinearPathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+   }
 
-  public void SplinePathVaryingHeading(
-          ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
-    SplinePathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
-  }
+   public void SplinePathVaryingHeading(
+           ArrayList<Point> pts, double posError, double angleError, int lookAheadDist, double timeout) {
+     SplinePathConstantHeading(pts, Double.MAX_VALUE, posError, angleError, lookAheadDist, timeout);
+   }
 
-  public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
-    dt.turnTo(targetAngle, timeout, powerCap, minDifference);
-  }
+   public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference) {
+     dt.turnTo(targetAngle, timeout, powerCap, minDifference);
+   }
 
-  public void turnTo(double targetAngle, long timeout, double powerCap) {
-    dt.turnTo(targetAngle, timeout, powerCap, 2);
-  }
+   public void turnTo(double targetAngle, long timeout, double powerCap) {
+     dt.turnTo(targetAngle, timeout, powerCap, 2);
+   }
 
-  public void turnTo(double targetAngle, long timeout) {
-    turnTo(targetAngle, timeout, 0.7);
-  }
+   public void turnTo(double targetAngle, long timeout) {
+     turnTo(targetAngle, timeout, 0.7);
+   }
 
- */
+  */
 
   // Driver Controlled Movemement
   public void computeDrivePowers(Gamepad gamepad) {

@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.outoftheboxrobotics.photoncore.PhotonCore;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,7 +10,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Camera;
@@ -22,10 +22,6 @@ import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.PathGenerator;
 import org.firstinspires.ftc.teamcode.Utils.Point;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public abstract class Base extends LinearOpMode {
   // Sleep Times
@@ -81,15 +77,14 @@ public abstract class Base extends LinearOpMode {
     for (LynxModule hub : allHubs) {
       hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
     }
-   PhotonCore.enable();
+    PhotonCore.enable();
 
     // Motors
     Motor fLeftMotor = new Motor(hardwareMap, "front_left_motor", true);
     Motor bLeftMotor = new Motor(hardwareMap, "back_left_motor", true);
     Motor fRightMotor = new Motor(hardwareMap, "front_right_motor", true);
     Motor bRightMotor = new Motor(hardwareMap, "back_right_motor", true);
-    Motor odoL = new Motor(hardwareMap, "enc_left"),
-            odoN = new Motor(hardwareMap, "enc_x");
+    Motor odoL = new Motor(hardwareMap, "enc_left"), odoN = new Motor(hardwareMap, "enc_x");
     Motor ls = new Motor(hardwareMap, "leftSlide", true),
         rs = new Motor(hardwareMap, "rightSlide", true);
 
@@ -109,7 +104,6 @@ public abstract class Base extends LinearOpMode {
     // Camera
     camera = new Camera(hardwareMap);
     camera.switchToAprilTagDetection();
-
 
     // Sensors
     TouchSensor t = hardwareMap.get(TouchSensor.class, "touch_sensor");
@@ -182,7 +176,8 @@ public abstract class Base extends LinearOpMode {
       double timeout) {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+    dt.ChaseTheCarrot(
+        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
   }
 
   public void LinearPathConstantHeading(
@@ -193,7 +188,8 @@ public abstract class Base extends LinearOpMode {
       int lookAheadDist,
       double timeout) {
     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
-    dt.ChaseTheCarrot(wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+    dt.ChaseTheCarrot(
+        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
   }
 
   public void PlainPathConstantHeading(
@@ -203,7 +199,8 @@ public abstract class Base extends LinearOpMode {
       double angleError,
       int lookAheadDist,
       double timeout) {
-    dt.ChaseTheCarrot(pts, lookAheadDist, heading, posError, angleError, 0.04, 0.04, 0.01, 0.01, 0, timeout);
+    dt.ChaseTheCarrot(
+        pts, lookAheadDist, heading, posError, angleError, 0.04, 0.04, 0.01, 0.01, 0, timeout);
   }
 
   public void PlainPathVaryingHeading(
@@ -265,7 +262,6 @@ public abstract class Base extends LinearOpMode {
       }
     }
   }
-
 
   public String formatDegrees(double degrees) {
     return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));

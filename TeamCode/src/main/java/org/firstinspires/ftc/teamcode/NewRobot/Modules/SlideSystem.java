@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.NewRobot.Modules;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.Utils.Motor;
-
 import java.util.Objects;
+import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class SlideSystem {
   Motor verticalLeftSlide, verticalRightSlide;
@@ -126,7 +124,6 @@ public class SlideSystem {
     }
     setBackClawClose();
 
-
     extendHorizontalSlides();
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
@@ -140,8 +137,6 @@ public class SlideSystem {
     setFrontClawOpen();
     setClawJointOpen();
     extendTransferMec();
-
-
 
     lastCmd = "null";
     return true;
