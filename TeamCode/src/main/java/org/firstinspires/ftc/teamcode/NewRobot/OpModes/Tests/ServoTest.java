@@ -29,7 +29,7 @@ public class ServoTest extends LinearOpMode {
     Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
     Servo cll = hardwareMap.get(Servo.class, "backClawLiftLeft");
     Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
-    Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
+    Servo hRightS = hardwareMap.get(Servo.class, "horizontalRightSlide");
 
     Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
 
