@@ -208,15 +208,13 @@ public class ConceptVuforiaFieldNavigation extends LinearOpMode {
     // In this example, it is centered on the robot (left-to-right and front-to-back), and 6 inches
     // above ground level.
     final float CAMERA_FORWARD_DISPLACEMENT =
-        0.0f
-            * mmPerInch; // eg: Enter the forward distance from the center of the robot to the
-                         // camera lens
+        0.0f * mmPerInch; // eg: Enter the forward distance from the center of the robot to the
+    // camera lens
     final float CAMERA_VERTICAL_DISPLACEMENT =
         6.0f * mmPerInch; // eg: Camera is 6 Inches above ground
     final float CAMERA_LEFT_DISPLACEMENT =
-        0.0f
-            * mmPerInch; // eg: Enter the left distance from the center of the robot to the camera
-                         // lens
+        0.0f * mmPerInch; // eg: Enter the left distance from the center of the robot to the camera
+    // lens
 
     OpenGLMatrix robotFromCamera =
         OpenGLMatrix.translation(
