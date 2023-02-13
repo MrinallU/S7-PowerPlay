@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Grabber;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
@@ -52,7 +51,7 @@ public class SlideTest extends LinearOpMode {
       lL = gamepad1.dpad_left;
 
       telemetry.addData("left slide pos ", curPos);
-      telemetry.addLine(grabber.leftSlide.getPower() + " " + grabber.rightSlide.getPower() );
+      telemetry.addLine(grabber.leftSlide.getPower() + " " + grabber.rightSlide.getPower());
       telemetry.update();
     }
   }

@@ -4,22 +4,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
-import org.firstinspires.ftc.teamcode.Utils.Motor;
-
 import java.util.Objects;
+import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
   public final double CLAW_OPEN_ELEVATED = 0.7, CLAW_OPEN_REST = 0.6, CLAW_CLOSE = 0.8;
   public int manualPos = 0;
   public final int HIGH = 2650,
-          MIDDLE = 860,
-          MIDDLE_AUTO = 2150,
-          MIDDLE_LOCK = 1900,
-          LOW = 100,
-          REST = 0,
-          STACK = 700,
-          STACK_UP = 850;
+      MIDDLE = 860,
+      MIDDLE_AUTO = 2150,
+      MIDDLE_LOCK = 1900,
+      LOW = 100,
+      REST = 0,
+      STACK = 700,
+      STACK_UP = 850;
   public boolean armRested = true, v4bExtended = false, v4bMoving = false, clawToggle = false;
   public String armStatusPrev = "rest", clawStatus;
   public Motor leftSlide, rightSlide, v4b;

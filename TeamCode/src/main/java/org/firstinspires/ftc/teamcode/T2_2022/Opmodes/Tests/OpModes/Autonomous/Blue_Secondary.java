@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Opmodes.Tests.OpModes.Autonomous;
 
 import android.annotation.SuppressLint;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.checkerframework.checker.units.qual.A;
+import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.T2_2022.Base;
 import org.firstinspires.ftc.teamcode.Utils.Point;
-
-import java.util.ArrayList;
 
 /*
 ** make slides go down while moving.
@@ -27,6 +23,7 @@ public class Blue_Secondary extends Base {
 
   double v4bRightOut = 0.8, v4bLeftOut = 0.2, v4bRIn = 0, v4bLIn = 1;
   ArrayList<Point> p1 = new ArrayList<>();
+
   @SuppressLint("SuspiciousIndentation")
   @Override
   public void runOpMode() throws InterruptedException {
@@ -59,9 +56,9 @@ public class Blue_Secondary extends Base {
     //      dt.NormalMTP(17, -51, 0, true, 3000);
     //    }
 
-//    v4bRight.setPosition(v4bRIn);
-//    v4bLeft.setPosition(v4bLIn);
-//    grabber.restArm();
+    //    v4bRight.setPosition(v4bRIn);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    grabber.restArm();
     dt.stopDrive();
     sleep(300000);
   }

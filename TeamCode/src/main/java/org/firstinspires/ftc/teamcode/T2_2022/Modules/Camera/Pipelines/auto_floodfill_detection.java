@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines;
 
+import java.util.ArrayList;
+import java.util.Stack;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.Helpers.Pos;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.Helpers.VisionObject;
@@ -11,9 +13,6 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.PipelineRecordingParameters;
-
-import java.util.ArrayList;
-import java.util.Stack;
 
 // Use Linear regression for distance based on cluster size + linear regression for x and y
 public class auto_floodfill_detection extends OpenCvPipeline {

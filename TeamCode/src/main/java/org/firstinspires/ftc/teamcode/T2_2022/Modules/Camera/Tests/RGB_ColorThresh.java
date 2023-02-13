@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Camera;
 
 @Autonomous(name = "RGB_ColorThresh", group = "Tests")

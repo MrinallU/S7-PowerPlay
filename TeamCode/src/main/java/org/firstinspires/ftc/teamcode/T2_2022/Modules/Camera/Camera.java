@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+import java.util.ArrayList;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.Helpers.VisionObject;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.Camera.Pipelines.april_tag_detection_pipeline;
@@ -12,8 +12,6 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-
-import java.util.ArrayList;
 
 public class Camera {
   private OpenCvWebcam webcam;

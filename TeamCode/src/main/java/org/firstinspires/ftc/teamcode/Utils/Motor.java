@@ -56,7 +56,9 @@ public class Motor {
     this.motor.setPower(power);
   }
 
-  public double getPower() {return this.motor.getPower();}
+  public double getPower() {
+    return this.motor.getPower();
+  }
 
   public void resetEncoder(boolean useEncoder) {
     this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
