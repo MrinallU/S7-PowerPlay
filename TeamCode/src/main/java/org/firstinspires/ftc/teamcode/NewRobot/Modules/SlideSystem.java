@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.NewRobot.Modules;
 
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Objects;
@@ -54,6 +55,8 @@ public class SlideSystem {
     this.backClawLiftLeft = backClawLiftLeft;
     this.clawJoint = clawJoint;
 
+    this.verticalLeftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+    this.verticalRightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     setFrontClawOpen();
     setBackClawClawOpen();
     this.backClawLiftLeft.setPosition(backClawLiftRetract);

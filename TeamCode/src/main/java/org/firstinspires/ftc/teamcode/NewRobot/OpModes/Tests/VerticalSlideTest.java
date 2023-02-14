@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.NewRobot.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.SlideSystem;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -23,7 +24,8 @@ public class VerticalSlideTest extends LinearOpMode {
     SlideSystem slideSystem;
     Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
     Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
-
+    vRightS.setDirection(DcMotorSimple.Direction.FORWARD);
+    vLeftS.setDirection(DcMotorSimple.Direction.REVERSE);
     // Servo
     Servo fClaw = hardwareMap.get(Servo.class, "frontClaw");
     Servo bClaw = hardwareMap.get(Servo.class, "backClaw");
