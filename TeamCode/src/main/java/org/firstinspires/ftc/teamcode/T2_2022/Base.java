@@ -177,7 +177,7 @@ public abstract class Base extends LinearOpMode {
     Point curLoc = dt.getCurrentPosition();
     ArrayList<Point> wps = PathGenerator.interpSplinePath(pts, curLoc);
     dt.ChaseTheCarrot(
-        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 1, 0, 0, timeout);
   }
 
   public void LinearPathConstantHeading(
@@ -189,7 +189,7 @@ public abstract class Base extends LinearOpMode {
       double timeout) {
     ArrayList<Point> wps = PathGenerator.generateLinearSpline(pts);
     dt.ChaseTheCarrot(
-        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 0, 0, timeout);
+        wps, lookAheadDist, heading, posError, angleError, 0.05, 0.05, 0.01, 1, 0, 0, timeout);
   }
 
   public void PlainPathConstantHeading(
@@ -200,7 +200,7 @@ public abstract class Base extends LinearOpMode {
       int lookAheadDist,
       double timeout) {
     dt.ChaseTheCarrot(
-        pts, lookAheadDist, heading, posError, angleError, 0.04, 0.04, 0.01, 0.01, 0, timeout);
+        pts, lookAheadDist, heading, posError, angleError, 0.04, 0.04, 0.02, 0.2, 0.01, 0, timeout);
   }
 
   public void PlainPathVaryingHeading(
@@ -258,7 +258,7 @@ public abstract class Base extends LinearOpMode {
       } else if (gamepad.dpad_down) {
         dt.driveFieldCentric(0, 0, dpadDriveSpeed);
       } else {
-        dt.driveFieldCentric(drive, turn, strafe);
+        dt.driveFieldCentric(drive, turn, -strafe);
       }
     }
   }

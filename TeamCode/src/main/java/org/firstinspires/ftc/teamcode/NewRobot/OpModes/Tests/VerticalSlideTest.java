@@ -22,22 +22,24 @@ public class VerticalSlideTest extends LinearOpMode {
     int curPos = 0, curPos2 = 0;
     boolean lU = false, lD = false, lL = false, lA = false, lB = false;
     SlideSystem slideSystem;
-    Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
-    Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
+    Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide", true);
+    Motor vRightS = new Motor(hardwareMap, "verticalRightSlide", true);
     vRightS.setDirection(DcMotorSimple.Direction.FORWARD);
     vLeftS.setDirection(DcMotorSimple.Direction.REVERSE);
+    vLeftS.resetEncoder(true);
+    vRightS.resetEncoder(true);
     // Servo
-    Servo fClaw = hardwareMap.get(Servo.class, "frontClaw");
-    Servo bClaw = hardwareMap.get(Servo.class, "backClaw");
-    Servo tl = hardwareMap.get(Servo.class, "transferMecLeft");
-    Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
-    Servo cll = hardwareMap.get(Servo.class, "backClawLiftLeft");
-    Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
-    Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
-    Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
-
-    slideSystem =
-        new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
+//    Servo fClaw = hardwareMap.get(Servo.class, "frontClaw");
+//    Servo bClaw = hardwareMap.get(Servo.class, "backClaw");
+//    Servo tl = hardwareMap.get(Servo.class, "transferMecLeft");
+//    Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
+//    Servo cll = hardwareMap.get(Servo.class, "backClawLiftLeft");
+//    Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
+//    Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
+//    Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
+//
+//    slideSystem =
+//        new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
 
     waitForStart();
 
@@ -78,6 +80,8 @@ public class VerticalSlideTest extends LinearOpMode {
 
       telemetry.addData("left slide pos ", curPos);
       telemetry.addData("right slide pos ", curPos2);
+      telemetry.addData("left slide pos ", vLeftS.encoderReading());
+      telemetry.addData("right slide pos ", vRightS.encoderReading());
       telemetry.update();
     }
   }

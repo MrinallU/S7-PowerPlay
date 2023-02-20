@@ -8,10 +8,10 @@ import java.util.Objects;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 
 public class Grabber {
-  public final double CLAW_OPEN_ELEVATED = 0.7, CLAW_OPEN_REST = 0.6, CLAW_CLOSE = 0.8;
+  public final double CLAW_OPEN_ELEVATED = 0.7, CLAW_OPEN_REST = 0.6, CLAW_CLOSE = 0.9;
   public int manualPos = 0;
   public final int HIGH = 2650,
-      MIDDLE = 860,
+      MIDDLE = 1660,
       MIDDLE_AUTO = 2150,
       MIDDLE_LOCK = 1900,
       LOW = 100,
@@ -85,7 +85,7 @@ public class Grabber {
   }
 
   public void raiseStack4() {
-    raiseToPosition(STACK - 220, 1);
+    raiseToPosition(STACK - 200, 1);
     armRested = false;
   }
 
@@ -191,4 +191,6 @@ public class Grabber {
       }
     }
   }
+
+
 }

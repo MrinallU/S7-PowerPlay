@@ -61,13 +61,14 @@ public class Drive extends Base {
   // Very similar to the carrot chasing algo (https://arxiv.org/abs/2012.13227)
   public void ChaseTheCarrot(
       ArrayList<Point> wp,
-      int switchTolerance,
+      double switchTolerance,
       double heading,
       double error,
       double angleError,
       double normalMovementConstant,
       double finalMovementConstant,
       double turnConstant,
+      double maxSpeed,
       double movementD,
       double turnD,
       double timeout) {
@@ -91,7 +92,13 @@ public class Drive extends Base {
       while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1) {
         update();
         pt++;
+        prevXDiff = 0;
+        prevYDiff = 0;
+        prevAngleDiff = 0;
       }
+
+      output.addData("pos", pt);
+      output.update();
       /*
             splineAngle = Math.atan2(yDiff, xDiff);
             double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
@@ -123,6 +130,27 @@ public class Drive extends Base {
         xPow += xDiff * normalMovementConstant;
         yPow += yDiff * normalMovementConstant;
       }
+
+      if(xPow<0){
+        if(xPow< -maxSpeed){
+          xPow = -maxSpeed;
+        }
+      }else{
+        if(xPow>maxSpeed){
+          xPow = maxSpeed;
+        }
+      }
+
+      if(yPow<0){
+        if(yPow< -maxSpeed){
+          yPow = -maxSpeed;
+        }
+      }else{
+        if(yPow>maxSpeed){
+          yPow = maxSpeed;
+        }
+      }
+
 
       prevTime = time.seconds();
       prevXDiff = xDiff;
