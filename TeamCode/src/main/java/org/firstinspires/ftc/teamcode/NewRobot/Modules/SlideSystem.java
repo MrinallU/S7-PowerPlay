@@ -14,24 +14,24 @@ public class SlideSystem {
       backClaw,
       transferMecLeft,
       transferMecRight,
-      backClawLiftLeft,
+          dropBucket,
       clawJoint;
-  final double horizontalSlideExtendPos = 0.7,
-      horizontalSlideRetractPos = 0.88,
+  final double horizontalSlideExtendPos = 0.3,
+      horizontalSlideRetractPos = 0.12,
       verticalSlideExtendPos = 1,
       verticalSlideRetractPos = 0,
       frontClawOpen = 0.28,
       frontClawClose = 0,
-      backClawOpen = 1,
-      backClawClose = 0,
-      clawJointExtend = 1,
-      clawJointClose = 0,
-      transferMecExtend = 1,
-      transferMecClose = 0,
+      backClawOpen = 0,
+      backClawClose = 1,
+      clawJointExtend = 0.73,
+      clawJointClose = 0.85,
+      transferMecExtend = 0.73,
+      transferMecClose = 0.21,
       backClawLiftExtend = 0.45,
       backClawLiftRetract = 1;
-  ElapsedTime timer = new ElapsedTime();
-  String lastCmd = "null";
+  public ElapsedTime timer = new ElapsedTime();
+  public String lastCmd = "null";
 
   public SlideSystem(
       Servo horizontalLeftSlide,
@@ -52,15 +52,45 @@ public class SlideSystem {
     this.backClaw = backClaw;
     this.transferMecLeft = transferMecLeft;
     this.transferMecRight = transferMecRight;
-    this.backClawLiftLeft = backClawLiftLeft;
+    this.dropBucket = backClawLiftLeft;
     this.clawJoint = clawJoint;
 
     this.verticalLeftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
     this.verticalRightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     this.horizontalLeftSlide.setDirection(Servo.Direction.REVERSE);
+    this.transferMecLeft.setDirection(Servo.Direction.REVERSE);
     setFrontClawOpen();
     setBackClawClawOpen();
-    this.backClawLiftLeft.setPosition(backClawLiftRetract);
+    this.dropBucket.setPosition(backClawLiftRetract);
+    this.transferMecLeft.setPosition(transferMecClose);
+    this.transferMecRight.setPosition(transferMecClose);
+    this.horizontalLeftSlide.setPosition(horizontalSlideRetractPos);
+    this.horizontalRightSlide.setPosition(horizontalSlideRetractPos);
+  }
+
+  public SlideSystem(
+          Servo horizontalLeftSlide,
+          Servo horizontalRightSlide,
+          Servo frontClaw,
+          Servo backClaw,
+          Servo transferMecLeft,
+          Servo transferMecRight,
+          Servo backClawLiftLeft,
+          Servo clawJoint) {
+    this.horizontalLeftSlide = horizontalLeftSlide;
+    this.horizontalRightSlide = horizontalRightSlide;
+    this.frontClaw = frontClaw;
+    this.backClaw = backClaw;
+    this.transferMecLeft = transferMecLeft;
+    this.transferMecRight = transferMecRight;
+    this.dropBucket = backClawLiftLeft;
+    this.clawJoint = clawJoint;
+
+    this.horizontalLeftSlide.setDirection(Servo.Direction.REVERSE);
+    this.transferMecLeft.setDirection(Servo.Direction.REVERSE);
+    setFrontClawOpen();
+    setBackClawClawOpen();
+    this.dropBucket.setPosition(backClawLiftRetract);
     this.transferMecLeft.setPosition(transferMecClose);
     this.transferMecRight.setPosition(transferMecClose);
     this.horizontalLeftSlide.setPosition(horizontalSlideRetractPos);
@@ -69,6 +99,7 @@ public class SlideSystem {
 
   public void initialGrab() {
     extendHorizontalSlides();
+    extendTransferMec();
   }
 
   // everytime the claws are toggled (other than the first this is called) since it extends and
@@ -84,7 +115,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "grabbing")) {
         timer.reset();
         lastCmd = "grabbing";
-      } else if (timer.milliseconds() < 500) { // half a second for the cone to grab
+      }
+      if (timer.milliseconds() < 500) { // half a second for the cone to grab
         return false;
       }
     }
@@ -99,7 +131,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
-      } else if (timer.milliseconds() < 500) { // half a second for the transfer mec to close
+      }
+      if (timer.milliseconds() < 500) { // half a second for the transfer mec to close
         return false;
       }
     }
@@ -110,7 +143,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
-      } else if (timer.milliseconds() < 1500) { // two seconds for the slides to retract
+      }
+      if (timer.milliseconds() < 1500) { // two seconds for the slides to retract
         return false;
       }
     }
@@ -120,7 +154,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
-      } else if (timer.milliseconds()
+      }
+      if (timer.milliseconds()
           < 500) { // half a second for the bucket to fully grab onto the cone and for the front
         // claw to let go of the cone.
         return false;
@@ -132,7 +167,8 @@ public class SlideSystem {
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
-    } else if (timer.milliseconds()
+    }
+    if (timer.milliseconds()
         < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
@@ -153,7 +189,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
-      } else if (timer.milliseconds()
+      }
+      if (timer.milliseconds()
           < 500) { // half a second for the claws to grab or drop the cone
         return false;
       }
@@ -166,7 +203,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
-      } else if (timer.milliseconds() < 1000) { // two seconds for the slides to retract
+      }
+      if (timer.milliseconds() < 1000) { // two seconds for the slides to retract
         return false;
       }
     }
@@ -176,7 +214,8 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
-      } else if (timer.milliseconds()
+      }
+      if (timer.milliseconds()
           < 500) { // half a second for the bucket to fully grab onto the cone and for the front
         // claw to let go of the cone.
         return false;
@@ -189,7 +228,8 @@ public class SlideSystem {
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
-    } else if (timer.milliseconds()
+    }
+    if (timer.milliseconds()
         < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
@@ -244,11 +284,11 @@ public class SlideSystem {
 //    verticalRightSlide.toPosition();
 //    verticalRightSlide.setPower(1);
 
-    backClawLiftLeft.setPosition(backClawLiftExtend);
+    dropBucket.setPosition(backClawLiftExtend);
   }
 
   public void retractVerticalSlides() {
-    backClawLiftLeft.setPosition(backClawLiftRetract);
+    dropBucket.setPosition(backClawLiftRetract);
 
 //    verticalLeftSlide.setTarget(verticalSlideRetractPos);
 //    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);

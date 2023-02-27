@@ -94,14 +94,14 @@ public abstract class Base extends LinearOpMode {
     bRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     // Servo
-    Servo fClaw = hardwareMap.get(Servo.class, "frontClaw");
-    Servo bClaw = hardwareMap.get(Servo.class, "backClaw");
-    Servo tl = hardwareMap.get(Servo.class, "transferMecLeft");
-    Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
-    Servo cll = hardwareMap.get(Servo.class, "backClawLiftLeft");
-    Servo hLeftS = hardwareMap.get(Servo.class, "horizontalLeftSlide");
-    Servo hRightS = hardwareMap.get(Servo.class, "horiztonalRightSlide");
-    Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
+    Servo fClaw = hardwareMap.get(Servo.class, "claw");
+    Servo bClaw = hardwareMap.get(Servo.class, "block");
+    Servo tl = hardwareMap.get(Servo.class, "intakeLeft");
+    Servo tr = hardwareMap.get(Servo.class, "intakeRight");
+    Servo cll = hardwareMap.get(Servo.class, "chain");
+    Servo hLeftS = hardwareMap.get(Servo.class, "leftSlide");
+    Servo hRightS = hardwareMap.get(Servo.class, "rightSlide");
+    Servo clawJoint = hardwareMap.get(Servo.class, "wrist");
 
     // Gyro
 

@@ -55,10 +55,10 @@ public class ServoTest extends LinearOpMode {
         curPos -= 0.1;
       }
 
-     // if (gamepad1.dpad_left && !lL) {
-        fClaw.setPosition(1);
-        fClawR.setPosition(0);
-      //}
+     if (gamepad1.dpad_left && !lL) {
+       fClaw.setPosition(1);
+       fClawR.setPosition(0);
+      }
 
       lU = gamepad1.dpad_up;
       lA = gamepad1.a;
