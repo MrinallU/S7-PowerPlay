@@ -58,38 +58,45 @@ public class Drive extends Base {
 
   // Very similar to the carrot chasing algo (https://arxiv.org/abs/2012.13227)
   public void ChaseTheCarrot(
-      ArrayList<Point> wp,
-      int switchTolerance,
-      double heading,
-      double error,
-      double angleError,
-      double normalMovementConstant,
-      double finalMovementConstant,
-      double turnConstant,
-      double movementD,
-      double turnD,
-      double timeout) {
+          ArrayList<Point> wp,
+          double switchTolerance,
+          double heading,
+          double error,
+          double angleError,
+          double normalMovementConstant,
+          double finalMovementConstant,
+          double turnConstant,
+          double maxSpeed,
+          double movementD,
+          double turnD,
+          double timeout) {
     ElapsedTime time = new ElapsedTime();
     double prevTime = 0, prevXDiff = 0, prevYDiff = 0, prevAngleDiff = 0, dx, dy, dtheta;
     int pt = 0;
     time.reset();
     while ((pt < wp.size() - 1
             || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > error
-                || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
-                || (heading == Double.MAX_VALUE
-                    ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
-                    : Math.abs(heading - odometry.getAngle()) > angleError)))
-        && time.milliseconds() < timeout) {
-      dt.update();
+            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
+            || (heading == Double.MAX_VALUE
+            ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
+            : Math.abs(heading - odometry.getAngle()) > angleError)))
+            && time.milliseconds() < timeout) {
+      update();
       double x = getX();
       double y = getY();
       double theta = odometry.getAngle();
 
       Point destPt;
-      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1) {
-        dt.update();
+      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1 && time.milliseconds()<=timeout) {
+        update();
         pt++;
+        prevXDiff = 0;
+        prevYDiff = 0;
+        prevAngleDiff = 0;
       }
+
+      output.addData("pos", pt);
+      output.update();
       /*
             splineAngle = Math.atan2(yDiff, xDiff);
             double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
@@ -104,9 +111,9 @@ public class Drive extends Base {
       double xDiff = destPt.xP - x;
       double yDiff = destPt.yP - y;
       double angleDiff =
-          heading == Double.MAX_VALUE
-              ? wp.get(wp.size() - 1).ang - odometry.getAngle()
-              : heading - theta;
+              heading == Double.MAX_VALUE
+                      ? wp.get(wp.size() - 1).ang - odometry.getAngle()
+                      : heading - theta;
 
       double xPow = 0, yPow = 0, turnPow = 0;
       xPow += movementD * (xDiff - prevXDiff) / (time.seconds() - prevTime);
@@ -122,11 +129,32 @@ public class Drive extends Base {
         yPow += yDiff * normalMovementConstant;
       }
 
+      if(xPow<0){
+        if(xPow< -maxSpeed){
+          xPow = -maxSpeed;
+        }
+      }else{
+        if(xPow>maxSpeed){
+          xPow = maxSpeed;
+        }
+      }
+
+      if(yPow<0){
+        if(yPow< -maxSpeed){
+          yPow = -maxSpeed;
+        }
+      }else{
+        if(yPow>maxSpeed){
+          yPow = maxSpeed;
+        }
+      }
+
+
       prevTime = time.seconds();
       prevXDiff = xDiff;
       prevYDiff = yDiff;
       prevAngleDiff = angleDiff;
-      driveFieldCentricAuto(-yPow, -turnPow, xPow);
+      driveFieldCentricAuto(yPow, -turnPow, xPow);
     }
   }
 

@@ -16,11 +16,11 @@ public class SlideSystem {
       transferMecRight,
       backClawLiftLeft,
       clawJoint;
-  final double horizontalSlideExtendPos = 1000,
-      horizontalSlideRetractPos = 0,
+  final double horizontalSlideExtendPos = 0.7,
+      horizontalSlideRetractPos = 0.88,
       verticalSlideExtendPos = 1,
       verticalSlideRetractPos = 0,
-      frontClawOpen = 1,
+      frontClawOpen = 0.28,
       frontClawClose = 0,
       backClawOpen = 1,
       backClawClose = 0,
@@ -28,8 +28,8 @@ public class SlideSystem {
       clawJointClose = 0,
       transferMecExtend = 1,
       transferMecClose = 0,
-      backClawLiftExtend = 1,
-      backClawLiftRetract = 0;
+      backClawLiftExtend = 0.45,
+      backClawLiftRetract = 1;
   ElapsedTime timer = new ElapsedTime();
   String lastCmd = "null";
 
@@ -57,6 +57,7 @@ public class SlideSystem {
 
     this.verticalLeftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
     this.verticalRightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+    this.horizontalLeftSlide.setDirection(Servo.Direction.REVERSE);
     setFrontClawOpen();
     setBackClawClawOpen();
     this.backClawLiftLeft.setPosition(backClawLiftRetract);
@@ -233,15 +234,15 @@ public class SlideSystem {
   }
 
   public void extendVerticalSlides() {
-    verticalLeftSlide.setTarget(verticalSlideExtendPos);
-    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-    verticalLeftSlide.toPosition();
-    verticalLeftSlide.setPower(1);
-
-    verticalRightSlide.setTarget(verticalSlideExtendPos);
-    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-    verticalRightSlide.toPosition();
-    verticalRightSlide.setPower(1);
+//    verticalLeftSlide.setTarget(verticalSlideExtendPos);
+//    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
+//    verticalLeftSlide.toPosition();
+//    verticalLeftSlide.setPower(1);
+//
+//    verticalRightSlide.setTarget(verticalSlideExtendPos);
+//    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
+//    verticalRightSlide.toPosition();
+//    verticalRightSlide.setPower(1);
 
     backClawLiftLeft.setPosition(backClawLiftExtend);
   }
@@ -249,15 +250,15 @@ public class SlideSystem {
   public void retractVerticalSlides() {
     backClawLiftLeft.setPosition(backClawLiftRetract);
 
-    verticalLeftSlide.setTarget(verticalSlideRetractPos);
-    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-    verticalLeftSlide.toPosition();
-    verticalLeftSlide.setPower(1);
-
-    verticalRightSlide.setTarget(verticalSlideRetractPos);
-    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-    verticalRightSlide.toPosition();
-    verticalRightSlide.setPower(1);
+//    verticalLeftSlide.setTarget(verticalSlideRetractPos);
+//    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
+//    verticalLeftSlide.toPosition();
+//    verticalLeftSlide.setPower(1);
+//
+//    verticalRightSlide.setTarget(verticalSlideRetractPos);
+//    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
+//    verticalRightSlide.toPosition();
+//    verticalRightSlide.setPower(1);
   }
 
   public void setFrontClawClose() {

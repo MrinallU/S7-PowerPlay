@@ -185,15 +185,15 @@ public class DriverControlled extends Base {
       // Drive
       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
-      if (up) {
+      /*if (up) {
         multiplier = 0.75;
       } else {
         multiplier = 0.85;
-      }
-      drive = -gamepad1.right_stick_x * multiplier;
+      }*/
+      /*drive = -gamepad1.right_stick_x * multiplier;
       strafe = -gamepad1.right_stick_y * multiplier;
       turn = gamepad1.left_stick_x * multiplier;
-      computeDrivePowers(gamepad1);
+      computeDrivePowers(gamepad1);*/
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
@@ -206,6 +206,9 @@ public class DriverControlled extends Base {
       telemetry.addData("yaw", dt.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
       telemetry.addData("pitch", dt.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
       telemetry.addData("roll", dt.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
+
+      telemetry.addData("v4b left pos", v4bLeft.getPosition());
+      telemetry.addData("v4b right pos", v4bRight.getPosition());
 
       telemetry.update();
     }
