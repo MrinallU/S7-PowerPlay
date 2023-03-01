@@ -9,6 +9,7 @@ public class Test_TeleOp extends Base {
   boolean first = true;
   boolean doneScoring = true;
   boolean cycleMode = true;
+  boolean cont = true;
   boolean xLP2, xP2, aLP, aP;
 
   @Override
@@ -47,13 +48,13 @@ public class Test_TeleOp extends Base {
       turn = turnFloor(gamepad1.left_stick_x);
       computeDrivePowers(gamepad1);
 
-      // Always reset grabber before changing mode!!
       bLP2 = bP2;
       bP2 = gamepad2.b;
       if (!bLP2 && bP2) {
         cycleMode = !cycleMode;
         stage = 0;
         first = false;
+        slideSystem.resetGrabber();
       }
 
       xLP2 = xP2;
@@ -71,6 +72,7 @@ public class Test_TeleOp extends Base {
             first = false;
             slideSystem.initialGrab();
           } else {
+            cont = false;
             slideSystem.setBackClawClawOpen();
             slideSystem.setFrontClawClose();
           }
@@ -84,8 +86,12 @@ public class Test_TeleOp extends Base {
             slideSystem.setBackClawClawOpen();
           }
         }
-        doneScoring = false;
+        if(!cont) {
+          doneScoring = false;
+        }
       }
+
+      telemetry.addLine(String.valueOf(doneScoring));
 
       if (!doneScoring) {
         if (cycleMode) {

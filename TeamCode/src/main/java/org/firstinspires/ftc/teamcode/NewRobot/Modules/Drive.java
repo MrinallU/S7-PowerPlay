@@ -401,8 +401,8 @@ public class Drive extends Base {
   }
 
   public void update() {
-    dt.resetCache();
-    dt.updatePosition();
+    resetCache();
+    updatePosition();
   }
   // BULK-READING FUNCTIONS
   public void resetCache() {

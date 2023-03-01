@@ -17,19 +17,22 @@ public class SlideSystem {
           dropBucket,
       clawJoint;
   final double horizontalSlideExtendPos = 0.3,
-      horizontalSlideRetractPos = 0.12,
-      verticalSlideExtendPos = 1,
-      verticalSlideRetractPos = 0,
-      frontClawOpen = 0.28,
-      frontClawClose = 0,
-      backClawOpen = 0,
-      backClawClose = 1,
-      clawJointExtend = 0.73,
-      clawJointClose = 0.85,
-      transferMecExtend = 0.73,
-      transferMecClose = 0.21,
-      backClawLiftExtend = 0.45,
-      backClawLiftRetract = 1;
+          horizontalSlideHighPosition = 0.18,
+          horizontalSlideRetractPos = 0.135,
+          verticalSlideExtendPos = 1,
+          verticalSlideRetractPos = 0,
+          frontClawOpenFull = 0.2,
+          frontClawOpen = 0.15,
+          frontClawClose = 0,
+          backClawOpen = 0.5,
+          backClawClose = 0.8,
+          clawJointExtend = 0.73,
+          clawJointClose = 0.76,
+          transferMecExtend = 0.73,
+          transferMecClose = 0.31,
+          transferMecInit = 0.41,
+          backClawLiftExtend = 0.45,
+          backClawLiftRetract = 1;
   public ElapsedTime timer = new ElapsedTime();
   public String lastCmd = "null";
 
@@ -59,7 +62,7 @@ public class SlideSystem {
     this.verticalRightSlide.setDirection(DcMotorSimple.Direction.FORWARD);
     this.horizontalLeftSlide.setDirection(Servo.Direction.REVERSE);
     this.transferMecLeft.setDirection(Servo.Direction.REVERSE);
-    setFrontClawOpen();
+    setFrontClawClose();
     setBackClawClawOpen();
     this.dropBucket.setPosition(backClawLiftRetract);
     this.transferMecLeft.setPosition(transferMecClose);
@@ -88,17 +91,18 @@ public class SlideSystem {
 
     this.horizontalLeftSlide.setDirection(Servo.Direction.REVERSE);
     this.transferMecLeft.setDirection(Servo.Direction.REVERSE);
-    setFrontClawOpen();
+    setFrontClawClose();
     setBackClawClawOpen();
+    initTransferMec();
     this.dropBucket.setPosition(backClawLiftRetract);
-    this.transferMecLeft.setPosition(transferMecClose);
-    this.transferMecRight.setPosition(transferMecClose);
     this.horizontalLeftSlide.setPosition(horizontalSlideRetractPos);
     this.horizontalRightSlide.setPosition(horizontalSlideRetractPos);
   }
 
   public void initialGrab() {
+    setFrontClawOpen();
     extendHorizontalSlides();
+    setClawJointOpen();
     extendTransferMec();
   }
 
@@ -107,11 +111,11 @@ public class SlideSystem {
   // keep running this method until the true parameter is returned.
   // todo: adjust the timers as necessary
   public boolean score() {
-
     if (!Objects.equals(lastCmd, "transferring")
         && !Objects.equals(lastCmd, "score")
         && !Objects.equals(lastCmd, "slidedelay")
-        && !Objects.equals(lastCmd, "dropping")) {
+        && !Objects.equals(lastCmd, "dropping")
+            && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "grabbing")) {
         timer.reset();
         lastCmd = "grabbing";
@@ -121,13 +125,79 @@ public class SlideSystem {
       }
     }
 
-    closeTransferMec();
+//    closeTransferMec();
+//    setClawJointClose();
+//    retractVerticalSlides();
+//    retractHorizontalSlides();
+//
+//    if (!Objects.equals(lastCmd, "transferring")
+//        && !Objects.equals(lastCmd, "score")
+//        && !Objects.equals(lastCmd, "slidedelay")) {
+//      if (!Objects.equals(lastCmd, "dropping")) {
+//        timer.reset();
+//        lastCmd = "dropping";
+//      }
+//      if (timer.milliseconds() < 800) { // 1 second for the slides to retract
+//        return false;
+//      }
+//    }
+//
+
+//
+//    if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")) {
+//      if (!Objects.equals(lastCmd, "score")) {
+//        timer.reset();
+//        lastCmd = "score";
+//      }
+//      if (timer.milliseconds() < 300) { // 500ms for the transfer mec to retract
+//        return false;
+//      }
+//    }
+
+//    setFrontClawOpen();
+//    if (!Objects.equals(lastCmd, "slidedelay")) {
+//      if (!Objects.equals(lastCmd, "transferring")) {
+//        lastCmd = "transferring";
+//        timer.reset();
+//      }
+//      if (timer.milliseconds()
+//          < 500) { // half a second for the bucket to fully grab onto the cone and for the front
+//        // claw to let go of the cone.
+//        return false;
+//      }
+//    }
+//
+//    setFrontClawClose();
+//    setClawJointOpen();
+//    extendTransferMec();
+//    setBackClawClose();
+//    extendHorizontalSlides();
+//
+//    if (!Objects.equals(lastCmd, "slidedelay")) {
+//      lastCmd = "slidedelay";
+//      timer.reset();
+//    }
+//    if (timer.milliseconds()
+//            < 600) { // half a second for the transfer mechanism to extend to avoid collision
+//      return false;
+//    }
+//
+//    extendVerticalSlides();
+//    setFrontClawOpen();
+//
+//    lastCmd = "null";
+//    return true;
+
+
+     // code for avoiding the ground junction.
     setClawJointClose();
+    closeTransferMec();
     retractVerticalSlides();
 
     if (!Objects.equals(lastCmd, "transferring")
         && !Objects.equals(lastCmd, "score")
-        && !Objects.equals(lastCmd, "slidedelay")) {
+        && !Objects.equals(lastCmd, "slidedelay")
+            && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
@@ -139,18 +209,18 @@ public class SlideSystem {
 
     retractHorizontalSlides();
 
-    if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")) {
+    if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")   && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
       }
-      if (timer.milliseconds() < 1500) { // two seconds for the slides to retract
+      if (timer.milliseconds() < 1000) { // one seconds for the slides to retract
         return false;
       }
     }
 
-    setFrontClawOpen();
-    if (!Objects.equals(lastCmd, "slidedelay")) {
+    setFrontClawOpenFull();
+    if (!Objects.equals(lastCmd, "slidedelay") && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
@@ -161,25 +231,41 @@ public class SlideSystem {
         return false;
       }
     }
-    setBackClawClose();
 
+    setFrontClawClose();
+    if (!Objects.equals(lastCmd, "slidedelay")) {
+      if (!Objects.equals(lastCmd, "openClaw")) {
+        lastCmd = "openClaw";
+        timer.reset();
+      }
+      if (timer.milliseconds()
+              < 500) { // half a second for the bucket to fully grab onto the cone and for the front
+        // claw to let go of the cone.
+        return false;
+      }
+    }
+
+
+    setBackClawClose();
     extendHorizontalSlides();
+
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
     }
     if (timer.milliseconds()
-        < 500) { // half a second for the transfer mechanism to extend to avoid collision
+            < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
 
     extendVerticalSlides();
-    setFrontClawOpen();
     setClawJointOpen();
     extendTransferMec();
+    setFrontClawOpenFull();
 
     lastCmd = "null";
     return true;
+
   }
 
   public boolean scoreCircuitsStage1() {
@@ -216,13 +302,12 @@ public class SlideSystem {
         timer.reset();
       }
       if (timer.milliseconds()
-          < 500) { // half a second for the bucket to fully grab onto the cone and for the front
+          < 200) { // half a second for the bucket to fully grab onto the cone and for the front
         // claw to let go of the cone.
         return false;
       }
     }
     setBackClawClose();
-
     extendTransferMec();
     setClawJointOpen();
     if (!Objects.equals(lastCmd, "slidedelay")) {
@@ -254,10 +339,10 @@ public class SlideSystem {
 
   public void resetGrabber() {
     // when you are done cycling invoke this to completely reset the robot.
+    setFrontClawOpen();
     retractVerticalSlides();
     closeTransferMec();
     setClawJointClose();
-    setFrontClawOpen();
     retractHorizontalSlides();
   }
 
@@ -309,6 +394,10 @@ public class SlideSystem {
     frontClaw.setPosition(frontClawOpen);
   }
 
+  public void setFrontClawOpenFull() {
+    frontClaw.setPosition(frontClawOpenFull);
+  }
+
   public void setClawJointClose() {
     clawJoint.setPosition(clawJointClose);
   }
@@ -328,6 +417,16 @@ public class SlideSystem {
   public void closeTransferMec() {
     transferMecLeft.setPosition(transferMecClose);
     transferMecRight.setPosition(transferMecClose);
+  }
+
+  public void initTransferMec() {
+    transferMecLeft.setPosition(transferMecInit);
+    transferMecRight.setPosition(transferMecInit);
+  }
+
+  public void closeTransferMecInter() {
+    transferMecLeft.setPosition(0.65);
+    transferMecRight.setPosition(0.65);
   }
 
   public void extendTransferMec() {

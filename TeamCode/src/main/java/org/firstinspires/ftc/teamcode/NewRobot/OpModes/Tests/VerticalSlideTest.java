@@ -42,7 +42,27 @@ public class VerticalSlideTest extends LinearOpMode {
 //        new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
 
     waitForStart();
+    vLeftS.setTarget(1200);
+    vLeftS.retMotorEx().setTargetPositionTolerance(1);
+    vLeftS.toPosition();
+    vLeftS.setPower(1);
 
+    vRightS.setTarget(1200);
+    vRightS.retMotorEx().setTargetPositionTolerance(1);
+    vRightS.toPosition();
+    vRightS.setPower(1);
+//
+//    sleep(3000);
+//
+//    vLeftS.setTarget(100);
+//    vLeftS.retMotorEx().setTargetPositionTolerance(1);
+//    vLeftS.toPosition();
+//    vLeftS.setPower(1);
+//
+//    vRightS.setTarget(100 );
+//    vRightS.retMotorEx().setTargetPositionTolerance(1);
+//    vRightS.toPosition();
+//    vRightS.setPower(1);
     while (opModeIsActive()) {
       if (gamepad1.dpad_up && !lU) {
         curPos += 100;
@@ -64,12 +84,12 @@ public class VerticalSlideTest extends LinearOpMode {
         vLeftS.setTarget(curPos);
         vLeftS.retMotorEx().setTargetPositionTolerance(1);
         vLeftS.toPosition();
-        vLeftS.setPower(1);
+        vLeftS.setPower(0.2);
 
         vRightS.setTarget(curPos2);
         vRightS.retMotorEx().setTargetPositionTolerance(1);
         vRightS.toPosition();
-        vRightS.setPower(1);
+        vRightS.setPower(0.2);
       }
 
       lU = gamepad1.dpad_up;

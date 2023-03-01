@@ -33,7 +33,7 @@ public class Odometry {
     this(0);
   }
 
-  // Two Deadwheel Odo
+  // Two Deadwheel Odo (change eqs for imu substitution)
   public void updatePosition(double l, double n, double ang) {
     double dL = l - lastLeftEnc;
     double dN = n - lastNormalEnc;

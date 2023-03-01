@@ -49,16 +49,18 @@ public class FullSlideSystemTest extends LinearOpMode {
     waitForStart();
 
     while (opModeIsActive()) {
-      // Always reset grabber before changing mode!!
       bLP2 = bP2;
       bP2 = gamepad2.b;
       if (!bLP2 && bP2) {
         cycleMode = !cycleMode;
         stage = 0;
         first = false;
+        cont = true;
+        slideSystem.resetGrabber();
       }
 
       xLP2 = xP2;
+      xP2 = gamepad2.x;
       xP2 = gamepad2.x;
       if (!xLP2 && xP2) {
         slideSystem.resetGrabber();
@@ -87,7 +89,7 @@ public class FullSlideSystemTest extends LinearOpMode {
             slideSystem.setBackClawClawOpen();
           }
         }
-        if(cont) {
+        if(!cont) {
           doneScoring = false;
         }
       }

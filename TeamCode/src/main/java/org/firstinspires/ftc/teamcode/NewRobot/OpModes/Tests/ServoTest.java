@@ -24,8 +24,8 @@ public class ServoTest extends LinearOpMode {
    // Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
 
     // Servo
-    Servo fClaw = hardwareMap.get(Servo.class, "v4bLeft");
-    Servo fClawR = hardwareMap.get(Servo.class, "v4bRight");
+    Servo fClaw = hardwareMap.get(Servo.class, "block");
+//    Servo fClawR = hardwareMap.get(Servo.class, "v4bRight");
 //    Servo bClaw = hardwareMap.get(Servo.class, "backClaw");
 //    Servo tl = hardwareMap.get(Servo.class, "transferMecLeft");
 //    Servo tr = hardwareMap.get(Servo.class, "transferMecRight");
@@ -34,10 +34,10 @@ public class ServoTest extends LinearOpMode {
 //    Servo hRightS = hardwareMap.get(Servo.class, "horizontalRightSlide");
 
     // Servo clawJoint = hardwareMap.get(Servo.class, "clawJoint");
-    fClaw.setPosition(0);
-    fClawR.setPosition(1);
-    waitForStart();
 
+   // fClawR.setPosition(1);
+    waitForStart();
+      fClaw.setPosition(0.7);
     while (opModeIsActive()) {
       if (gamepad1.dpad_up && !lU) {
         curPos += 0.1;
@@ -56,8 +56,8 @@ public class ServoTest extends LinearOpMode {
       }
 
      if (gamepad1.dpad_left && !lL) {
-       fClaw.setPosition(1);
-       fClawR.setPosition(0);
+//       fClaw.setPosition(1);
+//       fClawR.setPosition(0);
       }
 
       lU = gamepad1.dpad_up;
