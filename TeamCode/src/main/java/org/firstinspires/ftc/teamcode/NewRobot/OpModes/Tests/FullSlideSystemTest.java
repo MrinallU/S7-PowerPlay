@@ -30,7 +30,9 @@ public class FullSlideSystemTest extends LinearOpMode {
     boolean rSP2 = false, rSLP2 = false;
     boolean bP2 = false, bLP2 = false;
     boolean xP2 = false, xLP2 = false;
-    boolean dpD2;
+    boolean dpD2 = false, dpDL2 = false;
+    boolean dpL2 = false, dpLL2 = false;
+    boolean dpU2 = false, dpUL2 = false;
     boolean slowDrive = false, fastDrive = false;
     boolean basicDrive = false;
 
@@ -105,9 +107,21 @@ public class FullSlideSystemTest extends LinearOpMode {
         }
       }
 
-      // if(DpL)
-
-      telemetry.addLine(String.valueOf(doneScoring));
+      dpDL2 = dpD2;
+      dpD2 = gamepad2.dpad_down;
+      if(dpD2 && !dpDL2){
+        mode = "low";
+      }
+      dpUL2 = dpU2;
+      dpU2 = gamepad2.dpad_up;
+      if(dpU2 && !dpUL2){
+        mode = "high";
+      }
+      dpLL2 = dpL2;
+      dpL2 = gamepad2.dpad_left || gamepad2.dpad_right;
+      if(dpL2 && !dpLL2){
+        mode = "mid";
+      }
 
       if (!doneScoring) {
         if (cycleMode) {
@@ -118,7 +132,7 @@ public class FullSlideSystemTest extends LinearOpMode {
           } else if (stage == 1) {
             doneScoring = slideSystem.scoreCircuitsStage1();
           } else if(stage == 2){
-            doneScoring = slideSystem.scoreCircuitsStage2();
+            doneScoring = slideSystem.scoreCircuitsStage2(mode);
           }else{
             doneScoring = slideSystem.scoreCircuitsStage3();
           }
@@ -130,12 +144,7 @@ public class FullSlideSystemTest extends LinearOpMode {
       }
 
       // Display Values
-
-      telemetry.addLine(String.valueOf(doneScoring));
-      telemetry.addData("Stage", stage);
-      telemetry.addData("time", slideSystem.timer.milliseconds());
-      telemetry.addLine(slideSystem.lastCmd);
-      telemetry.addLine(String.valueOf(cycleMode));
+      telemetry.addData("Life Level:", mode);
       telemetry.update();
     }
   }

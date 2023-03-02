@@ -332,7 +332,7 @@ public class SlideSystem {
     return true;
   }
 
-  public boolean scoreCircuitsStage2() {
+  public boolean scoreCircuitsStage2(String m) {
     if (!Objects.equals(lastCmd, "dropping")) {
       timer.reset();
       lastCmd = "dropping";
@@ -340,8 +340,10 @@ public class SlideSystem {
       return false;
     }
 
+    if(Objects.equals(m, "high")){extendVerticalSlides();}
+    else if(Objects.equals(m, "mid")){extendVerticalSlidesMid();}
+    else {extendVerticalSlidesLow();}
     lastCmd = "null";
-    extendVerticalSlides();
     return true;
   }
 
@@ -390,6 +392,24 @@ public class SlideSystem {
     verticalRightSlide.toPosition();
     verticalRightSlide.setPower(1);
 
+    dropBucket.setPosition(backClawLiftExtend);
+  }
+
+  public void extendVerticalSlidesMid() {
+    verticalLeftSlide.setTarget(verticalSlideExtendPosMid);
+    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalLeftSlide.toPosition();
+    verticalLeftSlide.setPower(1);
+
+    verticalRightSlide.setTarget(verticalSlideExtendPosMid);
+    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalRightSlide.toPosition();
+    verticalRightSlide.setPower(1);
+
+    dropBucket.setPosition(backClawLiftExtend);
+  }
+
+  public void extendVerticalSlidesLow() {
     dropBucket.setPosition(backClawLiftExtend);
   }
 
