@@ -16,22 +16,23 @@ public class SlideSystem {
       transferMecRight,
           dropBucket,
       clawJoint;
-  final double horizontalSlideExtendPos = 0.3,
+  final double horizontalSlideExtendPos = 0.04,
           horizontalSlideHighPosition = 0.18,
-          horizontalSlideRetractPos = 0.135,
-          verticalSlideExtendPos = 1,
-          verticalSlideRetractPos = 0,
+          horizontalSlideRetractPos = 0,
+          verticalSlideExtendPosHigh = 1200,
+          verticalSlideExtendPosMid = 900,
+          verticalSlideRetractPos = -100,
           frontClawOpenFull = 0.2,
-          frontClawOpen = 0.15,
+          frontClawOpen = 0.16,
           frontClawClose = 0,
           backClawOpen = 0.5,
           backClawClose = 0.8,
           clawJointExtend = 0.73,
-          clawJointClose = 0.76,
-          transferMecExtend = 0.73,
-          transferMecClose = 0.31,
-          transferMecInit = 0.41,
-          backClawLiftExtend = 0.45,
+          clawJointClose = 0.891, // 0.87
+          transferMecExtend = 0.84,
+          transferMecClose = 0.41,
+          transferMecInit = 0.44,
+          backClawLiftExtend = 0.35,
           backClawLiftRetract = 1;
   public ElapsedTime timer = new ElapsedTime();
   public String lastCmd = "null";
@@ -100,7 +101,7 @@ public class SlideSystem {
   }
 
   public void initialGrab() {
-    setFrontClawOpen();
+    setFrontClawOpenFull();
     extendHorizontalSlides();
     setClawJointOpen();
     extendTransferMec();
@@ -190,9 +191,6 @@ public class SlideSystem {
 
 
      // code for avoiding the ground junction.
-    setClawJointClose();
-    closeTransferMec();
-    retractVerticalSlides();
 
     if (!Objects.equals(lastCmd, "transferring")
         && !Objects.equals(lastCmd, "score")
@@ -201,29 +199,34 @@ public class SlideSystem {
       if (!Objects.equals(lastCmd, "dropping")) {
         timer.reset();
         lastCmd = "dropping";
+        setClawJointClose();
+        closeTransferMec();
+        retractVerticalSlides();
       }
       if (timer.milliseconds() < 500) { // half a second for the transfer mec to close
         return false;
       }
     }
 
-    retractHorizontalSlides();
+
 
     if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")   && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
+        retractHorizontalSlides();
       }
-      if (timer.milliseconds() < 1000) { // one seconds for the slides to retract
+      if (timer.milliseconds() < 700) { // one seconds for the slides to retract
         return false;
       }
     }
 
-    setFrontClawOpenFull();
+
     if (!Objects.equals(lastCmd, "slidedelay") && !Objects.equals(lastCmd, "openClaw")) {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
+        setFrontClawOpen();
       }
       if (timer.milliseconds()
           < 500) { // half a second for the bucket to fully grab onto the cone and for the front
@@ -232,11 +235,12 @@ public class SlideSystem {
       }
     }
 
-    setFrontClawClose();
+
     if (!Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "openClaw")) {
         lastCmd = "openClaw";
         timer.reset();
+        setFrontClawClose();
       }
       if (timer.milliseconds()
               < 500) { // half a second for the bucket to fully grab onto the cone and for the front
@@ -246,21 +250,22 @@ public class SlideSystem {
     }
 
 
-    setBackClawClose();
-    extendHorizontalSlides();
+
 
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
+      setBackClawClose();
+      extendHorizontalSlides();
+      setClawJointOpen();
+      extendTransferMec();
     }
     if (timer.milliseconds()
-            < 500) { // half a second for the transfer mechanism to extend to avoid collision
+            < 800) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
 
     extendVerticalSlides();
-    setClawJointOpen();
-    extendTransferMec();
     setFrontClawOpenFull();
 
     lastCmd = "null";
@@ -282,24 +287,26 @@ public class SlideSystem {
       }
     }
 
-    closeTransferMec();
-    setClawJointClose();
+
 
     if (!Objects.equals(lastCmd, "transferring") && !Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "score")) {
         timer.reset();
         lastCmd = "score";
+        closeTransferMec();
+        setClawJointClose();
       }
       if (timer.milliseconds() < 1000) { // two seconds for the slides to retract
         return false;
       }
     }
 
-    setFrontClawOpen();
+
     if (!Objects.equals(lastCmd, "slidedelay")) {
       if (!Objects.equals(lastCmd, "transferring")) {
         lastCmd = "transferring";
         timer.reset();
+        setFrontClawOpen();
       }
       if (timer.milliseconds()
           < 200) { // half a second for the bucket to fully grab onto the cone and for the front
@@ -307,19 +314,20 @@ public class SlideSystem {
         return false;
       }
     }
-    setBackClawClose();
-    extendTransferMec();
-    setClawJointOpen();
+
     if (!Objects.equals(lastCmd, "slidedelay")) {
       lastCmd = "slidedelay";
       timer.reset();
+      setBackClawClose();
+      extendTransferMec();
+      setClawJointOpen();
     }
     if (timer.milliseconds()
         < 500) { // half a second for the transfer mechanism to extend to avoid collision
       return false;
     }
 
-    extendVerticalSlides();
+//    extendVerticalSlides();
     lastCmd = "null";
     return true;
   }
@@ -329,6 +337,19 @@ public class SlideSystem {
       timer.reset();
       lastCmd = "dropping";
     } else if (timer.milliseconds() < 500) { // half a second for the claws to grab or drop the cone
+      return false;
+    }
+
+    lastCmd = "null";
+    extendVerticalSlides();
+    return true;
+  }
+
+  public boolean scoreCircuitsStage3() {
+    if (!Objects.equals(lastCmd, "dropping")) {
+      timer.reset();
+      lastCmd = "dropping";
+    } else if (timer.milliseconds() < 1000) { // half a second for the claws to grab or drop the cone
       return false;
     }
 
@@ -359,15 +380,15 @@ public class SlideSystem {
   }
 
   public void extendVerticalSlides() {
-//    verticalLeftSlide.setTarget(verticalSlideExtendPos);
-//    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-//    verticalLeftSlide.toPosition();
-//    verticalLeftSlide.setPower(1);
-//
-//    verticalRightSlide.setTarget(verticalSlideExtendPos);
-//    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-//    verticalRightSlide.toPosition();
-//    verticalRightSlide.setPower(1);
+    verticalLeftSlide.setTarget(verticalSlideExtendPosHigh);
+    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalLeftSlide.toPosition();
+    verticalLeftSlide.setPower(1);
+
+    verticalRightSlide.setTarget(verticalSlideExtendPosHigh);
+    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalRightSlide.toPosition();
+    verticalRightSlide.setPower(1);
 
     dropBucket.setPosition(backClawLiftExtend);
   }
@@ -375,15 +396,15 @@ public class SlideSystem {
   public void retractVerticalSlides() {
     dropBucket.setPosition(backClawLiftRetract);
 
-//    verticalLeftSlide.setTarget(verticalSlideRetractPos);
-//    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
-//    verticalLeftSlide.toPosition();
-//    verticalLeftSlide.setPower(1);
-//
-//    verticalRightSlide.setTarget(verticalSlideRetractPos);
-//    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
-//    verticalRightSlide.toPosition();
-//    verticalRightSlide.setPower(1);
+    verticalLeftSlide.setTarget(verticalSlideRetractPos);
+    verticalLeftSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalLeftSlide.toPosition();
+    verticalLeftSlide.setPower(0.7);
+
+    verticalRightSlide.setTarget(verticalSlideRetractPos);
+    verticalRightSlide.retMotorEx().setTargetPositionTolerance(1);
+    verticalRightSlide.toPosition();
+    verticalRightSlide.setPower(0.7);
   }
 
   public void setFrontClawClose() {

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.NewRobot.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.SlideSystem;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -13,6 +14,7 @@ public class FullSlideSystemTest extends LinearOpMode {
   boolean doneScoring = true;
   boolean cycleMode = true;
   boolean cont = true;
+  String mode = "high";
 
   @Override
   public void runOpMode() throws InterruptedException {
@@ -28,8 +30,12 @@ public class FullSlideSystemTest extends LinearOpMode {
     boolean rSP2 = false, rSLP2 = false;
     boolean bP2 = false, bLP2 = false;
     boolean xP2 = false, xLP2 = false;
+    boolean dpD2;
     boolean slowDrive = false, fastDrive = false;
     boolean basicDrive = false;
+
+    Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
+    Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
 
     // Servo
     Servo fClaw = hardwareMap.get(Servo.class, "claw");
@@ -45,7 +51,7 @@ public class FullSlideSystemTest extends LinearOpMode {
     telemetry.update();
 
     slideSystem =
-        new SlideSystem(hLeftS, hRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
+            new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
     waitForStart();
 
     while (opModeIsActive()) {
@@ -56,6 +62,7 @@ public class FullSlideSystemTest extends LinearOpMode {
         stage = 0;
         first = false;
         cont = true;
+        doneScoring = true;
         slideSystem.resetGrabber();
       }
 
@@ -82,10 +89,14 @@ public class FullSlideSystemTest extends LinearOpMode {
         } else {
           if (stage == 0) {
             slideSystem.extendTransferMec();
-          } else if (stage % 2 != 0) {
+            slideSystem.setClawJointOpen();
+            cont = false;
+          } else if (stage == 1) {
             slideSystem.setBackClawClawOpen();
             slideSystem.setFrontClawClose();
-          } else {
+          } else if (stage == 2){
+           slideSystem.setFrontClawOpenFull();
+          } else{
             slideSystem.setBackClawClawOpen();
           }
         }
@@ -93,6 +104,8 @@ public class FullSlideSystemTest extends LinearOpMode {
           doneScoring = false;
         }
       }
+
+      // if(DpL)
 
       telemetry.addLine(String.valueOf(doneScoring));
 
@@ -102,23 +115,27 @@ public class FullSlideSystemTest extends LinearOpMode {
         } else {
           if (stage == 0) {
             doneScoring = true;
-          } else if (stage % 2 != 0) {
+          } else if (stage == 1) {
             doneScoring = slideSystem.scoreCircuitsStage1();
-          } else {
+          } else if(stage == 2){
             doneScoring = slideSystem.scoreCircuitsStage2();
+          }else{
+            doneScoring = slideSystem.scoreCircuitsStage3();
           }
           if (doneScoring) {
             stage++;
+            if(stage==4){stage=1;}
           }
         }
       }
 
       // Display Values
-      telemetry.addLine(String.valueOf(cycleMode));
+
       telemetry.addLine(String.valueOf(doneScoring));
       telemetry.addData("Stage", stage);
       telemetry.addData("time", slideSystem.timer.milliseconds());
       telemetry.addLine(slideSystem.lastCmd);
+      telemetry.addLine(String.valueOf(cycleMode));
       telemetry.update();
     }
   }

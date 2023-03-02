@@ -54,10 +54,12 @@ public class Test_TeleOp extends Base {
         cycleMode = !cycleMode;
         stage = 0;
         first = false;
+        cont = true;
         slideSystem.resetGrabber();
       }
 
       xLP2 = xP2;
+      xP2 = gamepad2.x;
       xP2 = gamepad2.x;
       if (!xLP2 && xP2) {
         slideSystem.resetGrabber();
@@ -65,7 +67,7 @@ public class Test_TeleOp extends Base {
 
       // the front claw automatically opens when extending...
       aLP = aP;
-      aP = gamepad1.a;
+      aP = gamepad2.a;
       if (aP && !aLP) {
         if (cycleMode) {
           if (first) {
@@ -91,6 +93,8 @@ public class Test_TeleOp extends Base {
         }
       }
 
+
+
       telemetry.addLine(String.valueOf(doneScoring));
 
       if (!doneScoring) {
@@ -109,6 +113,7 @@ public class Test_TeleOp extends Base {
           }
         }
       }
+
 
       // Display Values
       telemetry.addData("Drive Type", driveType);
