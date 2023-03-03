@@ -89,7 +89,9 @@ public class Drive extends Base {
       double theta = odometry.getAngle();
 
       Point destPt;
-      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1 && time.milliseconds()<=timeout) {
+      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance
+          && pt != wp.size() - 1
+          && time.milliseconds() <= timeout) {
         update();
         pt++;
         prevXDiff = 0;
@@ -131,26 +133,25 @@ public class Drive extends Base {
         yPow += yDiff * normalMovementConstant;
       }
 
-      if(xPow<0){
-        if(xPow< -maxSpeed){
+      if (xPow < 0) {
+        if (xPow < -maxSpeed) {
           xPow = -maxSpeed;
         }
-      }else{
-        if(xPow>maxSpeed){
+      } else {
+        if (xPow > maxSpeed) {
           xPow = maxSpeed;
         }
       }
 
-      if(yPow<0){
-        if(yPow< -maxSpeed){
+      if (yPow < 0) {
+        if (yPow < -maxSpeed) {
           yPow = -maxSpeed;
         }
-      }else{
-        if(yPow>maxSpeed){
+      } else {
+        if (yPow > maxSpeed) {
           yPow = maxSpeed;
         }
       }
-
 
       prevTime = time.seconds();
       prevXDiff = xDiff;
@@ -300,7 +301,8 @@ public class Drive extends Base {
 
   public Point getTicks() {
     updatePosition();
-    return new Point(fLeftMotor.encoderReading(), fRightMotor.encoderReading(), bLeftMotor.encoderReading());
+    return new Point(
+        fLeftMotor.encoderReading(), fRightMotor.encoderReading(), bLeftMotor.encoderReading());
   }
 
   public double getAngleImu() {

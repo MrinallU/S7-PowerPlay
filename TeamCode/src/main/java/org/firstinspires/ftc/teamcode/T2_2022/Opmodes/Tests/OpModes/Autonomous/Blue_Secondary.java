@@ -46,12 +46,12 @@ public class Blue_Secondary extends Base {
     v4bRight.setPosition(v4bRightOut);
     v4bLeft.setPosition(v4bLeftOut);
 
-    p1.add(new Point(0,4));
-    dt.ChaseTheCarrot(p1, 100, 0, 0.5, 1, 0.04, 0.040, 0.01 , 1, 0.01, 0, 500);
+    p1.add(new Point(0, 4));
+    dt.ChaseTheCarrot(p1, 100, 0, 0.5, 1, 0.04, 0.040, 0.01, 1, 0.01, 0, 500);
     p1.clear();
     p1.add(new Point(-40, 3));
-    dt.ChaseTheCarrot(p1, 100, 0, 0.5, 1, 0.04, 0.040, 0.01 , 1, 0.01, 0, 500);
-    //sleep(100);
+    dt.ChaseTheCarrot(p1, 100, 0, 0.5, 1, 0.04, 0.040, 0.01, 1, 0.01, 0, 500);
+    // sleep(100);
 
     grabber.releaseCone();
     sleep(200);
@@ -59,14 +59,14 @@ public class Blue_Secondary extends Base {
     v4bRight.setPosition(v4bRIn);
     grabber.raiseStack();
     sleep(400);
-    //sleep(300);
+    // sleep(300);
 
     // cycle 1
     p1.clear();
     p1.add(new Point(-60, 3));
-    //-60
+    // -60
     p1.add(new Point(-48, 32));
-    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02 , 0.7, 0.01, 0, 2200);
+    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7, 0.01, 0, 2200);
     grabber.grabCone();
     sleep(300);
     grabber.raiseTop();
@@ -74,133 +74,131 @@ public class Blue_Secondary extends Base {
 
     p1.clear();
     p1.add(new Point(-48, 3));
-    dt.ChaseTheCarrot(p1, 3, 0, 0.5, 1, 0.04, 0.030, 0.02 , 0.5, 0.01, 0, 2200);
+    dt.ChaseTheCarrot(p1, 3, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.5, 0.01, 0, 2200);
     dt.stopDrive();
 
-
-
-//
-//    p1.clear();
-//    p1.add(new Point(1, -49));
-//    p1.add(new Point(4, -40));
-//    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
-//    grabber.releaseCone();
-//    sleep(200);
-//    v4bLeft.setPosition(v4bLIn);
-//    v4bRight.setPosition(v4bRIn);
-//    grabber.raiseStack2();
-//    sleep(400);
-//
-//
-//    // cycle 2
-//    p1.clear();
-//    p1.add(new Point(3, -61));
-//    //-60
-//    p1.add(new Point(33, -48));
-//    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
-//    grabber.grabCone();
-//    grabber.raiseMiddle();
-//    v4bRight.setPosition(v4bRightOut);
-//    v4bLeft.setPosition(v4bLeftOut);
-//
-//    p1.clear();
-//    p1.add(new Point(1, -49));
-//    p1.add(new Point(4, -40));
-//    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
-//    grabber.releaseCone();
-//    sleep(200);
-//    v4bLeft.setPosition(v4bLIn);
-//    v4bRight.setPosition(v4bRIn);
-//    grabber.raiseStack3();
-//    sleep(400);
-//
-//    // cycle 3
-//    p1.clear();
-//    p1.add(new Point(3, -61));
-//    //-60
-//    p1.add(new Point(33, -48));
-//    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
-//    grabber.grabCone();
-//    grabber.raiseMiddle();
-//    v4bRight.setPosition(v4bRightOut);
-//    v4bLeft.setPosition(v4bLeftOut);
-//
-//    p1.clear();
-//    p1.add(new Point(1, -49));
-//    p1.add(new Point(4, -40));
-//    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
-//    grabber.releaseCone();
-//    sleep(200);
-//    v4bLeft.setPosition(v4bLIn);
-//    v4bRight.setPosition(v4bRIn);
-//    grabber.raiseStack4();
-//    sleep(400);
-//
-//    // cycle 4
-//    p1.clear();
-//    p1.add(new Point(3, -61));
-//    //-60
-//    p1.add(new Point(33, -48));
-//    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
-//    grabber.grabCone();
-//    grabber.raiseMiddle();
-//    v4bRight.setPosition(v4bRightOut);
-//    v4bLeft.setPosition(v4bLeftOut);
-//
-//    p1.clear();
-//    p1.add(new Point(1, -49));
-//    p1.add(new Point(4, -40));
-//    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
-//    grabber.releaseCone();
-//    sleep(200);
-//    v4bLeft.setPosition(v4bLIn);
-//    v4bRight.setPosition(v4bRIn);
-//    grabber.restArm();
-//    sleep(400);
-//    // cycle 5
-//    p1.clear();
-//    p1.add(new Point(3, -61));
-//    //-60
-//    p1.add(new Point(33, -48));
-//    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
-//    grabber.grabCone();
-//    grabber.raiseMiddle();
-//    v4bRight.setPosition(v4bRightOut);
-//    v4bLeft.setPosition(v4bLeftOut);
-//
-//    p1.clear();
-//    p1.add(new Point(1, -49));
-//    p1.add(new Point(4, -40));
-//    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
-//    grabber.releaseCone();
-//    sleep(200);
-//    v4bLeft.setPosition(v4bLIn);
-//    v4bRight.setPosition(v4bRIn);
-//    grabber.restArm();
-//    sleep(400);
-//
-//    //  Park
-//    p1.clear();
-//    p1.add(new Point(3, -61));
-//    //-60
-//    p1.add(new Point(33, -48));
-//    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
-//    //PlainPathConstantHeading(p1, 0, 0.5, 1, 19, 5000);
-//
-//    //    dt.NormalMTP(3, -51, 0, true, 3000);
-//    //    sleep(200);
-//    //    if (location == 2) {
-//    //      // dt.NormalMTP(3, -51, 0, true, 3000);
-//    //    } else if (location == 3) {
-//    //      dt.NormalMTP(-8, -51, 0, true, 3000);
-//    //    } else {
-//    //      dt.NormalMTP(17, -51, 0, true, 3000);
-//    //    }
-//
-//    //    v4bRight.setPosition(v4bRIn);
-//    //    v4bLeft.setPosition(v4bLIn);
-//    //    grabber.restArm();
-//    dt.stopDrive();
+    //
+    //    p1.clear();
+    //    p1.add(new Point(1, -49));
+    //    p1.add(new Point(4, -40));
+    //    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
+    //    grabber.releaseCone();
+    //    sleep(200);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    v4bRight.setPosition(v4bRIn);
+    //    grabber.raiseStack2();
+    //    sleep(400);
+    //
+    //
+    //    // cycle 2
+    //    p1.clear();
+    //    p1.add(new Point(3, -61));
+    //    //-60
+    //    p1.add(new Point(33, -48));
+    //    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
+    //    grabber.grabCone();
+    //    grabber.raiseMiddle();
+    //    v4bRight.setPosition(v4bRightOut);
+    //    v4bLeft.setPosition(v4bLeftOut);
+    //
+    //    p1.clear();
+    //    p1.add(new Point(1, -49));
+    //    p1.add(new Point(4, -40));
+    //    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
+    //    grabber.releaseCone();
+    //    sleep(200);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    v4bRight.setPosition(v4bRIn);
+    //    grabber.raiseStack3();
+    //    sleep(400);
+    //
+    //    // cycle 3
+    //    p1.clear();
+    //    p1.add(new Point(3, -61));
+    //    //-60
+    //    p1.add(new Point(33, -48));
+    //    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
+    //    grabber.grabCone();
+    //    grabber.raiseMiddle();
+    //    v4bRight.setPosition(v4bRightOut);
+    //    v4bLeft.setPosition(v4bLeftOut);
+    //
+    //    p1.clear();
+    //    p1.add(new Point(1, -49));
+    //    p1.add(new Point(4, -40));
+    //    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
+    //    grabber.releaseCone();
+    //    sleep(200);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    v4bRight.setPosition(v4bRIn);
+    //    grabber.raiseStack4();
+    //    sleep(400);
+    //
+    //    // cycle 4
+    //    p1.clear();
+    //    p1.add(new Point(3, -61));
+    //    //-60
+    //    p1.add(new Point(33, -48));
+    //    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
+    //    grabber.grabCone();
+    //    grabber.raiseMiddle();
+    //    v4bRight.setPosition(v4bRightOut);
+    //    v4bLeft.setPosition(v4bLeftOut);
+    //
+    //    p1.clear();
+    //    p1.add(new Point(1, -49));
+    //    p1.add(new Point(4, -40));
+    //    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
+    //    grabber.releaseCone();
+    //    sleep(200);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    v4bRight.setPosition(v4bRIn);
+    //    grabber.restArm();
+    //    sleep(400);
+    //    // cycle 5
+    //    p1.clear();
+    //    p1.add(new Point(3, -61));
+    //    //-60
+    //    p1.add(new Point(33, -48));
+    //    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
+    //    grabber.grabCone();
+    //    grabber.raiseMiddle();
+    //    v4bRight.setPosition(v4bRightOut);
+    //    v4bLeft.setPosition(v4bLeftOut);
+    //
+    //    p1.clear();
+    //    p1.add(new Point(1, -49));
+    //    p1.add(new Point(4, -40));
+    //    PlainPathConstantHeading(p1, 0, 1, 1, 9, 5000);
+    //    grabber.releaseCone();
+    //    sleep(200);
+    //    v4bLeft.setPosition(v4bLIn);
+    //    v4bRight.setPosition(v4bRIn);
+    //    grabber.restArm();
+    //    sleep(400);
+    //
+    //    //  Park
+    //    p1.clear();
+    //    p1.add(new Point(3, -61));
+    //    //-60
+    //    p1.add(new Point(33, -48));
+    //    dt.ChaseTheCarrot(p1, 18.7, 0, 0.5, 1, 0.04, 0.030, 0.02, 0.7,0.01, 0, 2200);
+    //    //PlainPathConstantHeading(p1, 0, 0.5, 1, 19, 5000);
+    //
+    //    //    dt.NormalMTP(3, -51, 0, true, 3000);
+    //    //    sleep(200);
+    //    //    if (location == 2) {
+    //    //      // dt.NormalMTP(3, -51, 0, true, 3000);
+    //    //    } else if (location == 3) {
+    //    //      dt.NormalMTP(-8, -51, 0, true, 3000);
+    //    //    } else {
+    //    //      dt.NormalMTP(17, -51, 0, true, 3000);
+    //    //    }
+    //
+    //    //    v4bRight.setPosition(v4bRIn);
+    //    //    v4bLeft.setPosition(v4bLIn);
+    //    //    grabber.restArm();
+    //    dt.stopDrive();
     sleep(300000);
   }
 }

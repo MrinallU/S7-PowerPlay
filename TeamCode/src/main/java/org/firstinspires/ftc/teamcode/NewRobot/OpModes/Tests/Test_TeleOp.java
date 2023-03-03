@@ -41,7 +41,7 @@ public class Test_TeleOp extends Base {
       }
 
       // Drive
-       slowDrive = gamepad1.left_bumper;
+      slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
       drive = floor(gamepad1.right_stick_x);
       strafe = floor(-gamepad1.right_stick_y * 1.1); // 1.1 counteracts imperfect strafing
@@ -87,30 +87,30 @@ public class Test_TeleOp extends Base {
           } else if (stage == 1) {
             slideSystem.setBackClawClawOpen();
             slideSystem.setFrontClawClose();
-          } else if (stage == 2){
+          } else if (stage == 2) {
             slideSystem.setFrontClawOpenFull();
-          } else{
+          } else {
             slideSystem.setBackClawClawOpen();
           }
         }
-        if(!cont) {
+        if (!cont) {
           doneScoring = false;
         }
       }
 
       dpDL2 = dpD2;
       dpD2 = gamepad2.dpad_down;
-      if(dpD2 && !dpDL2){
+      if (dpD2 && !dpDL2) {
         mode = "low";
       }
       dpUL2 = dpU2;
       dpU2 = gamepad2.dpad_up;
-      if(dpU2 && !dpUL2){
+      if (dpU2 && !dpUL2) {
         mode = "high";
       }
       dpLL2 = dpL2;
       dpL2 = gamepad2.dpad_left || gamepad2.dpad_right;
-      if(dpL2 && !dpLL2){
+      if (dpL2 && !dpLL2) {
         mode = "mid";
       }
 
@@ -122,14 +122,16 @@ public class Test_TeleOp extends Base {
             doneScoring = true;
           } else if (stage == 1) {
             doneScoring = slideSystem.scoreCircuitsStage1();
-          } else if(stage == 2){
+          } else if (stage == 2) {
             doneScoring = slideSystem.scoreCircuitsStage2(mode);
-          }else{
+          } else {
             doneScoring = slideSystem.scoreCircuitsStage3();
           }
           if (doneScoring) {
             stage++;
-            if(stage==4){stage=1;}
+            if (stage == 4) {
+              stage = 1;
+            }
           }
         }
       }

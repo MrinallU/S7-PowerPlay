@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.NewRobot.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.NewRobot.Modules.SlideSystem;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
@@ -19,8 +18,8 @@ public class FullSlideSystemTest extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
     SlideSystem slideSystem;
-//    Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
-//    Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
+    //    Motor vLeftS = new Motor(hardwareMap, "verticalLeftSlide");
+    //    Motor vRightS = new Motor(hardwareMap, "verticalRightSlide");
     // Button Variables
     boolean yP = false, yLP = false;
     boolean aP = false, aLP = false;
@@ -53,7 +52,7 @@ public class FullSlideSystemTest extends LinearOpMode {
     telemetry.update();
 
     slideSystem =
-            new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
+        new SlideSystem(hLeftS, hRightS, vLeftS, vRightS, fClaw, bClaw, tl, tr, cll, clawJoint);
     waitForStart();
 
     while (opModeIsActive()) {
@@ -96,49 +95,51 @@ public class FullSlideSystemTest extends LinearOpMode {
           } else if (stage == 1) {
             slideSystem.setBackClawClawOpen();
             slideSystem.setFrontClawClose();
-          } else if (stage == 2){
-           slideSystem.setFrontClawOpenFull();
-          } else{
+          } else if (stage == 2) {
+            slideSystem.setFrontClawOpenFull();
+          } else {
             slideSystem.setBackClawClawOpen();
           }
         }
-        if(!cont) {
+        if (!cont) {
           doneScoring = false;
         }
       }
 
       dpDL2 = dpD2;
       dpD2 = gamepad2.dpad_down;
-      if(dpD2 && !dpDL2){
+      if (dpD2 && !dpDL2) {
         mode = "low";
       }
       dpUL2 = dpU2;
       dpU2 = gamepad2.dpad_up;
-      if(dpU2 && !dpUL2){
+      if (dpU2 && !dpUL2) {
         mode = "high";
       }
       dpLL2 = dpL2;
       dpL2 = gamepad2.dpad_left || gamepad2.dpad_right;
-      if(dpL2 && !dpLL2){
+      if (dpL2 && !dpLL2) {
         mode = "mid";
       }
 
       if (!doneScoring) {
         if (cycleMode) {
-         doneScoring = slideSystem.score();
+          doneScoring = slideSystem.score();
         } else {
           if (stage == 0) {
             doneScoring = true;
           } else if (stage == 1) {
             doneScoring = slideSystem.scoreCircuitsStage1();
-          } else if(stage == 2){
+          } else if (stage == 2) {
             doneScoring = slideSystem.scoreCircuitsStage2(mode);
-          }else{
+          } else {
             doneScoring = slideSystem.scoreCircuitsStage3();
           }
           if (doneScoring) {
             stage++;
-            if(stage==4){stage=1;}
+            if (stage == 4) {
+              stage = 1;
+            }
           }
         }
       }

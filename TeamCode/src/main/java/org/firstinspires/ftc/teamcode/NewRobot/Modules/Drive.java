@@ -30,25 +30,26 @@ public class Drive extends Base {
   public boolean raise1 = false, raise2 = false, dropSlides3 = false, dropSlides4 = false;
 
   public Drive(
-          Motor fLeftMotor,
-          Motor bLeftMotor,
-          Motor fRightMotor,
-          Motor bRightMotor,
-          Motor odoL,
-          Motor odoN,
-          IMU gyro,
-          OpMode m,
-          int xPos,
-          int yPos,
-          int angle,
-          List<LynxModule> allHubs,
-          Telemetry t, SlideSystem slideSystem) {
+      Motor fLeftMotor,
+      Motor bLeftMotor,
+      Motor fRightMotor,
+      Motor bRightMotor,
+      Motor odoL,
+      Motor odoN,
+      IMU gyro,
+      OpMode m,
+      int xPos,
+      int yPos,
+      int angle,
+      List<LynxModule> allHubs,
+      Telemetry t,
+      SlideSystem slideSystem) {
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
     this.bRightMotor = bRightMotor;
-     this.odoL = odoL;
-     this.odoN = odoN;
+    this.odoL = odoL;
+    this.odoN = odoN;
     this.gyro = gyro;
     this.opMode = m;
     this.allHubs = allHubs;
@@ -59,41 +60,43 @@ public class Drive extends Base {
 
   // Very similar to the carrot chasing algo (https://arxiv.org/abs/2012.13227)
   public void ChaseTheCarrot(
-          ArrayList<Point> wp,
-          double switchTolerance,
-          double heading,
-          double error,
-          double angleError,
-          double normalMovementConstant,
-          double finalMovementConstant,
-          double turnConstant,
-          double maxSpeed,
-          double movementD,
-          double turnD,
-          double timeout) {
+      ArrayList<Point> wp,
+      double switchTolerance,
+      double heading,
+      double error,
+      double angleError,
+      double normalMovementConstant,
+      double finalMovementConstant,
+      double turnConstant,
+      double maxSpeed,
+      double movementD,
+      double turnD,
+      double timeout) {
     ElapsedTime time = new ElapsedTime();
     double prevTime = 0, prevXDiff = 0, prevYDiff = 0, prevAngleDiff = 0, dx, dy, dtheta;
     int pt = 0;
     time.reset();
     while ((pt < wp.size() - 1
             || (Math.abs(getX() - wp.get(wp.size() - 1).xP) > error
-            || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
-            || (heading == Double.MAX_VALUE
-            ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
-            : Math.abs(heading - odometry.getAngle()) > angleError)))
-            && time.milliseconds() < timeout) {
+                || Math.abs(getY() - wp.get(wp.size() - 1).yP) > error
+                || (heading == Double.MAX_VALUE
+                    ? Math.abs(wp.get(wp.size() - 1).ang - odometry.getAngle()) > angleError
+                    : Math.abs(heading - odometry.getAngle()) > angleError)))
+        && time.milliseconds() < timeout) {
       update();
       double x = getX();
       double y = getY();
       double theta = odometry.getAngle();
-      if(raise1 && time.milliseconds()>2500){
+      if (raise1 && time.milliseconds() > 2500) {
         slideSystem.extendVerticalSlides();
       }
-      if(raise2 && time.milliseconds()>1000){
+      if (raise2 && time.milliseconds() > 1000) {
         slideSystem.extendVerticalSlides();
       }
       Point destPt;
-      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1 && time.milliseconds()<=timeout) {
+      while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance
+          && pt != wp.size() - 1
+          && time.milliseconds() <= timeout) {
         update();
         pt++;
         x = getX();
@@ -102,7 +105,6 @@ public class Drive extends Base {
         prevYDiff = 0;
         prevAngleDiff = 0;
       }
-
 
       /*
             splineAngle = Math.atan2(yDiff, xDiff);
@@ -118,9 +120,7 @@ public class Drive extends Base {
       double xDiff = destPt.xP - x;
       double yDiff = destPt.yP - y;
       double angleDiff =
-              heading == Double.MAX_VALUE
-                      ? wp.get(pt).ang - odometry.getAngle()
-                      : heading - theta;
+          heading == Double.MAX_VALUE ? wp.get(pt).ang - odometry.getAngle() : heading - theta;
 
       double xPow = 0, yPow = 0, turnPow = 0;
       xPow += movementD * (xDiff - prevXDiff) / (time.seconds() - prevTime);
@@ -136,26 +136,25 @@ public class Drive extends Base {
         yPow += yDiff * normalMovementConstant;
       }
 
-      if(xPow<0){
-        if(xPow< -maxSpeed){
+      if (xPow < 0) {
+        if (xPow < -maxSpeed) {
           xPow = -maxSpeed;
         }
-      }else{
-        if(xPow>maxSpeed){
+      } else {
+        if (xPow > maxSpeed) {
           xPow = maxSpeed;
         }
       }
 
-      if(yPow<0){
-        if(yPow< -maxSpeed){
+      if (yPow < 0) {
+        if (yPow < -maxSpeed) {
           yPow = -maxSpeed;
         }
-      }else{
-        if(yPow>maxSpeed){
+      } else {
+        if (yPow > maxSpeed) {
           yPow = maxSpeed;
         }
       }
-
 
       prevTime = time.seconds();
       prevXDiff = xDiff;
@@ -285,7 +284,10 @@ public class Drive extends Base {
   }
 
   public void updatePosition() {
-    odometry.updatePosition(-odoL.encoderReading(), -odoN.encoderReading(), getAngleImu()); // forward shold be neg perp, right neg parallel.
+    odometry.updatePosition(
+        -odoL.encoderReading(),
+        -odoN.encoderReading(),
+        getAngleImu()); // forward shold be neg perp, right neg parallel.
   }
 
   public double getX() {
@@ -387,7 +389,7 @@ public class Drive extends Base {
     setDrivePowers(0, 0, 0, 0);
   }
 
-  public String getTicks(){
+  public String getTicks() {
     return odoL.encoderReading() + " x " + odoN.encoderReading();
   }
 
