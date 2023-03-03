@@ -11,6 +11,7 @@ public class Test_TeleOp extends Base {
   boolean cycleMode = true;
   boolean cont = true;
   boolean xLP2, xP2, aLP, aP;
+  String mode = "high";
 
   @Override
   public void runOpMode() throws InterruptedException {
@@ -36,12 +37,11 @@ public class Test_TeleOp extends Base {
 
       // Reset Angle
       if (gamepad1.x) {
-        targetAngle = -currAngle; // todo: subtract from the botHeading in field centric
+        initAng = -dt.getAngleImu();
       }
 
       // Drive
-      // todo fully integrate the angle reset.
-      slowDrive = gamepad1.left_bumper;
+       slowDrive = gamepad1.left_bumper;
       fastDrive = gamepad1.left_trigger > 0.05;
       drive = floor(gamepad1.right_stick_x);
       strafe = floor(-gamepad1.right_stick_y * 1.1); // 1.1 counteracts imperfect strafing
@@ -55,6 +55,7 @@ public class Test_TeleOp extends Base {
         stage = 0;
         first = false;
         cont = true;
+        doneScoring = true;
         slideSystem.resetGrabber();
       }
 
@@ -67,7 +68,7 @@ public class Test_TeleOp extends Base {
 
       // the front claw automatically opens when extending...
       aLP = aP;
-      aP = gamepad2.a;
+      aP = gamepad1.a;
       if (aP && !aLP) {
         if (cycleMode) {
           if (first) {
@@ -81,10 +82,14 @@ public class Test_TeleOp extends Base {
         } else {
           if (stage == 0) {
             slideSystem.extendTransferMec();
-          } else if (stage % 2 != 0) {
+            slideSystem.setClawJointOpen();
+            cont = false;
+          } else if (stage == 1) {
             slideSystem.setBackClawClawOpen();
             slideSystem.setFrontClawClose();
-          } else {
+          } else if (stage == 2){
+            slideSystem.setFrontClawOpenFull();
+          } else{
             slideSystem.setBackClawClawOpen();
           }
         }
@@ -93,9 +98,21 @@ public class Test_TeleOp extends Base {
         }
       }
 
-
-
-      telemetry.addLine(String.valueOf(doneScoring));
+      dpDL2 = dpD2;
+      dpD2 = gamepad2.dpad_down;
+      if(dpD2 && !dpDL2){
+        mode = "low";
+      }
+      dpUL2 = dpU2;
+      dpU2 = gamepad2.dpad_up;
+      if(dpU2 && !dpUL2){
+        mode = "high";
+      }
+      dpLL2 = dpL2;
+      dpL2 = gamepad2.dpad_left || gamepad2.dpad_right;
+      if(dpL2 && !dpLL2){
+        mode = "mid";
+      }
 
       if (!doneScoring) {
         if (cycleMode) {
@@ -103,21 +120,25 @@ public class Test_TeleOp extends Base {
         } else {
           if (stage == 0) {
             doneScoring = true;
-          } else if (stage % 2 != 0) {
+          } else if (stage == 1) {
             doneScoring = slideSystem.scoreCircuitsStage1();
-          } else {
-            doneScoring = slideSystem.scoreCircuitsStage2();
+          } else if(stage == 2){
+            doneScoring = slideSystem.scoreCircuitsStage2(mode);
+          }else{
+            doneScoring = slideSystem.scoreCircuitsStage3();
           }
           if (doneScoring) {
             stage++;
+            if(stage==4){stage=1;}
           }
         }
       }
 
-
       // Display Values
       telemetry.addData("Drive Type", driveType);
       telemetry.addData("Odometry Info", dt.getCurrentPosition());
+      telemetry.addData("Life Level:", mode);
+      telemetry.addLine(dt.getTicks());
       telemetry.addData("Stage", stage);
       telemetry.update();
     }

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Utils.Point;
 public class Drive extends Base {
 
   protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
-  protected Motor odoR, odoL, odoN;
+  protected Motor odoL, odoN;
   protected SlideSystem slideSystem;
   protected IMU gyro;
   protected Odometry odometry;
@@ -27,32 +27,33 @@ public class Drive extends Base {
   protected List<LynxModule> allHubs;
 
   Telemetry output;
-  public boolean dropSlides = false, dropSlides2 = false, dropSlides3 = false, dropSlides4 = false;
+  public boolean raise1 = false, raise2 = false, dropSlides3 = false, dropSlides4 = false;
 
   public Drive(
-      Motor fLeftMotor,
-      Motor bLeftMotor,
-      Motor fRightMotor,
-      Motor bRightMotor,
-      // Motor odoL,
-      // Motor odoN,
-      IMU gyro,
-      OpMode m,
-      int xPos,
-      int yPos,
-      int angle,
-      List<LynxModule> allHubs,
-      Telemetry t) {
+          Motor fLeftMotor,
+          Motor bLeftMotor,
+          Motor fRightMotor,
+          Motor bRightMotor,
+          Motor odoL,
+          Motor odoN,
+          IMU gyro,
+          OpMode m,
+          int xPos,
+          int yPos,
+          int angle,
+          List<LynxModule> allHubs,
+          Telemetry t, SlideSystem slideSystem) {
     this.fLeftMotor = fLeftMotor;
     this.fRightMotor = fRightMotor;
     this.bLeftMotor = bLeftMotor;
     this.bRightMotor = bRightMotor;
-    // this.odoL = odoL;
-    // this.odoN = odoN;
+     this.odoL = odoL;
+     this.odoN = odoN;
     this.gyro = gyro;
     this.opMode = m;
     this.allHubs = allHubs;
     this.output = t;
+    this.slideSystem = slideSystem;
     odometry = new Odometry(xPos, yPos, angle);
   }
 
@@ -85,18 +86,24 @@ public class Drive extends Base {
       double x = getX();
       double y = getY();
       double theta = odometry.getAngle();
-
+      if(raise1 && time.milliseconds()>2500){
+        slideSystem.extendVerticalSlides();
+      }
+      if(raise2 && time.milliseconds()>1000){
+        slideSystem.extendVerticalSlides();
+      }
       Point destPt;
       while (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1 && time.milliseconds()<=timeout) {
         update();
         pt++;
+        x = getX();
+        y = getY();
         prevXDiff = 0;
         prevYDiff = 0;
         prevAngleDiff = 0;
       }
 
-      output.addData("pos", pt);
-      output.update();
+
       /*
             splineAngle = Math.atan2(yDiff, xDiff);
             double dist = getRobotDistanceFromPoint(nxtP); // mtp 2.0
@@ -112,7 +119,7 @@ public class Drive extends Base {
       double yDiff = destPt.yP - y;
       double angleDiff =
               heading == Double.MAX_VALUE
-                      ? wp.get(wp.size() - 1).ang - odometry.getAngle()
+                      ? wp.get(pt).ang - odometry.getAngle()
                       : heading - theta;
 
       double xPow = 0, yPow = 0, turnPow = 0;
@@ -154,8 +161,10 @@ public class Drive extends Base {
       prevXDiff = xDiff;
       prevYDiff = yDiff;
       prevAngleDiff = angleDiff;
-      driveFieldCentricAuto(yPow, -turnPow, xPow);
+      driveFieldCentricAuto(-yPow, -turnPow, xPow);
     }
+
+    stopDrive();
   }
 
   // Kinda Like:
@@ -276,7 +285,7 @@ public class Drive extends Base {
   }
 
   public void updatePosition() {
-    // odometry.updatePosition(-odoL.encoderReading(), -odoN.encoderReading(), getAngleImu());
+    odometry.updatePosition(-odoL.encoderReading(), -odoN.encoderReading(), getAngleImu()); // forward shold be neg perp, right neg parallel.
   }
 
   public double getX() {
@@ -376,6 +385,10 @@ public class Drive extends Base {
 
   public void stopDrive() {
     setDrivePowers(0, 0, 0, 0);
+  }
+
+  public String getTicks(){
+    return odoL.encoderReading() + " x " + odoN.encoderReading();
   }
 
   public double[] scalePowers(
