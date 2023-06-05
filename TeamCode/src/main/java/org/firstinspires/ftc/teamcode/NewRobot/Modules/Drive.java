@@ -419,6 +419,7 @@ public class Drive extends Base {
     resetCache();
     updatePosition();
   }
+
   // BULK-READING FUNCTIONS
   public void resetCache() {
     // Clears cache of all hubs
